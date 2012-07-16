@@ -11,6 +11,8 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,8 @@ public class MainActivity extends FragmentActivity {
 	private NumberPicker nPicker;
 	private int setHour;
 	private int setMinute;
+	private SharedPreferences prefs;
+	private Editor prefsEditor;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,8 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
+        prefsEditor = prefs.edit();
         buttonSave = (Button)findViewById(R.id.button1);
         buttonCancel = (Button)findViewById(R.id.button2);
         time = (TextView)findViewById(R.id.textView2);
@@ -81,6 +87,9 @@ public class MainActivity extends FragmentActivity {
 				
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 				alarmManager.set(AlarmManager.RTC, alarmAt.getTimeInMillis(), pendingIntent);
+				
+				prefsEditor.putInt("TIME_HOUR", setHour);
+				prefsEditor.putInt("TIME_MINUTE", setMinute);
 			}
 		});
         
