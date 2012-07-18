@@ -1,6 +1,9 @@
 package com.mynameistodd.autovolume;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -88,8 +91,8 @@ public class MainActivity extends FragmentActivity {
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 				alarmManager.set(AlarmManager.RTC, alarmAt.getTimeInMillis(), pendingIntent);
 				
-				prefsEditor.putInt("TIME_HOUR", setHour);
-				prefsEditor.putInt("TIME_MINUTE", setMinute);
+				prefsEditor.putString(String.valueOf(setHour) + "|" + String.valueOf(setMinute), String.valueOf(nPickerVal));
+				prefsEditor.apply();
 			}
 		});
         

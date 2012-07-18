@@ -20,7 +20,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name="SetAlarmManagerReceiver"></receiver>
+
+        <receiver android:name="SetAlarmManagerReceiver" >
+        </receiver>
+
+        <activity
+            android:name=".ListAlarms"
+            android:label="@string/title_activity_list_alarms" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ListAlarmItem"
+            android:label="@string/title_activity_list_alarm_item" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
