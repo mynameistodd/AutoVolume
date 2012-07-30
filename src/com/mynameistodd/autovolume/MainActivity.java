@@ -91,8 +91,21 @@ public class MainActivity extends FragmentActivity {
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 				alarmManager.set(AlarmManager.RTC, alarmAt.getTimeInMillis(), pendingIntent);
 				
-				prefsEditor.putString(String.valueOf(setHour) + "|" + String.valueOf(setMinute), String.valueOf(nPickerVal));
+				//prefsEditor.putString(String.valueOf(setHour) + ":" + String.valueOf(setMinute), String.valueOf(nPickerVal));
+				int alarmNumber = prefs.getInt("ALARM_NUMBER", 0);
+				alarmNumber++;
+				prefsEditor.putInt("ALARM_NUMBER", alarmNumber);
+				
+				prefsEditor.putString("TIME" + String.valueOf(alarmNumber), String.valueOf(setHour) + ":" + String.valueOf(setMinute));
+				prefsEditor.putString("VOLUME" + String.valueOf(alarmNumber), String.valueOf(nPickerVal));
 				prefsEditor.apply();
+				
+				Intent returnIntent = new Intent();
+				returnIntent.putExtra("HOUR", setHour);
+				returnIntent.putExtra("MINUTE", setMinute);
+				returnIntent.putExtra("VOLUME", nPickerVal);
+				setResult(RESULT_OK, returnIntent);
+				finish();
 			}
 		});
         

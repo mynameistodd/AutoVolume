@@ -14,11 +14,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <receiver android:name="SetAlarmManagerReceiver" >
@@ -36,11 +31,6 @@
         <activity
             android:name=".ListAlarmItem"
             android:label="@string/title_activity_list_alarm_item" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
