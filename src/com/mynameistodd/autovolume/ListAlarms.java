@@ -1,11 +1,13 @@
 package com.mynameistodd.autovolume;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.os.Bundle;
+import android.R.integer;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
@@ -35,7 +37,7 @@ public class ListAlarms extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_alarms);
         prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
-        btnAdd = (Button)findViewById(R.id.button1);
+        btnAdd = (Button)findViewById(R.id.btn_add_new);
         context = getApplicationContext();
         listMap = new ArrayList<Map<String,?>>();
         
@@ -53,18 +55,23 @@ public class ListAlarms extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		//Map<String,?> prefsMap = prefs.getAll();
-        
-        SimpleAdapter sa =  new SimpleAdapter(context, listMap, R.layout.activity_list_alarm_item, new String[] { "HOUR", "VOLUME" }, new int[] { R.id.textView1, R.id.textView2 })
+        SimpleAdapter sa =  new SimpleAdapter(context, listMap, R.layout.activity_list_alarm_item, new String[] { "TIME", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_volume })
         {
         	@Override
 			public void setViewText(TextView v, String text) {
 				super.setViewText(v, text);
-				if (v.getId() == R.id.textView1)
+				if (v.getId() == R.id.tv_time)
 				{
-					v.setText(text);
+					String[] hourMinute = text.split(":");
+					int hour = Integer.valueOf(hourMinute[0]);
+					int minute = Integer.valueOf(hourMinute[1]);
+					Calendar c = Calendar.getInstance();
+					c.set(Calendar.HOUR, hour);
+					c.set(Calendar.MINUTE, minute);
+					
+					v.setText(DateUtils.formatDateTime(context, c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 				}
-				else if (v.getId() == R.id.textView2)
+				else if (v.getId() == R.id.tv_volume)
 				{
 					v.setText(text);
 				}
@@ -79,10 +86,9 @@ public class ListAlarms extends ListActivity {
 		
 		if (resultCode == RESULT_OK)
 		{
-			Map<String,Integer> newAlarm = new HashMap<String, Integer>();
-			newAlarm.put("HOUR", data.getIntExtra("HOUR", 0));
-			newAlarm.put("MINUTE", data.getIntExtra("MINUTE", 0));
-			newAlarm.put("VOLUME", data.getIntExtra("VOLUME", 0));
+			Map<String,String> newAlarm = new HashMap<String, String>();
+			newAlarm.put("TIME", String.valueOf(data.getIntExtra("HOUR", 0)) + ":" + String.valueOf(data.getIntExtra("MINUTE", 0)));
+			newAlarm.put("VOLUME", String.valueOf(data.getIntExtra("VOLUME", 0)));
 			listMap.add(newAlarm);
 		}
 	}
