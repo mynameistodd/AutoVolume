@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.widget.Toast;
 
 public class SetAlarmManagerReceiver extends BroadcastReceiver {
 
@@ -15,6 +16,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		audioLevel = arg1.getIntExtra("AUDIO_LEVEL", 0);
 		
 		audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, AudioManager.FLAG_SHOW_UI);
+		Toast.makeText(arg0, "Volume Changed!", Toast.LENGTH_SHORT).show();
 	}
 
 }

@@ -65,8 +65,9 @@ public class ListAlarms extends ListActivity {
 					String[] hourMinute = text.split(":");
 					int hour = Integer.valueOf(hourMinute[0]);
 					int minute = Integer.valueOf(hourMinute[1]);
+					
 					Calendar c = Calendar.getInstance();
-					c.set(Calendar.HOUR, hour);
+					c.set(Calendar.HOUR_OF_DAY, hour);
 					c.set(Calendar.MINUTE, minute);
 					
 					v.setText(DateUtils.formatDateTime(context, c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
@@ -91,6 +92,7 @@ public class ListAlarms extends ListActivity {
 			newAlarm.put("VOLUME", String.valueOf(data.getIntExtra("VOLUME", 0)));
 			listMap.add(newAlarm);
 		}
+
 	}
 
 	@Override

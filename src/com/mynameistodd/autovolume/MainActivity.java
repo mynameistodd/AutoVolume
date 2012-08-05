@@ -29,6 +29,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 
 public class MainActivity extends FragmentActivity {
 
@@ -39,10 +40,8 @@ public class MainActivity extends FragmentActivity {
 	private static TextView time;
 	private TimePickerDialog tPicker;
 	private NumberPicker nPicker;
-	private int setHour;
-	private int setMinute;
-	private SharedPreferences prefs;
-	private Editor prefsEditor;
+	private static int setHour = 0;
+	private static int setMinute = 0;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,17 +49,20 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
-        prefsEditor = prefs.edit();
         buttonSave = (Button)findViewById(R.id.button1);
         buttonCancel = (Button)findViewById(R.id.button2);
         time = (TextView)findViewById(R.id.textView2);
         nPicker = (NumberPicker)findViewById(R.id.numberPicker1);
-        
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
         final Calendar c = Calendar.getInstance();
 		int curHour = c.get(Calendar.HOUR_OF_DAY);
 		int curMinute = c.get(Calendar.MINUTE);
-		time.setText(curHour + ":" + curMinute);
+		time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 		
 		int maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
         nPicker.setMinValue(0);
@@ -70,41 +72,49 @@ public class MainActivity extends FragmentActivity {
 			
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				time.setText(hourOfDay + ":" + minute);
+				
+				final Calendar c = Calendar.getInstance();
+				c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				c.set(Calendar.MINUTE, minute);
+				
+				time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+				
 				setHour = hourOfDay;
 				setMinute = minute;
 			}
-		}, curHour, curMinute, true);
+		}, curHour, curMinute, false);
 		
         buttonSave.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				int nPickerVal = nPicker.getValue();
-				Calendar alarmAt = Calendar.getInstance();
-				alarmAt.set(Calendar.HOUR, setHour);
-				alarmAt.set(Calendar.MINUTE, setMinute);
+				
+				Calendar c = Calendar.getInstance();
+				c.set(Calendar.HOUR_OF_DAY, setHour);
+				c.set(Calendar.MINUTE, setMinute);
+				c.set(Calendar.SECOND, 0);
 				
 				Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
 				intent.putExtra("AUDIO_LEVEL", nPickerVal);
 				
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				alarmManager.set(AlarmManager.RTC, alarmAt.getTimeInMillis(), pendingIntent);
-				
-				//prefsEditor.putString(String.valueOf(setHour) + ":" + String.valueOf(setMinute), String.valueOf(nPickerVal));
-				int alarmNumber = prefs.getInt("ALARM_NUMBER", 0);
-				alarmNumber++;
-				prefsEditor.putInt("ALARM_NUMBER", alarmNumber);
-				
-				prefsEditor.putString("TIME" + String.valueOf(alarmNumber), String.valueOf(setHour) + ":" + String.valueOf(setMinute));
-				prefsEditor.putString("VOLUME" + String.valueOf(alarmNumber), String.valueOf(nPickerVal));
-				prefsEditor.apply();
+				alarmManager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
 				
 				Intent returnIntent = new Intent();
 				returnIntent.putExtra("HOUR", setHour);
 				returnIntent.putExtra("MINUTE", setMinute);
 				returnIntent.putExtra("VOLUME", nPickerVal);
 				setResult(RESULT_OK, returnIntent);
+				finish();
+			}
+		});
+        
+        buttonCancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				setResult(RESULT_CANCELED);
 				finish();
 			}
 		});
