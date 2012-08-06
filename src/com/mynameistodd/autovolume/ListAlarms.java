@@ -7,27 +7,25 @@ import java.util.List;
 import java.util.Map;
 
 import android.os.Bundle;
-import android.R.integer;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.telephony.PhoneNumberUtils;
 import android.text.format.DateUtils;
 
 public class ListAlarms extends ListActivity {
 
 	private SharedPreferences prefs;
+	private Editor prefsEditor;
 	private Button btnAdd;
 	private Context context;
 	private List<Map<String,?>> listMap;
@@ -37,6 +35,7 @@ public class ListAlarms extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_alarms);
         prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
+        prefsEditor = prefs.edit();
         btnAdd = (Button)findViewById(R.id.btn_add_new);
         context = getApplicationContext();
         listMap = new ArrayList<Map<String,?>>();
@@ -55,7 +54,20 @@ public class ListAlarms extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		
-        SimpleAdapter sa =  new SimpleAdapter(context, listMap, R.layout.activity_list_alarm_item, new String[] { "TIME", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_volume })
+		List<Map<String,?>> listMapLocal = new ArrayList<Map<String,?>>();
+		
+		Map<String,?> allPrefs = prefs.getAll();
+		for (String key : allPrefs.keySet()) {
+			
+			Map<String,String> tmp = new HashMap<String, String>();
+			tmp.put("TIME", key);
+			tmp.put("VOLUME", (String)allPrefs.get(key));
+			listMapLocal.add(tmp);
+			
+			
+		}
+		
+        SimpleAdapter sa =  new SimpleAdapter(context, listMapLocal, R.layout.activity_list_alarm_item, new String[] { "TIME", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_volume })
         {
         	@Override
 			public void setViewText(TextView v, String text) {
@@ -87,10 +99,17 @@ public class ListAlarms extends ListActivity {
 		
 		if (resultCode == RESULT_OK)
 		{
+			String hour = String.valueOf(data.getIntExtra("HOUR", 0));
+			String minute = String.valueOf(data.getIntExtra("MINUTE", 0));
+			String volume = String.valueOf(data.getIntExtra("VOLUME", 0));
+			
 			Map<String,String> newAlarm = new HashMap<String, String>();
-			newAlarm.put("TIME", String.valueOf(data.getIntExtra("HOUR", 0)) + ":" + String.valueOf(data.getIntExtra("MINUTE", 0)));
-			newAlarm.put("VOLUME", String.valueOf(data.getIntExtra("VOLUME", 0)));
+			newAlarm.put("TIME", hour + ":" + minute);
+			newAlarm.put("VOLUME", volume);
 			listMap.add(newAlarm);
+			
+			prefsEditor.putString(hour + ":" + minute, volume);
+			prefsEditor.commit();
 		}
 
 	}
@@ -98,6 +117,9 @@ public class ListAlarms extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		
+		Log.d("MYNAMEISTODD", "Position:" + position);
+		Log.d("MYNAMEISTODD", "ID:" + id);
 	}
 
 	@Override

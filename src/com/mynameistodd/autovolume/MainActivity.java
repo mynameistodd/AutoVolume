@@ -1,34 +1,21 @@
 package com.mynameistodd.autovolume;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
-
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.NumberPicker;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
-import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
 public class MainActivity extends FragmentActivity {
