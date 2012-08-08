@@ -118,6 +118,11 @@ public class ListAlarms extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		
+		SimpleAdapter sa = (SimpleAdapter) l.getAdapter();
+		Map<String,String> item = (Map<String, String>) sa.getItem(position);
+		
+		//pass the item in an intent to the MainActivity for editing.
+		
 		Log.d("MYNAMEISTODD", "Position:" + position);
 		Log.d("MYNAMEISTODD", "ID:" + id);
 	}
