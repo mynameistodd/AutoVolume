@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.R.integer;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Context;
@@ -28,7 +29,7 @@ public class ListAlarms extends ListActivity {
 	private Editor prefsEditor;
 	private Button btnAdd;
 	private Context context;
-	private List<Map<String,?>> listMap;
+	//private List<Map<String,?>> listMap;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,13 +39,13 @@ public class ListAlarms extends ListActivity {
         prefsEditor = prefs.edit();
         btnAdd = (Button)findViewById(R.id.btn_add_new);
         context = getApplicationContext();
-        listMap = new ArrayList<Map<String,?>>();
+        //listMap = new ArrayList<Map<String,?>>();
         
         btnAdd.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, MainActivity.class);
+				Intent intent = new Intent(context, EditCreateAlarm.class);
 				startActivityForResult(intent, 1);
 			}
 		});
@@ -106,7 +107,7 @@ public class ListAlarms extends ListActivity {
 			Map<String,String> newAlarm = new HashMap<String, String>();
 			newAlarm.put("TIME", hour + ":" + minute);
 			newAlarm.put("VOLUME", volume);
-			listMap.add(newAlarm);
+			//listMap.add(newAlarm);
 			
 			prefsEditor.putString(hour + ":" + minute, volume);
 			prefsEditor.commit();
@@ -121,7 +122,14 @@ public class ListAlarms extends ListActivity {
 		SimpleAdapter sa = (SimpleAdapter) l.getAdapter();
 		Map<String,String> item = (Map<String, String>) sa.getItem(position);
 		
-		//pass the item in an intent to the MainActivity for editing.
+		String[] time = item.get("TIME").split(":");
+		
+		Intent intent = new Intent(context, EditCreateAlarm.class);
+		intent.putExtra("HOUR", Integer.parseInt(time[0]));
+		intent.putExtra("MINUTE", Integer.parseInt(time[1]));
+		intent.putExtra("VOLUME", Integer.parseInt(item.get("VOLUME")));
+		
+		startActivityForResult(intent, 1);
 		
 		Log.d("MYNAMEISTODD", "Position:" + position);
 		Log.d("MYNAMEISTODD", "ID:" + id);

@@ -18,7 +18,7 @@ import android.widget.TimePicker;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateUtils;
 
-public class MainActivity extends FragmentActivity {
+public class EditCreateAlarm extends FragmentActivity {
 
 	private Button buttonSave;
 	private Button buttonCancel;
@@ -29,17 +29,24 @@ public class MainActivity extends FragmentActivity {
 	private NumberPicker nPicker;
 	private static int setHour = 0;
 	private static int setMinute = 0;
+	private Intent callingIntent;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_edit_create_alarm);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         buttonSave = (Button)findViewById(R.id.button1);
         buttonCancel = (Button)findViewById(R.id.button2);
         time = (TextView)findViewById(R.id.textView2);
         nPicker = (NumberPicker)findViewById(R.id.numberPicker1);
+        
+        int maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+        nPicker.setMinValue(0);
+        nPicker.setMaxValue(maxVolumeStep);
+        
+        callingIntent = getIntent();
 	}
 	
 	@Override
@@ -49,11 +56,19 @@ public class MainActivity extends FragmentActivity {
         final Calendar c = Calendar.getInstance();
 		int curHour = c.get(Calendar.HOUR_OF_DAY);
 		int curMinute = c.get(Calendar.MINUTE);
-		time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+
+		int hour = callingIntent.getIntExtra("HOUR", curHour);
+		int minute = callingIntent.getIntExtra("MINUTE", curMinute);
+		int volume = callingIntent.getIntExtra("VOLUME", 0);
 		
-		int maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-        nPicker.setMinValue(0);
-        nPicker.setMaxValue(maxVolumeStep);
+		c.set(Calendar.HOUR_OF_DAY, hour);
+		c.set(Calendar.MINUTE, minute);
+		
+		time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+		nPicker.setValue(volume);
+		
+		setHour = hour;
+		setMinute = minute;
 		
         tPicker = new TimePickerDialog(this, new OnTimeSetListener() {
 			
@@ -69,7 +84,7 @@ public class MainActivity extends FragmentActivity {
 				setHour = hourOfDay;
 				setMinute = minute;
 			}
-		}, curHour, curMinute, false);
+		}, hour, minute, false);
 		
         buttonSave.setOnClickListener(new OnClickListener() {
 			
