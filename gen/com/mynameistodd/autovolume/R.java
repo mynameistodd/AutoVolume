@@ -28,6 +28,7 @@ public final class R {
         public static final int button1=0x7f090002;
         public static final int button2=0x7f090003;
         public static final int linearLayout1=0x7f090001;
+        public static final int menu_delete=0x7f09000c;
         public static final int menu_settings=0x7f09000b;
         public static final int numberPicker1=0x7f090006;
         public static final int textView1=0x7f090000;
@@ -42,19 +43,20 @@ public final class R {
         public static final int activity_list_alarms=0x7f030002;
     }
     public static final class menu {
-        public static final int activity_list_alarm_item=0x7f080000;
-        public static final int activity_list_alarms=0x7f080001;
-        public static final int activity_main=0x7f080002;
+        public static final int activity_edit_create_alarm=0x7f080000;
+        public static final int activity_list_alarm_item=0x7f080001;
+        public static final int activity_list_alarms=0x7f080002;
         public static final int activity_time_picker=0x7f080003;
     }
     public static final class string {
-        public static final int add_new_alarm=0x7f050006;
+        public static final int add_new_alarm=0x7f050007;
         public static final int app_name=0x7f050000;
+        public static final int menu_delete=0x7f050002;
         public static final int menu_settings=0x7f050001;
-        public static final int title_activity_list_alarm_item=0x7f050005;
-        public static final int title_activity_list_alarms=0x7f050004;
-        public static final int title_activity_main=0x7f050002;
-        public static final int title_activity_time_picker=0x7f050003;
+        public static final int title_activity_list_alarm_item=0x7f050006;
+        public static final int title_activity_list_alarms=0x7f050005;
+        public static final int title_activity_main=0x7f050003;
+        public static final int title_activity_time_picker=0x7f050004;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;

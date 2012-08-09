@@ -8,7 +8,10 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,6 +23,8 @@ import android.text.format.DateUtils;
 
 public class EditCreateAlarm extends FragmentActivity {
 
+	private SharedPreferences prefs;
+	private Editor prefsEditor;
 	private Button buttonSave;
 	private Button buttonCancel;
 	private AudioManager audioManager;
@@ -35,6 +40,8 @@ public class EditCreateAlarm extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_create_alarm);
+        prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
+		prefsEditor = prefs.edit();
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         buttonSave = (Button)findViewById(R.id.button1);
@@ -132,7 +139,24 @@ public class EditCreateAlarm extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_edit_create_alarm, menu);
 		return true;
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		
+		case R.id.menu_delete:
+				prefsEditor.remove(setHour + ":" + setMinute);
+				prefsEditor.commit();
+				setResult(RESULT_CANCELED);
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+		
+	}
+	
 }
