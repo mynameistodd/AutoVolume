@@ -37,7 +37,9 @@ public class ListAlarms extends ListActivity {
 	private Context context;
 	private Context contextThis;
 	private ListView list;
-	private static Object tmp;
+	private static Map<String, ?> itemToDelete;
+	private static List<Map<String, ?>> listMapLocal;
+	private SimpleAdapter sa;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class ListAlarms extends ListActivity {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 
-				tmp = arg0.getSelectedItem();
+				itemToDelete = (HashMap<String, ?>) arg0
+						.getItemAtPosition(arg2);
 
 				showDialog(0);
 				return true;
@@ -78,7 +81,7 @@ public class ListAlarms extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 
-		List<Map<String, ?>> listMapLocal = new ArrayList<Map<String, ?>>();
+		listMapLocal = new ArrayList<Map<String, ?>>();
 
 		Map<String, ?> allPrefs = prefs.getAll();
 		for (String key : allPrefs.keySet()) {
@@ -90,7 +93,7 @@ public class ListAlarms extends ListActivity {
 
 		}
 
-		SimpleAdapter sa = new SimpleAdapter(context, listMapLocal,
+		sa = new SimpleAdapter(context, listMapLocal,
 				R.layout.activity_list_alarm_item, new String[] { "TIME",
 						"VOLUME" }, new int[] { R.id.tv_time, R.id.tv_volume }) {
 			@Override
@@ -160,14 +163,20 @@ public class ListAlarms extends ListActivity {
 	protected Dialog onCreateDialog(int id) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
-		builder.setMessage("Delete this alarm?")
+		builder.setMessage(R.string.delete_this_schedule)
 				.setCancelable(false)
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-
 								Log.d("MYNAMEISTODD", "Clicked Yes");
 
+								String time = (String) itemToDelete.get("TIME");
+
+								prefsEditor.remove(time);
+								prefsEditor.commit();
+
+								listMapLocal.remove(itemToDelete);
+								sa.notifyDataSetChanged();
 							}
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {

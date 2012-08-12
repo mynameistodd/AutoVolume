@@ -49,7 +49,9 @@ public final class R {
     }
     public static final class string {
         public static final int add_new_alarm=0x7f050007;
+        public static final int add_new_alarm_instruct=0x7f050008;
         public static final int app_name=0x7f050000;
+        public static final int delete_this_schedule=0x7f050009;
         public static final int menu_delete=0x7f050002;
         public static final int menu_settings=0x7f050001;
         public static final int title_activity_list_alarm_item=0x7f050006;

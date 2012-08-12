@@ -7,7 +7,9 @@
     <string name="title_activity_time_picker">TimePicker</string>
     <string name="title_activity_list_alarms">List Alarms</string>
     <string name="title_activity_list_alarm_item">ListAlarmItem</string>
-    <string name="add_new_alarm">Add New Alarm</string>
+    <string name="add_new_alarm">Schedule Volume Change</string>
+    <string name="add_new_alarm_instruct">Click below to get started</string>
     <color name="Black">#000000</color>
+    <string name="delete_this_schedule">Delete this schedule?</string>
 
 </resources>
