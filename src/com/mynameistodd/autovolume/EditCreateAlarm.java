@@ -99,6 +99,9 @@ public class EditCreateAlarm extends FragmentActivity {
 			public void onClick(View v) {
 				int nPickerVal = nPicker.getValue();
 				
+				//need to keep track of the old time and volume, to delete
+				//them after editing an item. Also, remove the pending intent for the alarm manager.
+				
 				Calendar c = Calendar.getInstance();
 				c.set(Calendar.HOUR_OF_DAY, setHour);
 				c.set(Calendar.MINUTE, setMinute);
@@ -148,6 +151,9 @@ public class EditCreateAlarm extends FragmentActivity {
 		switch (item.getItemId()) {
 		
 		case R.id.menu_delete:
+			
+			//use alarmManager to cancel the pending intent
+			
 				prefsEditor.remove(setHour + ":" + setMinute);
 				prefsEditor.commit();
 				setResult(RESULT_CANCELED);
