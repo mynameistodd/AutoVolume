@@ -126,6 +126,7 @@ public class ListAlarms extends ListActivity {
 			String hour = String.valueOf(data.getIntExtra("HOUR", 0));
 			String minute = String.valueOf(data.getIntExtra("MINUTE", 0));
 			String volume = String.valueOf(data.getIntExtra("VOLUME", 0));
+			String oldAlarm = data.getStringExtra("OLD_ALARM");
 
 			Map<String, String> newAlarm = new HashMap<String, String>();
 			newAlarm.put("TIME", hour + ":" + minute);
@@ -133,6 +134,7 @@ public class ListAlarms extends ListActivity {
 			// listMap.add(newAlarm);
 
 			prefsEditor.putString(hour + ":" + minute, volume);
+			prefsEditor.remove(oldAlarm);
 			prefsEditor.commit();
 		}
 

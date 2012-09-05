@@ -117,6 +117,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				returnIntent.putExtra("HOUR", setHour);
 				returnIntent.putExtra("MINUTE", setMinute);
 				returnIntent.putExtra("VOLUME", nPickerVal);
+				returnIntent.putExtra("OLD_ALARM", callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0));
 				setResult(RESULT_OK, returnIntent);
 				finish();
 			}
