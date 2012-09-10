@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.R.integer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,10 +25,10 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.text.format.DateUtils;
 
 public class ListAlarms extends ListActivity {
@@ -40,6 +42,7 @@ public class ListAlarms extends ListActivity {
 	private static Map<String, ?> itemToDelete;
 	private static List<Map<String, ?>> listMapLocal;
 	private SimpleAdapter sa;
+	private AlarmManager alarmManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class ListAlarms extends ListActivity {
 		context = getApplicationContext();
 		contextThis = this;
 		list = getListView();
+		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
 		btnAdd.setOnClickListener(new OnClickListener() {
 
@@ -63,12 +67,12 @@ public class ListAlarms extends ListActivity {
 
 		list.setOnItemLongClickListener(new OnItemLongClickListener() {
 
+			@SuppressWarnings({ "deprecation", "unchecked" })
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 
-				itemToDelete = (HashMap<String, ?>) arg0
-						.getItemAtPosition(arg2);
+				itemToDelete = (HashMap<String, ?>) arg0.getItemAtPosition(arg2);
 
 				showDialog(0);
 				return true;
@@ -123,19 +127,10 @@ public class ListAlarms extends ListActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (resultCode == RESULT_OK) {
-			String hour = String.valueOf(data.getIntExtra("HOUR", 0));
-			String minute = String.valueOf(data.getIntExtra("MINUTE", 0));
-			String volume = String.valueOf(data.getIntExtra("VOLUME", 0));
-			String oldAlarm = data.getStringExtra("OLD_ALARM");
 
-			Map<String, String> newAlarm = new HashMap<String, String>();
-			newAlarm.put("TIME", hour + ":" + minute);
-			newAlarm.put("VOLUME", volume);
-			// listMap.add(newAlarm);
-
-			prefsEditor.putString(hour + ":" + minute, volume);
-			prefsEditor.remove(oldAlarm);
-			prefsEditor.commit();
+			// put in a Toast here that it was saved.
+			Toast.makeText(contextThis, "Saved!", Toast.LENGTH_SHORT).show();
+			sa.notifyDataSetChanged();
 		}
 
 	}
@@ -166,15 +161,24 @@ public class ListAlarms extends ListActivity {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
 		builder.setMessage(R.string.delete_this_schedule)
-				.setCancelable(false)
+				.setCancelable(true)
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								Log.d("MYNAMEISTODD", "Clicked Yes");
 
 								String time = (String) itemToDelete.get("TIME");
-
+								int volume = Integer.parseInt((String) itemToDelete.get("VOLUME"));
+								
+								Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+								String rawOld = "mnit://" + time + "/" + volume;
+								Uri dataOld = Uri.parse(Uri.encode(rawOld));
+								intentOld.setData(dataOld);
+								intentOld.putExtra("AUDIO_LEVEL", volume);
+								PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
+								alarmManager.cancel(pendingIntentOld);
 								prefsEditor.remove(time);
+								
 								prefsEditor.commit();
 
 								listMapLocal.remove(itemToDelete);

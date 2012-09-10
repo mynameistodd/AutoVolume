@@ -2,6 +2,7 @@ package com.mynameistodd.autovolume;
 
 import java.util.Calendar;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,6 +11,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,26 +101,36 @@ public class EditCreateAlarm extends FragmentActivity {
 			public void onClick(View v) {
 				int nPickerVal = nPicker.getValue();
 				
-				//need to keep track of the old time and volume, to delete
-				//them after editing an item. Also, remove the pending intent for the alarm manager.
-				
 				Calendar c = Calendar.getInstance();
 				c.set(Calendar.HOUR_OF_DAY, setHour);
 				c.set(Calendar.MINUTE, setMinute);
 				c.set(Calendar.SECOND, 0);
 				
-				Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-				intent.putExtra("AUDIO_LEVEL", nPickerVal);
+				//Delete old alarm
+				Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+				String rawOld = "mnit://" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + "/" + callingIntent.getIntExtra("VOLUME", 0);
+				Uri dataOld = Uri.parse(Uri.encode(rawOld));
+				intentOld.setData(dataOld);
+				intentOld.putExtra("AUDIO_LEVEL", callingIntent.getIntExtra("VOLUME", 0));
+				PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
+				alarmManager.cancel(pendingIntentOld);
+				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0));
+				Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 				
+				//Save new alarm
+				Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+				String raw = "mnit://" + setHour + ":" + setMinute + "/" + nPickerVal;
+				Uri data = Uri.parse(Uri.encode(raw));
+				intent.setData(data);
+				intent.putExtra("AUDIO_LEVEL", nPickerVal);
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 				alarmManager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
+				prefsEditor.putString(setHour + ":" + setMinute, String.valueOf(nPickerVal));
+				Log.d("MYNAMEISTODD", "Saved:" + setHour + ":" + setMinute + " Volume:" + String.valueOf(nPickerVal));
 				
-				Intent returnIntent = new Intent();
-				returnIntent.putExtra("HOUR", setHour);
-				returnIntent.putExtra("MINUTE", setMinute);
-				returnIntent.putExtra("VOLUME", nPickerVal);
-				returnIntent.putExtra("OLD_ALARM", callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0));
-				setResult(RESULT_OK, returnIntent);
+				prefsEditor.commit();
+				
+				setResult(RESULT_OK);
 				finish();
 			}
 		});
@@ -153,15 +165,24 @@ public class EditCreateAlarm extends FragmentActivity {
 		
 		case R.id.menu_delete:
 			
-			//use alarmManager to cancel the pending intent
+			//Delete old alarm
+			Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+			String rawOld = "mnit://" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + "/" + callingIntent.getIntExtra("VOLUME", 0);
+			Uri dataOld = Uri.parse(Uri.encode(rawOld));
+			intentOld.setData(dataOld);
+			intentOld.putExtra("AUDIO_LEVEL", callingIntent.getIntExtra("VOLUME", 0));
+			PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
+			alarmManager.cancel(pendingIntentOld);
+			prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0));
 			
-				prefsEditor.remove(setHour + ":" + setMinute);
-				prefsEditor.commit();
-				setResult(RESULT_CANCELED);
-				finish();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+			prefsEditor.commit();
+			
+			setResult(RESULT_CANCELED);
+			finish();
+			return true;
+		
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 		
 	}

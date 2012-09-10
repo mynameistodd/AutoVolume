@@ -16,6 +16,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 	public void onReceive(Context arg0, Intent arg1) {
 		audioManager = (AudioManager) arg0.getSystemService(Context.AUDIO_SERVICE);
 		audioLevel = arg1.getIntExtra("AUDIO_LEVEL", 0);
+		Log.d("MYNAMEISTODD", "Data from Intent:" + arg1.getData());
 		
 		audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, AudioManager.FLAG_SHOW_UI);
 		Toast.makeText(arg0, "Volume Changed!", Toast.LENGTH_SHORT).show();
