@@ -124,7 +124,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				intent.setData(data);
 				intent.putExtra("AUDIO_LEVEL", nPickerVal);
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				alarmManager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
+				alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
 				prefsEditor.putString(setHour + ":" + setMinute, String.valueOf(nPickerVal));
 				Log.d("MYNAMEISTODD", "Saved:" + setHour + ":" + setMinute + " Volume:" + String.valueOf(nPickerVal));
 				
