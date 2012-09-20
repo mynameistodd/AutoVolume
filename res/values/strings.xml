@@ -9,7 +9,11 @@
     <string name="title_activity_list_alarm_item">ListAlarmItem</string>
     <string name="add_new_alarm">Schedule Volume Change</string>
     <string name="add_new_alarm_instruct">Click below to get started</string>
+
     <color name="Black">#000000</color>
+
     <string name="delete_this_schedule">Delete this schedule?</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_edit_name_dialog">EditNameDialog</string>
 
 </resources>

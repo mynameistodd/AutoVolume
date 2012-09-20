@@ -1,13 +1,21 @@
 package com.mynameistodd.autovolume;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -20,7 +28,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateUtils;
 
 public class EditCreateAlarm extends FragmentActivity {
@@ -37,6 +47,9 @@ public class EditCreateAlarm extends FragmentActivity {
 	private static int setHour = 0;
 	private static int setMinute = 0;
 	private Intent callingIntent;
+	private TextView daysRecurring;
+	private Context contextThis;
+	private static List<String> recurDays;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +63,9 @@ public class EditCreateAlarm extends FragmentActivity {
         buttonCancel = (Button)findViewById(R.id.button2);
         time = (TextView)findViewById(R.id.textView2);
         nPicker = (NumberPicker)findViewById(R.id.numberPicker1);
+        daysRecurring = (TextView)findViewById(R.id.textView4);
+        contextThis = this;
+        recurDays = new ArrayList<String>();
         
         int maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
         nPicker.setMinValue(0);
@@ -151,8 +167,61 @@ public class EditCreateAlarm extends FragmentActivity {
 				tPicker.show();
 			}
 		});
+        
+        daysRecurring.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showDialog(0);
+			}
+		});
     }
+	
+	@Override
+	@Deprecated
+	protected Dialog onCreateDialog(int id) {
 
+		final CharSequence[] items = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
+		builder.setTitle("Pick recuring days")
+				.setCancelable(true)
+				.setMultiChoiceItems(items, null, new OnMultiChoiceClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+						//keep track of the selected items
+						if (isChecked)
+						{
+							recurDays.add(items[which].toString());
+						}
+						else
+						{
+							if (recurDays.contains(items[which].toString()))
+							{
+								recurDays.remove(items[which].toString());
+							}
+						}
+					}
+				})
+				.setPositiveButton("Done",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								Log.d("MYNAMEISTODD", "Clicked Done");
+
+							}
+						})
+				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						Log.d("MYNAMEISTODD", "Clicked Cancel");
+						dialog.cancel();
+					}
+				});
+
+		AlertDialog alert = builder.create();
+		return alert;
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_edit_create_alarm, menu);
