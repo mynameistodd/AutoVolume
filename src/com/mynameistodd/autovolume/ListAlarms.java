@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -89,17 +90,19 @@ public class ListAlarms extends ListActivity {
 
 		Map<String, ?> allPrefs = prefs.getAll();
 		for (String key : allPrefs.keySet()) {
-
+			
+			String[] timeRecur = key.split(":");
+			
 			Map<String, String> tmp = new HashMap<String, String>();
-			tmp.put("TIME", key);
+			tmp.put("TIME", timeRecur[0] + ":" + timeRecur[1]);
+			tmp.put("RECUR", timeRecur[2]);
 			tmp.put("VOLUME", (String) allPrefs.get(key));
 			listMapLocal.add(tmp);
 
 		}
 
 		sa = new SimpleAdapter(context, listMapLocal,
-				R.layout.activity_list_alarm_item, new String[] { "TIME",
-						"VOLUME" }, new int[] { R.id.tv_time, R.id.tv_volume }) {
+				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume }) {
 			@Override
 			public void setViewText(TextView v, String text) {
 				super.setViewText(v, text);
@@ -114,7 +117,46 @@ public class ListAlarms extends ListActivity {
 
 					v.setText(DateUtils.formatDateTime(context,
 							c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
-				} else if (v.getId() == R.id.tv_volume) {
+				}
+				else if (v.getId() == R.id.tv_recur) {
+					String textToShow = "";
+					String[] recurDaysArray = text.split("\\|");
+					if (recurDaysArray.length > 0) {
+						for (String recurDayStr : recurDaysArray) {
+							if (!recurDayStr.isEmpty()) {
+								int recurDay = Integer.parseInt(recurDayStr);
+								switch (recurDay) {
+								case 0:
+									textToShow += "Sun,";
+									break;
+								case 1:
+									textToShow += "Mon,";
+									break;
+								case 2:
+									textToShow += "Tue,";
+									break;
+								case 3:
+									textToShow += "Wed,";
+									break;
+								case 4:
+									textToShow += "Thu,";
+									break;
+								case 5:
+									textToShow += "Fri,";
+									break;
+								case 6:
+									textToShow += "Sat,";
+									break;
+								default:
+									break;
+								}
+							}
+						}
+						textToShow = textToShow.substring(0, textToShow.length()-1);
+					}
+					v.setText(textToShow);
+				}
+				else if (v.getId() == R.id.tv_volume) {
 					v.setText(text);
 				}
 			}
@@ -147,6 +189,7 @@ public class ListAlarms extends ListActivity {
 		Intent intent = new Intent(context, EditCreateAlarm.class);
 		intent.putExtra("HOUR", Integer.parseInt(time[0]));
 		intent.putExtra("MINUTE", Integer.parseInt(time[1]));
+		intent.putExtra("RECUR", item.get("RECUR"));
 		intent.putExtra("VOLUME", Integer.parseInt(item.get("VOLUME")));
 
 		startActivityForResult(intent, 1);
@@ -167,18 +210,26 @@ public class ListAlarms extends ListActivity {
 							public void onClick(DialogInterface dialog, int id) {
 								Log.d("MYNAMEISTODD", "Clicked Yes");
 
-								String time = (String) itemToDelete.get("TIME");
-								int volume = Integer.parseInt((String) itemToDelete.get("VOLUME"));
+								//Delete old alarm
+								String[] recurDaysArray = ((String) itemToDelete.get("RECUR")).split("\\|");
 								
-								Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-								String rawOld = "mnit://" + time + "/" + volume;
-								Uri dataOld = Uri.parse(Uri.encode(rawOld));
-								intentOld.setData(dataOld);
-								intentOld.putExtra("AUDIO_LEVEL", volume);
-								PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
-								alarmManager.cancel(pendingIntentOld);
-								prefsEditor.remove(time);
-								
+								//Cancel the alarms
+								for (String recurDayStr : recurDaysArray) {
+									if (!recurDayStr.isEmpty()) {
+										int recurDay = Integer.parseInt(recurDayStr);
+										
+										Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+										String rawOld = "mnit://" + recurDay + "/" + itemToDelete.get("TIME") + "/" + itemToDelete.get("VOLUME");
+										Uri dataOld = Uri.parse(Uri.encode(rawOld));
+										intentOld.setData(dataOld);
+										intentOld.putExtra("AUDIO_LEVEL", Integer.parseInt((String) itemToDelete.get("VOLUME")));
+										PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
+										alarmManager.cancel(pendingIntentOld);
+									}
+								}
+								prefsEditor.remove(itemToDelete.get("TIME") + ":" + itemToDelete.get("RECUR"));
+								Log.d("MYNAMEISTODD", "Deleted:" + itemToDelete.get("TIME") + ":" + itemToDelete.get("RECUR") + " Volume:" + itemToDelete.get("VOLUME"));
+
 								prefsEditor.commit();
 
 								listMapLocal.remove(itemToDelete);
@@ -200,6 +251,20 @@ public class ListAlarms extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_list_alarms, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.delete_all_prefs:
+			prefsEditor.clear().commit();
+			listMapLocal.clear();
+			sa.notifyDataSetChanged();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		
 	}
 
 }
