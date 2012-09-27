@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.support.v4.app.DialogFragment;
@@ -44,7 +45,6 @@ public class EditCreateAlarm extends FragmentActivity {
 	private AlarmManager alarmManager;
 	private static TextView time;
 	private TimePickerDialog tPicker;
-	private NumberPicker nPicker;
 	private static int hour = 0;
 	private static int minute = 0;
 	private static int volume = 0;
@@ -54,6 +54,7 @@ public class EditCreateAlarm extends FragmentActivity {
 	private Context contextThis;
 	private static List<Integer> recurDays;
 	private static boolean editMode = false;
+	private SeekBar seekBar;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class EditCreateAlarm extends FragmentActivity {
         buttonSave = (Button)findViewById(R.id.button1);
         buttonCancel = (Button)findViewById(R.id.button2);
         time = (TextView)findViewById(R.id.textView2);
-        nPicker = (NumberPicker)findViewById(R.id.numberPicker1);
+        seekBar = (SeekBar)findViewById(R.id.seekBar1);
         daysRecurring = (TextView)findViewById(R.id.textView4);
         daysRecurringLabel = (TextView)findViewById(R.id.textView5);
         contextThis = this;
@@ -74,8 +75,7 @@ public class EditCreateAlarm extends FragmentActivity {
         editMode = false;
         
         int maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-        nPicker.setMinValue(0);
-        nPicker.setMaxValue(maxVolumeStep);
+        seekBar.setMax(maxVolumeStep);
         
         callingIntent = getIntent();
         if (callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("VOLUME"))
@@ -102,7 +102,7 @@ public class EditCreateAlarm extends FragmentActivity {
         	String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
 			
 			for (String rd : recurDaysArray) {
-				if (!rd.isEmpty()) {
+				if (rd.length() > 0) {
 					int rdi = Integer.parseInt(rd);
 					recurDays.add(rdi);
 				}
@@ -113,7 +113,8 @@ public class EditCreateAlarm extends FragmentActivity {
 		c.set(Calendar.MINUTE, minute);
 		
 		time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
-		nPicker.setValue(volume);
+		seekBar.setProgress(volume);
+		
 		String textToShow = "";
 		if (recurDays.size() > 0) {
 			for (int recurDay : recurDays) {
@@ -167,7 +168,7 @@ public class EditCreateAlarm extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				int nPickerVal = nPicker.getValue();
+				int nPickerVal = seekBar.getProgress();
 				
 				//Delete old alarm
 				if (editMode) {
@@ -175,7 +176,7 @@ public class EditCreateAlarm extends FragmentActivity {
 					
 					//Cancel the alarms
 					for (String recurDayStr : recurDaysArray) {
-						if (!recurDayStr.isEmpty()) {
+						if (recurDayStr.length() > 0) {
 							int recurDay = Integer.parseInt(recurDayStr);
 							
 							Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
@@ -266,7 +267,7 @@ public class EditCreateAlarm extends FragmentActivity {
 			String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
 			
 			for (String rd : recurDaysArray) {
-				if (!rd.isEmpty()) {
+				if (rd.length() > 0) {
 					int rdi = Integer.parseInt(rd);
 					itemsChecked[rdi] = true;
 					recurDays.add(rdi);
@@ -372,7 +373,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				
 				//Cancel the alarms
 				for (String recurDayStr : recurDaysArray) {
-					if (!recurDayStr.isEmpty()) {
+					if (recurDayStr.length() > 0) {
 						int recurDay = Integer.parseInt(recurDayStr);
 						
 						Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);

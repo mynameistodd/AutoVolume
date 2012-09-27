@@ -123,7 +123,7 @@ public class ListAlarms extends ListActivity {
 					String[] recurDaysArray = text.split("\\|");
 					if (recurDaysArray.length > 0) {
 						for (String recurDayStr : recurDaysArray) {
-							if (!recurDayStr.isEmpty()) {
+							if (recurDayStr.length() > 0) {
 								int recurDay = Integer.parseInt(recurDayStr);
 								switch (recurDay) {
 								case 0:
@@ -215,7 +215,7 @@ public class ListAlarms extends ListActivity {
 								
 								//Cancel the alarms
 								for (String recurDayStr : recurDaysArray) {
-									if (!recurDayStr.isEmpty()) {
+									if (recurDayStr.length() > 0) {
 										int recurDay = Integer.parseInt(recurDayStr);
 										
 										Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);

@@ -24,15 +24,6 @@
         android:layout_alignParentRight="true" >
 
         <Button
-            android:id="@+id/button1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_weight="1"
-            android:text="Save" />
-
-        <Button
             android:id="@+id/button2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -40,6 +31,15 @@
             android:layout_alignParentRight="true"
             android:layout_weight="1"
             android:text="Cancel" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:text="Save" />
     </LinearLayout>
 
     <TextView
@@ -58,29 +58,27 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="89dp"
-        android:layout_toLeftOf="@+id/textView2"
+        android:layout_marginTop="42dp"
         android:layout_weight="1"
         android:text="Volume:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <NumberPicker
-        android:id="@+id/numberPicker1"
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="14dp"
-        android:layout_weight="1" />
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="13dp" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/numberPicker1"
-        android:layout_below="@+id/numberPicker1"
-        android:layout_marginTop="38dp"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_below="@+id/seekBar1"
+        android:layout_marginTop="25dp"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -90,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView4"
         android:layout_alignBottom="@+id/textView4"
-        android:layout_alignRight="@+id/textView3"
+        android:layout_toLeftOf="@+id/textView2"
         android:layout_weight="1"
         android:text="Recurring:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
