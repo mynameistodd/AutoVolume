@@ -119,6 +119,10 @@ public class EditCreateAlarm extends FragmentActivity {
 		if (recurDays.size() > 0) {
 			for (int recurDay : recurDays) {
 					switch (recurDay) {
+					case -1:
+					default:
+						textToShow = "One Time";
+						break;
 					case 0:
 						textToShow += "Sun,";
 						break;
@@ -140,11 +144,13 @@ public class EditCreateAlarm extends FragmentActivity {
 					case 6:
 						textToShow += "Sat,";
 						break;
-					default:
-						break;
 					}	
 			}
 			textToShow = textToShow.substring(0, textToShow.length()-1);
+		}
+		else
+		{
+			textToShow = "One Time";
 		}
 		daysRecurring.setText(textToShow);
 		
@@ -193,29 +199,50 @@ public class EditCreateAlarm extends FragmentActivity {
 				}
 				
 				//Save new alarm
-				String recurDaysDelim = "|";
-				for (int recurDay : recurDays) {
-					recurDaysDelim += recurDay + "|";
-					
+				if (recurDays.size() > 0) {
+					String recurDaysDelim = "|";
+					for (int recurDay : recurDays) {
+						recurDaysDelim += recurDay + "|";
+						
+						Calendar cNew = Calendar.getInstance();
+						cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
+						cNew.set(Calendar.HOUR_OF_DAY, hour);
+						cNew.set(Calendar.MINUTE, minute);
+						cNew.set(Calendar.SECOND, 0);
+						
+						//Set alarms
+						Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+						String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
+						Uri data = Uri.parse(Uri.encode(raw));
+						intent.setData(data);
+						intent.putExtra("AUDIO_LEVEL", nPickerVal);
+						PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
+						
+					}
+					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
+					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
+				}
+				else
+				{
 					Calendar cNew = Calendar.getInstance();
-					cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
 					cNew.set(Calendar.HOUR_OF_DAY, hour);
 					cNew.set(Calendar.MINUTE, minute);
 					cNew.set(Calendar.SECOND, 0);
 					
 					//Set alarms
 					Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-					String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
+					String raw = "mnit://" + (cNew.get(Calendar.DAY_OF_WEEK)-1) + "/" + hour + ":" + minute + "/" + nPickerVal;
 					Uri data = Uri.parse(Uri.encode(raw));
 					intent.setData(data);
 					intent.putExtra("AUDIO_LEVEL", nPickerVal);
 					PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-					alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
+					alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 					
-				}
-				prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
-				Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
+					prefsEditor.putString(hour + ":" + minute + ":" + "|" + -1 + "|", String.valueOf(nPickerVal));
+					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + -1 + " Volume:" + String.valueOf(nPickerVal));
 				
+				}
 				prefsEditor.commit();
 				
 				setResult(RESULT_OK);
@@ -264,20 +291,16 @@ public class EditCreateAlarm extends FragmentActivity {
 		boolean[] itemsChecked = new boolean[7];
 		
 		if (editMode) {
-			String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
-			
-			for (String rd : recurDaysArray) {
-				if (rd.length() > 0) {
-					int rdi = Integer.parseInt(rd);
-					itemsChecked[rdi] = true;
-					recurDays.add(rdi);
+			for (int rd : recurDays) {
+				if (rd >= 0) {
+					itemsChecked[rd] = true;
 				}
 			}
 		}
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
 		builder.setTitle("Pick recurring days")
-				.setCancelable(true)
+				//.setCancelable(true)
 				.setMultiChoiceItems(items, itemsChecked, new OnMultiChoiceClickListener() {
 					
 					@Override
@@ -288,6 +311,12 @@ public class EditCreateAlarm extends FragmentActivity {
 							if (!recurDays.contains(which))
 							{
 								recurDays.add(which);
+								Log.d("MYNAMEISTODD", "Add:" + which);
+							}
+							
+							if (recurDays.contains(-1)) {
+								recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
+								Log.d("MYNAMEISTODD", "Remove:-1");
 							}
 						}
 						else
@@ -295,7 +324,13 @@ public class EditCreateAlarm extends FragmentActivity {
 							if (recurDays.contains(which))
 							{
 								recurDays.remove(recurDays.indexOf(which));
+								Log.d("MYNAMEISTODD", "Remove:" + which);
 							}
+						}
+						
+						if (recurDays.size() == 0) {
+							recurDays.add(-1);
+							Log.d("MYNAMEISTODD", "Add:-1");
 						}
 					}
 				})
@@ -303,15 +338,15 @@ public class EditCreateAlarm extends FragmentActivity {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								Log.d("MYNAMEISTODD", "Clicked Done");
-
 							}
 						})
-				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						Log.d("MYNAMEISTODD", "Clicked Cancel");
-						dialog.cancel();
-					}
-				});
+//				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int id) {
+//						Log.d("MYNAMEISTODD", "Clicked Cancel");
+//						dialog.cancel();
+//					}
+//				})
+						;
 
 		AlertDialog alert = builder.create();
 		alert.setOnDismissListener(new OnDismissListener() {
@@ -322,6 +357,10 @@ public class EditCreateAlarm extends FragmentActivity {
 				if (recurDays.size() > 0) {
 					for (int recurDay : recurDays) {
 							switch (recurDay) {
+							case -1:
+							default:
+								textToShow = "One Time";
+								break;
 							case 0:
 								textToShow += "Sun,";
 								break;
@@ -343,11 +382,12 @@ public class EditCreateAlarm extends FragmentActivity {
 							case 6:
 								textToShow += "Sat,";
 								break;
-							default:
-								break;
 							}	
 					}
 					textToShow = textToShow.substring(0, textToShow.length()-1);
+				}
+				else {
+					textToShow = "One Time";
 				}
 				daysRecurring.setText(textToShow);
 			}

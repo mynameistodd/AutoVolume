@@ -126,6 +126,10 @@ public class ListAlarms extends ListActivity {
 							if (recurDayStr.length() > 0) {
 								int recurDay = Integer.parseInt(recurDayStr);
 								switch (recurDay) {
+								case -1:
+								default:
+									textToShow = "One Time";
+									break;
 								case 0:
 									textToShow += "Sun,";
 									break;
@@ -146,8 +150,6 @@ public class ListAlarms extends ListActivity {
 									break;
 								case 6:
 									textToShow += "Sat,";
-									break;
-								default:
 									break;
 								}
 							}
