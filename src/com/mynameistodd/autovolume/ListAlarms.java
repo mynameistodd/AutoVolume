@@ -2,6 +2,8 @@ package com.mynameistodd.autovolume;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,8 +100,16 @@ public class ListAlarms extends ListActivity {
 			tmp.put("RECUR", timeRecur[2]);
 			tmp.put("VOLUME", (String) allPrefs.get(key));
 			listMapLocal.add(tmp);
-
 		}
+//		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
+//
+//			@Override
+//			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
+//				int time1 = Integer.parseInt(lhs.get("TIME").toString().replace(":", ""));
+//				int time2 = Integer.parseInt(rhs.get("TIME").toString().replace(":", ""));
+//				return (time1 < time2) ? 1 : 0;
+//			}
+//		});
 
 		sa = new SimpleAdapter(context, listMapLocal,
 				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume }) {
@@ -154,7 +164,9 @@ public class ListAlarms extends ListActivity {
 								}
 							}
 						}
-						textToShow = textToShow.substring(0, textToShow.length()-1);
+						if (textToShow != "One Time") {
+							textToShow = textToShow.substring(0, textToShow.length()-1);
+						}
 					}
 					v.setText(textToShow);
 				}
@@ -163,6 +175,7 @@ public class ListAlarms extends ListActivity {
 				}
 			}
 		};
+		
 		setListAdapter(sa);
 	}
 
@@ -240,7 +253,7 @@ public class ListAlarms extends ListActivity {
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						Log.d("MYNAMEISTODD", "Clicked Yes");
+						Log.d("MYNAMEISTODD", "Clicked No");
 						dialog.cancel();
 					}
 				});

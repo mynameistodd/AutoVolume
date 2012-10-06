@@ -108,6 +108,12 @@ public class EditCreateAlarm extends FragmentActivity {
 				}
 			}
         }
+        else
+        {
+        	if (!recurDays.contains(-1)) {
+				recurDays.add(-1);
+			}
+        }
 		
 		c.set(Calendar.HOUR_OF_DAY, hour);
 		c.set(Calendar.MINUTE, minute);
@@ -146,11 +152,14 @@ public class EditCreateAlarm extends FragmentActivity {
 						break;
 					}	
 			}
-			textToShow = textToShow.substring(0, textToShow.length()-1);
+			if (textToShow != "One Time") {
+				textToShow = textToShow.substring(0, textToShow.length()-1);
+			}
 		}
 		else
 		{
 			textToShow = "One Time";
+			
 		}
 		daysRecurring.setText(textToShow);
 		
@@ -204,45 +213,47 @@ public class EditCreateAlarm extends FragmentActivity {
 					for (int recurDay : recurDays) {
 						recurDaysDelim += recurDay + "|";
 						
-						Calendar cNew = Calendar.getInstance();
-						cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
-						cNew.set(Calendar.HOUR_OF_DAY, hour);
-						cNew.set(Calendar.MINUTE, minute);
-						cNew.set(Calendar.SECOND, 0);
+						if (recurDay != -1) {
+							Calendar cNew = Calendar.getInstance();
+							cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
+							cNew.set(Calendar.HOUR_OF_DAY, hour);
+							cNew.set(Calendar.MINUTE, minute);
+							cNew.set(Calendar.SECOND, 0);
+							
+							//Set alarms
+							Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+							String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
+							Uri data = Uri.parse(Uri.encode(raw));
+							intent.setData(data);
+							intent.putExtra("AUDIO_LEVEL", nPickerVal);
+							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
+						}
+						else
+						{
+							Calendar cNew = Calendar.getInstance();
+							cNew.set(Calendar.HOUR_OF_DAY, hour);
+							cNew.set(Calendar.MINUTE, minute);
+							cNew.set(Calendar.SECOND, 0);
+							
+							//Set alarms
+							Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
+							String raw = "mnit://" + (cNew.get(Calendar.DAY_OF_WEEK)-1) + "/" + hour + ":" + minute + "/" + nPickerVal;
+							Uri data = Uri.parse(Uri.encode(raw));
+							intent.setData(data);
+							intent.putExtra("AUDIO_LEVEL", nPickerVal);
+							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
+							
+							//prefsEditor.putString(hour + ":" + minute + ":" + "|" + -1 + "|", String.valueOf(nPickerVal));
+							//Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + -1 + " Volume:" + String.valueOf(nPickerVal));
 						
-						//Set alarms
-						Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-						String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
-						Uri data = Uri.parse(Uri.encode(raw));
-						intent.setData(data);
-						intent.putExtra("AUDIO_LEVEL", nPickerVal);
-						PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
-						
+						}
 					}
 					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
 					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
 				}
-				else
-				{
-					Calendar cNew = Calendar.getInstance();
-					cNew.set(Calendar.HOUR_OF_DAY, hour);
-					cNew.set(Calendar.MINUTE, minute);
-					cNew.set(Calendar.SECOND, 0);
-					
-					//Set alarms
-					Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-					String raw = "mnit://" + (cNew.get(Calendar.DAY_OF_WEEK)-1) + "/" + hour + ":" + minute + "/" + nPickerVal;
-					Uri data = Uri.parse(Uri.encode(raw));
-					intent.setData(data);
-					intent.putExtra("AUDIO_LEVEL", nPickerVal);
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-					alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
-					
-					prefsEditor.putString(hour + ":" + minute + ":" + "|" + -1 + "|", String.valueOf(nPickerVal));
-					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + -1 + " Volume:" + String.valueOf(nPickerVal));
 				
-				}
 				prefsEditor.commit();
 				
 				setResult(RESULT_OK);
@@ -300,7 +311,6 @@ public class EditCreateAlarm extends FragmentActivity {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
 		builder.setTitle("Pick recurring days")
-				//.setCancelable(true)
 				.setMultiChoiceItems(items, itemsChecked, new OnMultiChoiceClickListener() {
 					
 					@Override
@@ -339,14 +349,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							public void onClick(DialogInterface dialog, int id) {
 								Log.d("MYNAMEISTODD", "Clicked Done");
 							}
-						})
-//				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int id) {
-//						Log.d("MYNAMEISTODD", "Clicked Cancel");
-//						dialog.cancel();
-//					}
-//				})
-						;
+						});
 
 		AlertDialog alert = builder.create();
 		alert.setOnDismissListener(new OnDismissListener() {
@@ -384,10 +387,15 @@ public class EditCreateAlarm extends FragmentActivity {
 								break;
 							}	
 					}
-					textToShow = textToShow.substring(0, textToShow.length()-1);
+					if (textToShow != "One Time") {
+						textToShow = textToShow.substring(0, textToShow.length()-1);
+					}
 				}
 				else {
 					textToShow = "One Time";
+					if (!recurDays.contains(-1)) {
+						recurDays.add(-1);
+					}
 				}
 				daysRecurring.setText(textToShow);
 			}
