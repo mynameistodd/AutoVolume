@@ -45,6 +45,7 @@ public class EditCreateAlarm extends FragmentActivity {
 	private AlarmManager alarmManager;
 	private static TextView time;
 	private TimePickerDialog tPicker;
+	private static Calendar cal;
 	private static int hour = 0;
 	private static int minute = 0;
 	private static int volume = 0;
@@ -88,10 +89,10 @@ public class EditCreateAlarm extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		
-        Calendar c = Calendar.getInstance();
+        cal = Calendar.getInstance();
         
-        hour = c.get(Calendar.HOUR_OF_DAY);
-		minute = c.get(Calendar.MINUTE);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+		minute = cal.get(Calendar.MINUTE);
 		volume = 0;
 		
         if (editMode)
@@ -115,10 +116,10 @@ public class EditCreateAlarm extends FragmentActivity {
 			}
         }
 		
-		c.set(Calendar.HOUR_OF_DAY, hour);
-		c.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
 		
-		time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+		time.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 		seekBar.setProgress(volume);
 		
 		String textToShow = "";
@@ -168,11 +169,11 @@ public class EditCreateAlarm extends FragmentActivity {
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfDay) {
 				
-				Calendar c = Calendar.getInstance();
-				c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				c.set(Calendar.MINUTE, minuteOfDay);
+				//Calendar c = Calendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				cal.set(Calendar.MINUTE, minuteOfDay);
 				
-				time.setText(DateUtils.formatDateTime(getApplicationContext(), c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+				time.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 				
 				hour = hourOfDay;
 				minute = minuteOfDay;

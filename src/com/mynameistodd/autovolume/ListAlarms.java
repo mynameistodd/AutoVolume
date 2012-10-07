@@ -29,10 +29,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.text.format.DateUtils;
+
+import com.google.ads.*;
 
 public class ListAlarms extends ListActivity {
 
@@ -46,6 +49,7 @@ public class ListAlarms extends ListActivity {
 	private static List<Map<String, ?>> listMapLocal;
 	private SimpleAdapter sa;
 	private AlarmManager alarmManager;
+	private AdView adView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,16 @@ public class ListAlarms extends ListActivity {
 		contextThis = this;
 		list = getListView();
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		adView = new AdView(this, AdSize.BANNER, "a150719f918826b");
+		
+		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout1);
+		layout.addView(adView);
+		AdRequest adRequest = new AdRequest();
+		//adRequest.addTestDevice("BEC95AF7414ACCA7627A9C768544EB30");
+		//adRequest.addTestDevice("3D173FEA54EE7C5D1C062C644D79DAF5");
+		//adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+
+		adView.loadAd(adRequest);
 
 		btnAdd.setOnClickListener(new OnClickListener() {
 
@@ -101,15 +115,15 @@ public class ListAlarms extends ListActivity {
 			tmp.put("VOLUME", (String) allPrefs.get(key));
 			listMapLocal.add(tmp);
 		}
-//		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
-//
-//			@Override
-//			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
-//				int time1 = Integer.parseInt(lhs.get("TIME").toString().replace(":", ""));
-//				int time2 = Integer.parseInt(rhs.get("TIME").toString().replace(":", ""));
-//				return (time1 < time2) ? 1 : 0;
-//			}
-//		});
+		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
+
+			@Override
+			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
+				String hour1 = lhs.get("TIME").toString().substring(0, lhs.get("TIME").toString().indexOf(":"));
+				String hour2 = rhs.get("TIME").toString().substring(0, rhs.get("TIME").toString().indexOf(":"));
+				return hour1.compareToIgnoreCase(hour2);
+			}
+		});
 
 		sa = new SimpleAdapter(context, listMapLocal,
 				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume }) {
@@ -281,5 +295,12 @@ public class ListAlarms extends ListActivity {
 		}
 		
 	}
-
+	
+	@Override
+	public void onDestroy() {
+	  if (adView != null) {
+	    adView.destroy();
+	  }
+	  super.onDestroy();
+	}
 }
