@@ -62,7 +62,7 @@ public class ListAlarms extends ListActivity {
 		contextThis = this;
 		list = getListView();
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		adView = new AdView(this, AdSize.BANNER, "a150719f918826b");
+		adView = new AdView(this, AdSize.SMART_BANNER, "a150719f918826b");
 		
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout1);
 		layout.addView(adView);
@@ -119,9 +119,9 @@ public class ListAlarms extends ListActivity {
 
 			@Override
 			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
-				String hour1 = lhs.get("TIME").toString().substring(0, lhs.get("TIME").toString().indexOf(":"));
-				String hour2 = rhs.get("TIME").toString().substring(0, rhs.get("TIME").toString().indexOf(":"));
-				return hour1.compareToIgnoreCase(hour2);
+				int hour1 = Integer.parseInt(lhs.get("TIME").toString().substring(0, lhs.get("TIME").toString().indexOf(":")));
+				int hour2 = Integer.parseInt(rhs.get("TIME").toString().substring(0, rhs.get("TIME").toString().indexOf(":")));
+				return (hour1 == hour2) ? 0 : (hour1 > hour2) ? 1 : -1;
 			}
 		});
 
