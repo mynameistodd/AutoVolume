@@ -278,7 +278,7 @@ public class ListAlarms extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_list_alarms, menu);
+		//getMenuInflater().inflate(R.menu.activity_list_alarms, menu);
 		return true;
 	}
 
