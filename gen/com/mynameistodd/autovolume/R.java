@@ -19,26 +19,29 @@ public final class R {
         public static final int padding_small=0x7f040000;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int ic_action_search=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f09000c;
-        public static final int btn_add_new=0x7f09000d;
-        public static final int button1=0x7f090003;
-        public static final int button2=0x7f090002;
-        public static final int delete_all_prefs=0x7f090010;
+        public static final int RelativeLayout1=0x7f09000e;
+        public static final int btnCancel=0x7f090002;
+        public static final int btnSave=0x7f090003;
+        public static final int btn_add_new=0x7f09000f;
+        public static final int delete_all_prefs=0x7f090012;
+        public static final int imageView1=0x7f090009;
+        public static final int imageView2=0x7f09000a;
         public static final int linearLayout1=0x7f090001;
-        public static final int menu_delete=0x7f09000f;
-        public static final int menu_settings=0x7f09000e;
+        public static final int menu_delete=0x7f090010;
+        public static final int menu_settings=0x7f090011;
         public static final int seekBar1=0x7f090006;
-        public static final int textView1=0x7f090000;
-        public static final int textView2=0x7f090004;
-        public static final int textView3=0x7f090005;
-        public static final int textView4=0x7f090007;
-        public static final int textView5=0x7f090008;
-        public static final int tv_recur=0x7f09000b;
-        public static final int tv_time=0x7f09000a;
-        public static final int tv_volume=0x7f090009;
+        public static final int tvRecur=0x7f090007;
+        public static final int tvRecurLabel=0x7f090008;
+        public static final int tvTime=0x7f090004;
+        public static final int tvTimeLabel=0x7f090000;
+        public static final int tvVolumeLabel=0x7f090005;
+        public static final int tv_recur=0x7f09000d;
+        public static final int tv_time=0x7f09000c;
+        public static final int tv_volume=0x7f09000b;
     }
     public static final class layout {
         public static final int activity_edit_create_alarm=0x7f030000;
@@ -65,6 +68,10 @@ public final class R {
         public static final int title_activity_time_picker=0x7f050004;
     }
     public static final class style {
-        public static final int AppTheme=0x7f070000;
+        public static final int AppTheme=0x7f070004;
+        public static final int labels=0x7f070000;
+        public static final int recurLabel=0x7f070003;
+        public static final int timeLabel=0x7f070001;
+        public static final int volumeLabel=0x7f070002;
     }
 }

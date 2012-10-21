@@ -65,12 +65,12 @@ public class EditCreateAlarm extends FragmentActivity {
 		prefsEditor = prefs.edit();
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        buttonSave = (Button)findViewById(R.id.button1);
-        buttonCancel = (Button)findViewById(R.id.button2);
-        time = (TextView)findViewById(R.id.textView2);
+        buttonSave = (Button)findViewById(R.id.btnSave);
+        buttonCancel = (Button)findViewById(R.id.btnCancel);
+        time = (TextView)findViewById(R.id.tvTime);
         seekBar = (SeekBar)findViewById(R.id.seekBar1);
-        daysRecurring = (TextView)findViewById(R.id.textView4);
-        daysRecurringLabel = (TextView)findViewById(R.id.textView5);
+        daysRecurring = (TextView)findViewById(R.id.tvRecur);
+        daysRecurringLabel = (TextView)findViewById(R.id.tvRecurLabel);
         contextThis = this;
         recurDays = new ArrayList<Integer>();
         editMode = false;
