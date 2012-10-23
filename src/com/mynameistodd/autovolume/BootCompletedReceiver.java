@@ -56,6 +56,8 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 				}
 			}
 			
+			final Calendar calNow = Calendar.getInstance();
+			
 			for (int recurDay : recurDays) {
 				//recurDaysDelim += recurDay + "|";
 				
@@ -64,6 +66,9 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 				cNew.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeRecur[0]));
 				cNew.set(Calendar.MINUTE, Integer.parseInt(timeRecur[1]));
 				cNew.set(Calendar.SECOND, 0);
+				if (cNew.before(calNow)) {
+					cNew.roll(Calendar.WEEK_OF_YEAR, 1);
+				}
 				
 				//Set alarms
 				Intent intentBC = new Intent(context, SetAlarmManagerReceiver.class);

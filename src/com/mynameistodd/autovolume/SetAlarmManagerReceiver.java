@@ -1,10 +1,15 @@
 package com.mynameistodd.autovolume;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Debug;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,6 +26,45 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, AudioManager.FLAG_SHOW_UI);
 		Toast.makeText(arg0, "Volume Changed!", Toast.LENGTH_SHORT).show();
 		Log.d("MYNAMEISTODD", "Volume set to:" + audioLevel);
+		
+		NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = new Notification(R.drawable.ic_launcher, "Your Volume Has Been Changed.", System.currentTimeMillis());
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		
+		Intent notificationIntent = new Intent(arg0, ListAlarms.class);
+		//notificationIntent.putExtra("com.mynameistodd.whocalled.unknownNumber", incomingNumber);
+		PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		notification.setLatestEventInfo(arg0, "Auto Volume Change", "Set To: " + audioLevel, contentIntent);
+		mNotificationManager.notify(1, notification);
+		
+//		NotificationCompat.Builder mBuilder =
+//		        new NotificationCompat.Builder(arg0)
+//		        .setSmallIcon(R.drawable.ic_launcher)
+//		        .setContentTitle("My notification")
+//		        .setContentText("Hello World!");
+//		// Creates an explicit intent for an Activity in your app
+//		Intent resultIntent = new Intent(arg0, ListAlarms.class);
+//
+//		// The stack builder object will contain an artificial back stack for the
+//		// started Activity.
+//		// This ensures that navigating backward from the Activity leads out of
+//		// your application to the Home screen.
+//		TaskStackBuilder stackBuilder = TaskStackBuilder.create(arg0);
+//		// Adds the back stack for the Intent (but not the Intent itself)
+//		stackBuilder.addParentStack(ListAlarms.class);
+//		// Adds the Intent that starts the Activity to the top of the stack
+//		stackBuilder.addNextIntent(resultIntent);
+//		PendingIntent resultPendingIntent =
+//		        stackBuilder.getPendingIntent(
+//		            0,
+//		            PendingIntent.FLAG_UPDATE_CURRENT
+//		        );
+//		mBuilder.setContentIntent(resultPendingIntent);
+//		NotificationManager mNotificationManager =
+//		    (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
+//		// mId allows you to update the notification later on.
+//		mNotificationManager.notify(1, mBuilder.build());
 	}
 
 }

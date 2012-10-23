@@ -208,6 +208,7 @@ public class EditCreateAlarm extends FragmentActivity {
 					Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 				}
 				
+				final Calendar calNow = Calendar.getInstance();
 				//Save new alarm
 				if (recurDays.size() > 0) {
 					String recurDaysDelim = "|";
@@ -220,6 +221,9 @@ public class EditCreateAlarm extends FragmentActivity {
 							cNew.set(Calendar.HOUR_OF_DAY, hour);
 							cNew.set(Calendar.MINUTE, minute);
 							cNew.set(Calendar.SECOND, 0);
+							if (cNew.before(calNow)) {
+								cNew.roll(Calendar.WEEK_OF_YEAR, 1);
+							}
 							
 							//Set alarms
 							Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
@@ -229,6 +233,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							intent.putExtra("AUDIO_LEVEL", nPickerVal);
 							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
+							Log.d("MYNAMEISTODD", "Time:" + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), DateUtils.FORMAT_ABBREV_ALL));
 						}
 						else
 						{
@@ -253,6 +258,7 @@ public class EditCreateAlarm extends FragmentActivity {
 					}
 					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
 					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
+					
 				}
 				
 				prefsEditor.commit();
