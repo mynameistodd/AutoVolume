@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,6 +45,8 @@ public class EditCreateAlarm extends FragmentActivity {
 	private AudioManager audioManager;
 	private AlarmManager alarmManager;
 	private static TextView time;
+	private static ImageView arrowUp;
+	private static ImageView arrowDown;
 	private TimePickerDialog tPicker;
 	private static Calendar cal;
 	private static int hour = 0;
@@ -68,6 +71,8 @@ public class EditCreateAlarm extends FragmentActivity {
         buttonSave = (Button)findViewById(R.id.btnSave);
         buttonCancel = (Button)findViewById(R.id.btnCancel);
         time = (TextView)findViewById(R.id.tvTime);
+        arrowUp = (ImageView)findViewById(R.id.imageView1);
+        arrowDown = (ImageView)findViewById(R.id.imageView2);
         seekBar = (SeekBar)findViewById(R.id.seekBar1);
         daysRecurring = (TextView)findViewById(R.id.tvRecur);
         daysRecurringLabel = (TextView)findViewById(R.id.tvRecurLabel);
@@ -233,6 +238,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							intent.putExtra("AUDIO_LEVEL", nPickerVal);
 							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
+							
 							Log.d("MYNAMEISTODD", "Time:" + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), DateUtils.FORMAT_ABBREV_ALL));
 						}
 						else
@@ -241,8 +247,11 @@ public class EditCreateAlarm extends FragmentActivity {
 							cNew.set(Calendar.HOUR_OF_DAY, hour);
 							cNew.set(Calendar.MINUTE, minute);
 							cNew.set(Calendar.SECOND, 0);
+							if (cNew.before(calNow)) {
+								cNew.roll(Calendar.DAY_OF_WEEK, 1);
+							}
 							
-							//Set alarms
+							//Set one-time alarm
 							Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
 							String raw = "mnit://" + (cNew.get(Calendar.DAY_OF_WEEK)-1) + "/" + hour + ":" + minute + "/" + nPickerVal;
 							Uri data = Uri.parse(Uri.encode(raw));
@@ -251,9 +260,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 							
-							//prefsEditor.putString(hour + ":" + minute + ":" + "|" + -1 + "|", String.valueOf(nPickerVal));
-							//Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + -1 + " Volume:" + String.valueOf(nPickerVal));
-						
+							Log.d("MYNAMEISTODD", "Time:" + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), DateUtils.FORMAT_ABBREV_ALL));
 						}
 					}
 					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
@@ -278,6 +285,22 @@ public class EditCreateAlarm extends FragmentActivity {
 		});
         
         time.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				tPicker.show();
+			}
+		});
+        
+		arrowUp.setOnClickListener(new OnClickListener() {
+					
+			@Override
+			public void onClick(View v) {
+				tPicker.show();
+			}
+		});
+		
+		arrowDown.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

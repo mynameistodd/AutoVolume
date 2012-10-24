@@ -12,8 +12,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="31dp"
         android:text="7"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/Black" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -23,8 +22,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="26dp"
         android:text="12:00"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/Black" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tv_recur"
@@ -34,7 +32,6 @@
         android:layout_below="@+id/tv_time"
         android:layout_marginTop="15dp"
         android:text="Sun"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/Black" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
