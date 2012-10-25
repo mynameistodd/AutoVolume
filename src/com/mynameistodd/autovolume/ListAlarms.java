@@ -10,6 +10,7 @@ import java.util.Map;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -63,6 +64,8 @@ public class ListAlarms extends ListActivity {
 		list = getListView();
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		adView = new AdView(this, AdSize.SMART_BANNER, "a150719f918826b");
+		
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout1);
 		layout.addView(adView);
@@ -278,13 +281,16 @@ public class ListAlarms extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.activity_list_alarms, menu);
+		getMenuInflater().inflate(R.menu.activity_list_alarms, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			startActivity(new Intent(context, SettingsActivity.class));
+			return true;
 		case R.id.delete_all_prefs:
 			prefsEditor.clear().commit();
 			listMapLocal.clear();

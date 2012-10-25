@@ -6,8 +6,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Debug;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -21,23 +23,27 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 	public void onReceive(Context arg0, Intent arg1) {
 		audioManager = (AudioManager) arg0.getSystemService(Context.AUDIO_SERVICE);
 		audioLevel = arg1.getIntExtra("AUDIO_LEVEL", 0);
-		Log.d("MYNAMEISTODD", "Data from Intent:" + arg1.getData());
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);
+		boolean pref_notify = sharedPref.getBoolean("pref_notify", false);
 		
 		audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, AudioManager.FLAG_SHOW_UI);
-		Toast.makeText(arg0, "Volume Changed!", Toast.LENGTH_SHORT).show();
+		
+		Toast.makeText(arg0, "Volume changed!", Toast.LENGTH_SHORT).show();
+		
+		Log.d("MYNAMEISTODD", "Data from Intent:" + arg1.getData());
 		Log.d("MYNAMEISTODD", "Volume set to:" + audioLevel);
 		
-		NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.ic_launcher, "Your Volume Has Been Changed.", System.currentTimeMillis());
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		
-		Intent notificationIntent = new Intent(arg0, ListAlarms.class);
-		//notificationIntent.putExtra("com.mynameistodd.whocalled.unknownNumber", incomingNumber);
-		PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		notification.setLatestEventInfo(arg0, "Auto Volume Change", "Set To: " + audioLevel, contentIntent);
-		mNotificationManager.notify(1, notification);
-		
+		if (pref_notify) {
+			NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
+			Notification notification = new Notification(R.drawable.ic_launcher, "Volume has been changed", System.currentTimeMillis());
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			
+			Intent notificationIntent = new Intent(arg0, ListAlarms.class);
+			PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+			notification.setLatestEventInfo(arg0, "Scheduled volume change", "Set to: " + audioLevel, contentIntent);
+			mNotificationManager.notify(1, notification);
+		}
 //		NotificationCompat.Builder mBuilder =
 //		        new NotificationCompat.Builder(arg0)
 //		        .setSmallIcon(R.drawable.ic_launcher)
