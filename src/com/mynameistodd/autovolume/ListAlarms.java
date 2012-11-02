@@ -1,5 +1,6 @@
 package com.mynameistodd.autovolume;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,8 +51,10 @@ public class ListAlarms extends ListActivity {
 	private static Map<String, ?> itemToDelete;
 	private static List<Map<String, ?>> listMapLocal;
 	private SimpleAdapter sa;
+	private AudioManager audioManager;
 	private AlarmManager alarmManager;
 	private AdView adView;
+	private Integer maxVolume;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,8 +66,11 @@ public class ListAlarms extends ListActivity {
 		context = getApplicationContext();
 		contextThis = this;
 		list = getListView();
+		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		adView = new AdView(this, AdSize.SMART_BANNER, "a150719f918826b");
+		
+		maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
@@ -188,7 +195,9 @@ public class ListAlarms extends ListActivity {
 					v.setText(textToShow);
 				}
 				else if (v.getId() == R.id.tv_volume) {
-					v.setText(text);
+					float volume = Float.parseFloat(text);
+					double toFormat = (volume / maxVolume.floatValue());
+					v.setText(NumberFormat.getPercentInstance().format(toFormat));
 				}
 			}
 		};
