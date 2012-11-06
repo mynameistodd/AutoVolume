@@ -1,5 +1,7 @@
 package com.mynameistodd.autovolume;
 
+import java.text.NumberFormat;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,7 +20,9 @@ import android.widget.Toast;
 public class SetAlarmManagerReceiver extends BroadcastReceiver {
 
 	private AudioManager audioManager;
-	private int audioLevel;
+	private Integer audioLevel;
+	private Integer maxVolume;
+	
 	@Override
 	public void onReceive(Context arg0, Intent arg1) {
 		audioManager = (AudioManager) arg0.getSystemService(Context.AUDIO_SERVICE);
@@ -33,6 +37,9 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		Log.d("MYNAMEISTODD", "Data from Intent:" + arg1.getData());
 		Log.d("MYNAMEISTODD", "Volume set to:" + audioLevel);
 		
+		maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+		double toFormat = (audioLevel.floatValue() / maxVolume.floatValue());
+		
 		if (pref_notify) {
 			NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
 			Notification notification = new Notification(R.drawable.ic_launcher, "Volume has been changed", System.currentTimeMillis());
@@ -41,7 +48,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 			Intent notificationIntent = new Intent(arg0, ListAlarms.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	
-			notification.setLatestEventInfo(arg0, "Scheduled volume change", "Set to: " + audioLevel, contentIntent);
+			notification.setLatestEventInfo(arg0, "Scheduled volume change", "Set to: " + NumberFormat.getPercentInstance().format(toFormat), contentIntent);
 			mNotificationManager.notify(1, notification);
 		}
 //		NotificationCompat.Builder mBuilder =
