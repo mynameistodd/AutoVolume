@@ -136,30 +136,30 @@ public class EditCreateAlarm extends FragmentActivity {
 						textToShow = "One Time";
 						break;
 					case 0:
-						textToShow += "Sun,";
+						textToShow += "Sun, ";
 						break;
 					case 1:
-						textToShow += "Mon,";
+						textToShow += "Mon, ";
 						break;
 					case 2:
-						textToShow += "Tue,";
+						textToShow += "Tue, ";
 						break;
 					case 3:
-						textToShow += "Wed,";
+						textToShow += "Wed, ";
 						break;
 					case 4:
-						textToShow += "Thu,";
+						textToShow += "Thu, ";
 						break;
 					case 5:
-						textToShow += "Fri,";
+						textToShow += "Fri, ";
 						break;
 					case 6:
-						textToShow += "Sat,";
+						textToShow += "Sat, ";
 						break;
 					}	
 			}
 			if (textToShow != "One Time") {
-				textToShow = textToShow.substring(0, textToShow.length()-1);
+				textToShow = textToShow.substring(0, textToShow.length()-2);
 			}
 		}
 		else

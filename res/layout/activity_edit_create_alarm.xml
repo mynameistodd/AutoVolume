@@ -77,7 +77,7 @@
         android:layout_below="@+id/seekBar1"
         android:layout_marginTop="25dp"
         android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/tvRecurLabel"

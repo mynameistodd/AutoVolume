@@ -6,32 +6,29 @@
 
     <TextView
         android:id="@+id/tv_volume"
+        style="@style/tv_volume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="31dp"
-        android:text="7"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="7" />
 
     <TextView
         android:id="@+id/tv_time"
+        style="@style/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="26dp"
-        android:text="12:00"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="12:00" />
 
     <TextView
         android:id="@+id/tv_recur"
+        style="@style/tv_recur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_time"
         android:layout_below="@+id/tv_time"
-        android:layout_marginTop="15dp"
-        android:text="Sun"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="Sun" />
 
 </RelativeLayout>
