@@ -239,7 +239,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 							
-							Log.d("MYNAMEISTODD", "Time:" + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), DateUtils.FORMAT_ABBREV_ALL));
+							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 						else
 						{
@@ -260,7 +260,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 							
-							Log.d("MYNAMEISTODD", "Time:" + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), DateUtils.FORMAT_ABBREV_ALL));
+							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 					}
 					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
@@ -395,30 +395,30 @@ public class EditCreateAlarm extends FragmentActivity {
 								textToShow = "One Time";
 								break;
 							case 0:
-								textToShow += "Sun,";
+								textToShow += "Sun, ";
 								break;
 							case 1:
-								textToShow += "Mon,";
+								textToShow += "Mon, ";
 								break;
 							case 2:
-								textToShow += "Tue,";
+								textToShow += "Tue, ";
 								break;
 							case 3:
-								textToShow += "Wed,";
+								textToShow += "Wed, ";
 								break;
 							case 4:
-								textToShow += "Thu,";
+								textToShow += "Thu, ";
 								break;
 							case 5:
-								textToShow += "Fri,";
+								textToShow += "Fri, ";
 								break;
 							case 6:
-								textToShow += "Sat,";
+								textToShow += "Sat, ";
 								break;
 							}	
 					}
 					if (textToShow != "One Time") {
-						textToShow = textToShow.substring(0, textToShow.length()-1);
+						textToShow = textToShow.substring(0, textToShow.length()-2);
 					}
 				}
 				else {
