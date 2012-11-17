@@ -34,11 +34,10 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     	prefs = context.getSharedPreferences("AUTOVOLUME", Context.MODE_PRIVATE);
 		prefsEditor = prefs.edit();
-    	recurDays = new ArrayList<Integer>();
-
+    	
 		Map<String, ?> allPrefs = prefs.getAll();
 		for (String key : allPrefs.keySet()) {
-			
+			recurDays = new ArrayList<Integer>();
 			String[] timeRecur = key.split(":");
 			
 			Map<String, String> tmp = new HashMap<String, String>();
@@ -47,10 +46,12 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 			tmp.put("VOLUME", (String) allPrefs.get(key));
 
 			String[] recurDaysArray = tmp.get("RECUR").split("\\|");
+			
 			for (String rd : recurDaysArray) {
 				if (rd.length() > 0) {
 					int rdi = Integer.parseInt(rd);
 					recurDays.add(rdi);
+					Log.d("MYNAMEISTODD", "recurDays add: " + rdi);
 				}
 			}
 			
@@ -80,7 +81,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentBC, PendingIntent.FLAG_UPDATE_CURRENT);
 					alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 					
-					Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+					Log.d("MYNAMEISTODD", "Repeating: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 				}
 				else
 				{
@@ -88,20 +89,19 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 					cNew.set(Calendar.HOUR_OF_DAY, hour);
 					cNew.set(Calendar.MINUTE, minute);
 					cNew.set(Calendar.SECOND, 0);
-					if (cNew.before(calNow)) {
-						cNew.roll(Calendar.DAY_OF_WEEK, 1);
+					if (cNew.after(calNow)) {
+						
+						//Set one-time alarm
+						Intent intentBC = new Intent(context, SetAlarmManagerReceiver.class);
+						String raw = "mnit://" + cNew.get(Calendar.DAY_OF_WEEK) + "/" + hour + ":" + minute + "/" + nPickerVal;
+						Uri data = Uri.parse(Uri.encode(raw));
+						intentBC.setData(data);
+						intentBC.putExtra("AUDIO_LEVEL", nPickerVal);
+						PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentBC, PendingIntent.FLAG_UPDATE_CURRENT);
+						alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
+						
+						Log.d("MYNAMEISTODD", "One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 					}
-					
-					//Set one-time alarm
-					Intent intentBC = new Intent(context, SetAlarmManagerReceiver.class);
-					String raw = "mnit://" + (cNew.get(Calendar.DAY_OF_WEEK)-1) + "/" + hour + ":" + minute + "/" + nPickerVal;
-					Uri data = Uri.parse(Uri.encode(raw));
-					intentBC.setData(data);
-					intentBC.putExtra("AUDIO_LEVEL", nPickerVal);
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentBC, PendingIntent.FLAG_UPDATE_CURRENT);
-					alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
-					
-					Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 				}
 			}
 		}

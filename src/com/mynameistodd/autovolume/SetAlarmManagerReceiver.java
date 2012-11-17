@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -34,7 +35,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		
 		Toast.makeText(arg0, "Volume changed!", Toast.LENGTH_SHORT).show();
 		
-		Log.d("MYNAMEISTODD", "Data from Intent:" + arg1.getData());
+		Log.d("MYNAMEISTODD", "Data from Intent:" + Uri.decode(arg1.getData().toString()));
 		Log.d("MYNAMEISTODD", "Volume set to:" + audioLevel);
 		
 		maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
