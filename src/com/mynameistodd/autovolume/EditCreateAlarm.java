@@ -263,7 +263,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 					}
-					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
+					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim + ":" + "true", String.valueOf(nPickerVal));
 					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
 					
 				}

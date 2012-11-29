@@ -43,6 +43,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 			Map<String, String> tmp = new HashMap<String, String>();
 			tmp.put("TIME", timeRecur[0] + ":" + timeRecur[1]);
 			tmp.put("RECUR", timeRecur[2]);
+			tmp.put("ENABLED", (timeRecur.length == 4) ? timeRecur[3] : "true");
 			tmp.put("VOLUME", (String) allPrefs.get(key));
 
 			String[] recurDaysArray = tmp.get("RECUR").split("\\|");
@@ -58,6 +59,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 			final Calendar calNow = Calendar.getInstance();
 			int hour = Integer.parseInt(timeRecur[0]);
 			int minute = Integer.parseInt(timeRecur[1]);
+			boolean enabled = Boolean.parseBoolean(tmp.get("ENABLED"));
 			int nPickerVal = Integer.parseInt((String) allPrefs.get(key));
 			
 			for (int recurDay : recurDays) {
@@ -89,7 +91,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 					cNew.set(Calendar.HOUR_OF_DAY, hour);
 					cNew.set(Calendar.MINUTE, minute);
 					cNew.set(Calendar.SECOND, 0);
-					if (cNew.after(calNow)) {
+					if (enabled && cNew.after(calNow)) {
 						
 						//Set one-time alarm
 						Intent intentBC = new Intent(context, SetAlarmManagerReceiver.class);
