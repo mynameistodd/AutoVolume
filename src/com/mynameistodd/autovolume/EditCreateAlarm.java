@@ -127,46 +127,8 @@ public class EditCreateAlarm extends FragmentActivity {
 		time.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 		seekBar.setProgress(volume);
 		
-		String textToShow = "";
-		if (recurDays.size() > 0) {
-			for (int recurDay : recurDays) {
-					switch (recurDay) {
-					case -1:
-					default:
-						textToShow = "One Time";
-						break;
-					case 0:
-						textToShow += "Sun, ";
-						break;
-					case 1:
-						textToShow += "Mon, ";
-						break;
-					case 2:
-						textToShow += "Tue, ";
-						break;
-					case 3:
-						textToShow += "Wed, ";
-						break;
-					case 4:
-						textToShow += "Thu, ";
-						break;
-					case 5:
-						textToShow += "Fri, ";
-						break;
-					case 6:
-						textToShow += "Sat, ";
-						break;
-					}	
-			}
-			if (textToShow != "One Time") {
-				textToShow = textToShow.substring(0, textToShow.length()-2);
-			}
-		}
-		else
-		{
-			textToShow = "One Time";
-			
-		}
+		String textToShow = Util.getRecurText(recurDays);
+		
 		daysRecurring.setText(textToShow);
 		
         tPicker = new TimePickerDialog(this, new OnTimeSetListener() {
@@ -263,7 +225,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 					}
-					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim + ":" + "true", String.valueOf(nPickerVal));
+					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
 					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
 					
 				}
@@ -315,6 +277,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				showDialog(0);
 			}
 		});
+        
         daysRecurring.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -386,47 +349,14 @@ public class EditCreateAlarm extends FragmentActivity {
 			
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				String textToShow = "";
-				if (recurDays.size() > 0) {
-					for (int recurDay : recurDays) {
-							switch (recurDay) {
-							case -1:
-							default:
-								textToShow = "One Time";
-								break;
-							case 0:
-								textToShow += "Sun, ";
-								break;
-							case 1:
-								textToShow += "Mon, ";
-								break;
-							case 2:
-								textToShow += "Tue, ";
-								break;
-							case 3:
-								textToShow += "Wed, ";
-								break;
-							case 4:
-								textToShow += "Thu, ";
-								break;
-							case 5:
-								textToShow += "Fri, ";
-								break;
-							case 6:
-								textToShow += "Sat, ";
-								break;
-							}	
-					}
-					if (textToShow != "One Time") {
-						textToShow = textToShow.substring(0, textToShow.length()-2);
-					}
-				}
-				else {
-					textToShow = "One Time";
+				if (recurDays.size() == 0)
+				{
 					if (!recurDays.contains(-1)) {
 						recurDays.add(-1);
 					}
 				}
+				
+				String textToShow = Util.getRecurText(recurDays);
 				daysRecurring.setText(textToShow);
 			}
 		});
