@@ -73,14 +73,14 @@ public final class R {
         public static final int title_activity_time_picker=0x7f060004;
     }
     public static final class style {
-        public static final int AppTheme=0x7f080007;
-        public static final int labels=0x7f080000;
-        public static final int recurLabel=0x7f080003;
-        public static final int timeLabel=0x7f080001;
-        public static final int tv_recur=0x7f080004;
-        public static final int tv_time=0x7f080005;
-        public static final int tv_volume=0x7f080006;
-        public static final int volumeLabel=0x7f080002;
+        public static final int AppTheme=0x7f080000;
+        public static final int labels=0x7f080001;
+        public static final int recurLabel=0x7f080004;
+        public static final int timeLabel=0x7f080002;
+        public static final int tv_recur=0x7f080005;
+        public static final int tv_time=0x7f080006;
+        public static final int tv_volume=0x7f080007;
+        public static final int volumeLabel=0x7f080003;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
