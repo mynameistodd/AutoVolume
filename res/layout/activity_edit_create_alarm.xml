@@ -51,6 +51,18 @@
         android:layout_weight="1"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/tvVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvVolumeLabel"
+        android:layout_alignBottom="@+id/tvVolumeLabel"
+        android:layout_marginLeft="13dp"
+        android:layout_toRightOf="@+id/tvVolumeLabel"
+        android:layout_weight="1"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/tvVolumeLabel"
@@ -62,21 +74,14 @@
         android:layout_weight="1"
         android:text="Volume:" />
 
-    <SeekBar
-        android:id="@+id/seekBar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvVolumeLabel"
-        android:layout_marginTop="13dp" />
-
     <TextView
         android:id="@+id/tvRecur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvTime"
-        android:layout_below="@+id/seekBar1"
+        android:layout_below="@+id/tvVolumeLabel"
         android:layout_marginTop="25dp"
-        android:text="Medium Text"
+        android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -106,5 +111,7 @@
         android:layout_alignLeft="@+id/imageView1"
         android:layout_below="@+id/imageView1"
         android:src="@android:drawable/arrow_down_float" />
+
+    
 
 </RelativeLayout>

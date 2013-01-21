@@ -169,9 +169,7 @@ public class ListAlarms extends ListActivity {
 					v.setText(textToShow);
 				}
 				else if (v.getId() == R.id.tv_volume) {
-					float volume = Float.parseFloat(text);
-					double toFormat = (volume / maxVolume.floatValue());
-					v.setText(NumberFormat.getPercentInstance().format(toFormat));
+					v.setText(Util.getVolumePercent(text, maxVolume));
 				}
 			}
 		};

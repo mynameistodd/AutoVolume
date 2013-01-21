@@ -3,6 +3,7 @@ package com.mynameistodd.autovolume;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.media.AudioManager;
 import android.net.Uri;
@@ -59,11 +60,15 @@ public class EditCreateAlarm extends FragmentActivity {
 	private static List<Integer> recurDays;
 	private static boolean editMode = false;
 	private SeekBar seekBar;
+	private TextView tvVolume;
+	private int maxVolumeStep;
+	private int nPickerVal = 0;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_create_alarm);
+        contextThis = this;
         prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
 		prefsEditor = prefs.edit();
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -73,14 +78,14 @@ public class EditCreateAlarm extends FragmentActivity {
         time = (TextView)findViewById(R.id.tvTime);
         arrowUp = (ImageView)findViewById(R.id.imageView1);
         arrowDown = (ImageView)findViewById(R.id.imageView2);
-        seekBar = (SeekBar)findViewById(R.id.seekBar1);
+        seekBar = new SeekBar(contextThis);
         daysRecurring = (TextView)findViewById(R.id.tvRecur);
         daysRecurringLabel = (TextView)findViewById(R.id.tvRecurLabel);
-        contextThis = this;
+        tvVolume = (TextView)findViewById(R.id.tvVolume);
         recurDays = new ArrayList<Integer>();
         editMode = false;
         
-        int maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+        maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
         seekBar.setMax(maxVolumeStep);
         
         callingIntent = getIntent();
@@ -125,6 +130,7 @@ public class EditCreateAlarm extends FragmentActivity {
 		cal.set(Calendar.MINUTE, minute);
 		
 		time.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+		tvVolume.setText(Util.getVolumePercent(Integer.toString(volume), maxVolumeStep));
 		seekBar.setProgress(volume);
 		
 		String textToShow = Util.getRecurText(recurDays);
@@ -151,7 +157,6 @@ public class EditCreateAlarm extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				int nPickerVal = seekBar.getProgress();
 				
 				//Delete old alarm
 				if (editMode) {
@@ -181,9 +186,9 @@ public class EditCreateAlarm extends FragmentActivity {
 					String recurDaysDelim = "|";
 					for (int recurDay : recurDays) {
 						recurDaysDelim += recurDay + "|";
+						Calendar cNew = Calendar.getInstance();
 						
 						if (recurDay != -1) {
-							Calendar cNew = Calendar.getInstance();
 							cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
 							cNew.set(Calendar.HOUR_OF_DAY, hour);
 							cNew.set(Calendar.MINUTE, minute);
@@ -205,7 +210,6 @@ public class EditCreateAlarm extends FragmentActivity {
 						}
 						else
 						{
-							Calendar cNew = Calendar.getInstance();
 							cNew.set(Calendar.HOUR_OF_DAY, hour);
 							cNew.set(Calendar.MINUTE, minute);
 							cNew.set(Calendar.SECOND, 0);
@@ -254,6 +258,14 @@ public class EditCreateAlarm extends FragmentActivity {
 			}
 		});
         
+        tvVolume.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showDialog(1);
+			}
+		});
+        
 		arrowUp.setOnClickListener(new OnClickListener() {
 					
 			@Override
@@ -290,77 +302,102 @@ public class EditCreateAlarm extends FragmentActivity {
 	@Override
 	@Deprecated
 	protected Dialog onCreateDialog(int id) {
-
-		final CharSequence[] items = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-		boolean[] itemsChecked = new boolean[7];
+		if (id == 0) {
 		
-		if (editMode) {
-			for (int rd : recurDays) {
-				if (rd >= 0) {
-					itemsChecked[rd] = true;
+			final CharSequence[] items = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+			boolean[] itemsChecked = new boolean[7];
+			
+			if (editMode) {
+				for (int rd : recurDays) {
+					if (rd >= 0) {
+						itemsChecked[rd] = true;
+					}
 				}
 			}
-		}
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
-		builder.setTitle("Pick recurring days")
-				.setMultiChoiceItems(items, itemsChecked, new OnMultiChoiceClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-						//keep track of the selected items
-						if (isChecked)
-						{
-							if (!recurDays.contains(which))
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
+			builder.setTitle("Pick recurring days")
+					.setMultiChoiceItems(items, itemsChecked, new OnMultiChoiceClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+							//keep track of the selected items
+							if (isChecked)
 							{
-								recurDays.add(which);
-								Log.d("MYNAMEISTODD", "Add:" + which);
+								if (!recurDays.contains(which))
+								{
+									recurDays.add(which);
+									Log.d("MYNAMEISTODD", "Add:" + which);
+								}
+								
+								if (recurDays.contains(-1)) {
+									recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
+									Log.d("MYNAMEISTODD", "Remove:-1");
+								}
+							}
+							else
+							{
+								if (recurDays.contains(which))
+								{
+									recurDays.remove(recurDays.indexOf(which));
+									Log.d("MYNAMEISTODD", "Remove:" + which);
+								}
 							}
 							
-							if (recurDays.contains(-1)) {
-								recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
-								Log.d("MYNAMEISTODD", "Remove:-1");
+							if (recurDays.size() == 0) {
+								recurDays.add(-1);
+								Log.d("MYNAMEISTODD", "Add:-1");
 							}
 						}
-						else
-						{
-							if (recurDays.contains(which))
-							{
-								recurDays.remove(recurDays.indexOf(which));
-								Log.d("MYNAMEISTODD", "Remove:" + which);
-							}
-						}
-						
-						if (recurDays.size() == 0) {
-							recurDays.add(-1);
-							Log.d("MYNAMEISTODD", "Add:-1");
-						}
-					}
-				})
-				.setPositiveButton("Done",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								Log.d("MYNAMEISTODD", "Clicked Done");
-							}
-						});
-
-		AlertDialog alert = builder.create();
-		alert.setOnDismissListener(new OnDismissListener() {
-			
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				if (recurDays.size() == 0)
-				{
-					if (!recurDays.contains(-1)) {
-						recurDays.add(-1);
-					}
-				}
+					})
+					.setPositiveButton("Done",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									Log.d("MYNAMEISTODD", "Clicked Done in PickDays");
+								}
+							});
+	
+			AlertDialog alert = builder.create();
+			alert.setOnDismissListener(new OnDismissListener() {
 				
-				String textToShow = Util.getRecurText(recurDays);
-				daysRecurring.setText(textToShow);
-			}
-		});
-		return alert;
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					if (recurDays.size() == 0)
+					{
+						if (!recurDays.contains(-1)) {
+							recurDays.add(-1);
+						}
+					}
+					
+					String textToShow = Util.getRecurText(recurDays);
+					daysRecurring.setText(textToShow);
+				}
+			});
+			return alert;
+		}
+		else
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
+			builder.setTitle("Set Volume").setPositiveButton("Set",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							Log.d("MYNAMEISTODD", "Clicked Done in SetVolume");
+						}
+					})
+					.setView(seekBar);
+			
+			AlertDialog alert = builder.create();
+			alert.setOnDismissListener(new OnDismissListener() {
+				
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					nPickerVal = seekBar.getProgress();
+					tvVolume.setText(Util.getVolumePercent(Integer.toString(nPickerVal), maxVolumeStep));
+					Log.d("MYNAMEISTODD", "SetVolume" + nPickerVal);
+				}
+			});
+			return alert;
+		}
 	}
 	
 	@Override

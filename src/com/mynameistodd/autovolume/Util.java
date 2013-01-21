@@ -1,9 +1,16 @@
 package com.mynameistodd.autovolume;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 public class Util {
 
+	public static String getVolumePercent(String volumeSet, Integer maxVolume)
+	{
+		float volume = Float.parseFloat(volumeSet);
+		double toFormat = (volume / maxVolume.floatValue());
+		return NumberFormat.getPercentInstance().format(toFormat);
+	}
 	public static String getRecurText(List<Integer> recurDays)
 	{
 		String textToShow = "";

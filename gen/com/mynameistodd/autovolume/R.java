@@ -33,12 +33,12 @@ public final class R {
         public static final int linearLayout1=0x7f0a0001;
         public static final int menu_delete=0x7f0a0010;
         public static final int menu_settings=0x7f0a0011;
-        public static final int seekBar1=0x7f0a0006;
         public static final int tvRecur=0x7f0a0007;
         public static final int tvRecurLabel=0x7f0a0008;
         public static final int tvTime=0x7f0a0004;
         public static final int tvTimeLabel=0x7f0a0000;
-        public static final int tvVolumeLabel=0x7f0a0005;
+        public static final int tvVolume=0x7f0a0005;
+        public static final int tvVolumeLabel=0x7f0a0006;
         public static final int tv_recur=0x7f0a000d;
         public static final int tv_time=0x7f0a000c;
         public static final int tv_volume=0x7f0a000b;
