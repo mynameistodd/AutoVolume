@@ -17,19 +17,19 @@ import android.net.Uri;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-public class BootCompletedReceiver extends BroadcastReceiver {
+public class BootTimeZoneBR extends BroadcastReceiver {
 	
 	private AlarmManager alarmManager;
 	private SharedPreferences prefs;
 	private Editor prefsEditor;
 	private static List<Integer> recurDays;
 	
-    public BootCompletedReceiver() {
+    public BootTimeZoneBR() {
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.d("MYNAMEISTODD", "Boot complete! Setting alarms...");
+    	Log.d("MYNAMEISTODD", "Setting alarms...");
     	
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     	prefs = context.getSharedPreferences("AUTOVOLUME", Context.MODE_PRIVATE);
@@ -63,6 +63,20 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 			int nPickerVal = Integer.parseInt((String) allPrefs.get(key));
 			
 			for (int recurDay : recurDays) {
+				
+				if (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) {
+					//Cancel the alarms already scheduled
+					Intent intentOld = new Intent(context, SetAlarmManagerReceiver.class);
+					String rawOld = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
+					Uri dataOld = Uri.parse(Uri.encode(rawOld));
+					intentOld.setData(dataOld);
+					intentOld.putExtra("AUDIO_LEVEL", nPickerVal);
+					PendingIntent pendingIntentOld = PendingIntent.getBroadcast(context, 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
+					alarmManager.cancel(pendingIntentOld);
+					
+					prefsEditor.remove(hour + ":" + minute + ":" + tmp.get("RECUR"));
+					Log.d("MYNAMEISTODD", "Deleted: " + hour + ":" + minute + ":" + tmp.get("RECUR") + " Volume: " + nPickerVal);
+				}
 				
 				if (recurDay != -1) {
 					Calendar cNew = Calendar.getInstance();
