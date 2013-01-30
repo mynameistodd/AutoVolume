@@ -66,13 +66,8 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 				
 				if (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) {
 					//Cancel the alarms already scheduled
-					Intent intentOld = new Intent(context, SetAlarmManagerReceiver.class);
-					String rawOld = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
-					Uri dataOld = Uri.parse(Uri.encode(rawOld));
-					intentOld.setData(dataOld);
-					intentOld.putExtra("AUDIO_LEVEL", nPickerVal);
-					PendingIntent pendingIntentOld = PendingIntent.getBroadcast(context, 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
-					alarmManager.cancel(pendingIntentOld);
+					PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, nPickerVal, recurDay);
+					alarmManager.cancel(pendingIntent);
 					
 					prefsEditor.remove(hour + ":" + minute + ":" + tmp.get("RECUR"));
 					Log.d("MYNAMEISTODD", "Deleted: " + hour + ":" + minute + ":" + tmp.get("RECUR") + " Volume: " + nPickerVal);
@@ -89,12 +84,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 					}
 					
 					//Set alarms
-					Intent intentBC = new Intent(context, SetAlarmManagerReceiver.class);
-					String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
-					Uri data = Uri.parse(Uri.encode(raw));
-					intentBC.setData(data);
-					intentBC.putExtra("AUDIO_LEVEL", nPickerVal);
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentBC, PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, nPickerVal, recurDay);
 					alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 					
 					Log.d("MYNAMEISTODD", "Repeating: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
@@ -108,12 +98,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 					if (enabled && cNew.after(calNow)) {
 						
 						//Set one-time alarm
-						Intent intentBC = new Intent(context, SetAlarmManagerReceiver.class);
-						String raw = "mnit://" + cNew.get(Calendar.DAY_OF_WEEK) + "/" + hour + ":" + minute + "/" + nPickerVal;
-						Uri data = Uri.parse(Uri.encode(raw));
-						intentBC.setData(data);
-						intentBC.putExtra("AUDIO_LEVEL", nPickerVal);
-						PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentBC, PendingIntent.FLAG_UPDATE_CURRENT);
+						PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, nPickerVal, cNew.get(Calendar.DAY_OF_WEEK));
 						alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 						
 						Log.d("MYNAMEISTODD", "One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
@@ -123,4 +108,5 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 		}
     	
     }
+	
 }

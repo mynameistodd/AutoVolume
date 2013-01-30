@@ -167,13 +167,8 @@ public class EditCreateAlarm extends FragmentActivity {
 						if (recurDayStr.length() > 0) {
 							int recurDay = Integer.parseInt(recurDayStr);
 							
-							Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-							String rawOld = "mnit://" + recurDay + "/" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + "/" + callingIntent.getIntExtra("VOLUME", 0);
-							Uri dataOld = Uri.parse(Uri.encode(rawOld));
-							intentOld.setData(dataOld);
-							intentOld.putExtra("AUDIO_LEVEL", callingIntent.getIntExtra("VOLUME", 0));
-							PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
-							alarmManager.cancel(pendingIntentOld);
+							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDay);
+							alarmManager.cancel(pendingIntent);
 						}
 					}
 					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR"));
@@ -198,12 +193,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							}
 							
 							//Set alarms
-							Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-							String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + nPickerVal;
-							Uri data = Uri.parse(Uri.encode(raw));
-							intent.setData(data);
-							intent.putExtra("AUDIO_LEVEL", nPickerVal);
-							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, recurDay);
 							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 							
 							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
@@ -218,12 +208,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							}
 							
 							//Set one-time alarm
-							Intent intent = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-							String raw = "mnit://" + (cNew.get(Calendar.DAY_OF_WEEK)-1) + "/" + hour + ":" + minute + "/" + nPickerVal;
-							Uri data = Uri.parse(Uri.encode(raw));
-							intent.setData(data);
-							intent.putExtra("AUDIO_LEVEL", nPickerVal);
-							PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, (cNew.get(Calendar.DAY_OF_WEEK)-1));
 							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 							
 							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
@@ -421,13 +406,8 @@ public class EditCreateAlarm extends FragmentActivity {
 					if (recurDayStr.length() > 0) {
 						int recurDay = Integer.parseInt(recurDayStr);
 						
-						Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-						String rawOld = "mnit://" + recurDay + "/" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + "/" + callingIntent.getIntExtra("VOLUME", 0);
-						Uri dataOld = Uri.parse(Uri.encode(rawOld));
-						intentOld.setData(dataOld);
-						intentOld.putExtra("AUDIO_LEVEL", callingIntent.getIntExtra("VOLUME", 0));
-						PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
-						alarmManager.cancel(pendingIntentOld);
+						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDay);
+						alarmManager.cancel(pendingIntent);
 					}
 				}
 				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR"));

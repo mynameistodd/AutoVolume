@@ -2,9 +2,26 @@ package com.mynameistodd.autovolume;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Map;
+
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 
 public class Util {
 
+	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay) {
+		Intent intent = new Intent(context, SetAlarmManagerReceiver.class);
+		String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + volume;
+		Uri data = Uri.parse(Uri.encode(raw));
+		intent.setData(data);
+		intent.putExtra("AUDIO_LEVEL", volume);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		return pendingIntent;
+	}
+	
 	public static String getVolumePercent(String volumeSet, Integer maxVolume)
 	{
 		float volume = Float.parseFloat(volumeSet);

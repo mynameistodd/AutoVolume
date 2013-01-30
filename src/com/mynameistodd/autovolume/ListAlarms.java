@@ -231,13 +231,10 @@ public class ListAlarms extends ListActivity {
 									if (recurDayStr.length() > 0) {
 										int recurDay = Integer.parseInt(recurDayStr);
 										
-										Intent intentOld = new Intent(getApplicationContext(), SetAlarmManagerReceiver.class);
-										String rawOld = "mnit://" + recurDay + "/" + itemToDelete.get("TIME") + "/" + itemToDelete.get("VOLUME");
-										Uri dataOld = Uri.parse(Uri.encode(rawOld));
-										intentOld.setData(dataOld);
-										intentOld.putExtra("AUDIO_LEVEL", Integer.parseInt((String) itemToDelete.get("VOLUME")));
-										PendingIntent pendingIntentOld = PendingIntent.getBroadcast(getApplicationContext(), 0, intentOld, PendingIntent.FLAG_UPDATE_CURRENT);
-										alarmManager.cancel(pendingIntentOld);
+										String[] hourMin = ((String) itemToDelete.get("TIME")).split(":");
+										
+										PendingIntent pendingIntent = Util.createPendingIntent(context, Integer.parseInt(hourMin[0]), Integer.parseInt(hourMin[1]), Integer.parseInt((String) itemToDelete.get("VOLUME")), recurDay);
+										alarmManager.cancel(pendingIntent);
 									}
 								}
 								prefsEditor.remove(itemToDelete.get("TIME") + ":" + itemToDelete.get("RECUR"));
