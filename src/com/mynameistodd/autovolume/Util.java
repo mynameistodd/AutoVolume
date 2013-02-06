@@ -1,6 +1,7 @@
 package com.mynameistodd.autovolume;
 
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class Util {
 	{
 		String textToShow = "";
 		if (recurDays.size() > 0) {
+			Collections.sort(recurDays);
 			for (int recurDay : recurDays) {
 					switch (recurDay) {
 					case -1:
@@ -61,7 +63,10 @@ public class Util {
 						break;
 					}	
 			}
-			if (textToShow != "One Time") {
+			if (textToShow.equals("Mon, Tue, Wed, Thu, Fri, ")) {
+				textToShow = "Weekdays";
+			}
+			else if (!textToShow.equals("One Time")) {
 				textToShow = textToShow.substring(0, textToShow.length()-2);
 			}
 		}
