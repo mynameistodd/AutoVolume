@@ -57,6 +57,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mynameistodd.autovolume.ListAlarms" />
         </activity>
+        <meta-data android:name="com.google.android.backup.api_key"
+    		android:value="AEdPqrEAAAAIZbs_fwBzQCnVOd_AR_Qv9eAyJ88TQZ8JdI2_Hw" />
     </application>
 
 </manifest>

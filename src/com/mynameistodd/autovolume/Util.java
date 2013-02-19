@@ -13,6 +13,8 @@ import android.util.Log;
 
 public class Util {
 
+	static final String AUTOVOLUME = "AUTOVOLUME";
+	
 	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay) {
 		Intent intent = new Intent(context, SetAlarmManagerReceiver.class);
 		String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + volume;

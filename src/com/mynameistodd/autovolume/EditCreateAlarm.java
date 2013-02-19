@@ -69,7 +69,7 @@ public class EditCreateAlarm extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_create_alarm);
         contextThis = this;
-        prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
+        prefs = getSharedPreferences(Util.AUTOVOLUME, MODE_PRIVATE);
 		prefsEditor = prefs.edit();
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
