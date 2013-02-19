@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.PendingIntent;
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,7 +61,7 @@ public class ListAlarms extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list_alarms);
-		prefs = getSharedPreferences("AUTOVOLUME", MODE_PRIVATE);
+		prefs = getSharedPreferences(Util.AUTOVOLUME, MODE_PRIVATE);
 		prefsEditor = prefs.edit();
 		btnAdd = (Button) findViewById(R.id.btn_add_new);
 		context = getApplicationContext();
@@ -186,6 +187,7 @@ public class ListAlarms extends ListActivity {
 			// put in a Toast here that it was saved.
 			Toast.makeText(contextThis, "Saved!", Toast.LENGTH_SHORT).show();
 			sa.notifyDataSetChanged();
+			requestBackup();
 		}
 
 	}
@@ -244,6 +246,7 @@ public class ListAlarms extends ListActivity {
 
 								listMapLocal.remove(itemToDelete);
 								sa.notifyDataSetChanged();
+								requestBackup();
 							}
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -273,6 +276,7 @@ public class ListAlarms extends ListActivity {
 			prefsEditor.clear().commit();
 			listMapLocal.clear();
 			sa.notifyDataSetChanged();
+			requestBackup();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -286,5 +290,11 @@ public class ListAlarms extends ListActivity {
 	    adView.destroy();
 	  }
 	  super.onDestroy();
+	}
+	
+	public void requestBackup()
+	{
+		BackupManager bm = new BackupManager(this);
+		bm.dataChanged();
 	}
 }

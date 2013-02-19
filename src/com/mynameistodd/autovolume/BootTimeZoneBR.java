@@ -32,7 +32,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
     	Log.d("MYNAMEISTODD", "Setting alarms...");
     	
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-    	prefs = context.getSharedPreferences("AUTOVOLUME", Context.MODE_PRIVATE);
+    	prefs = context.getSharedPreferences(Util.AUTOVOLUME, Context.MODE_PRIVATE);
 		prefsEditor = prefs.edit();
     	
 		Map<String, ?> allPrefs = prefs.getAll();
