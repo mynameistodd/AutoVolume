@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.support.v4.app.DialogFragment;
@@ -45,17 +46,20 @@ public class EditCreateAlarm extends FragmentActivity {
 	private Button buttonCancel;
 	private AudioManager audioManager;
 	private AlarmManager alarmManager;
-	private static TextView time;
-	private static ImageView arrowUp;
-	private static ImageView arrowDown;
+	private static TextView tvTime;
+//	private static ImageView arrowUp;
+//	private static ImageView arrowDown;
+	private static TableRow timeTableRow;
+	private static TableRow volumeTableRow;
+	private static TableRow recurTableRow;
 	private TimePickerDialog tPicker;
 	private static Calendar cal;
 	private static int hour = 0;
 	private static int minute = 0;
 	private static int volume = 0;
 	private Intent callingIntent;
-	private TextView daysRecurringLabel;
-	private TextView daysRecurring;
+	//private TextView tvRecurLabel;
+	private TextView tvRecur;
 	private Context contextThis;
 	private static List<Integer> recurDays;
 	private static boolean editMode = false;
@@ -75,12 +79,15 @@ public class EditCreateAlarm extends FragmentActivity {
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         buttonSave = (Button)findViewById(R.id.btnSave);
         buttonCancel = (Button)findViewById(R.id.btnCancel);
-        time = (TextView)findViewById(R.id.tvTime);
-        arrowUp = (ImageView)findViewById(R.id.imageView1);
-        arrowDown = (ImageView)findViewById(R.id.imageView2);
+        tvTime = (TextView)findViewById(R.id.tvTime);
+        //arrowUp = (ImageView)findViewById(R.id.imageView1);
+        //arrowDown = (ImageView)findViewById(R.id.imageView2);
+        timeTableRow = (TableRow)findViewById(R.id.timeTableRow);
+        volumeTableRow = (TableRow)findViewById(R.id.volumeTableRow);
+        recurTableRow = (TableRow)findViewById(R.id.recurTableRow);
         seekBar = new SeekBar(contextThis);
-        daysRecurring = (TextView)findViewById(R.id.tvRecur);
-        daysRecurringLabel = (TextView)findViewById(R.id.tvRecurLabel);
+        tvRecur = (TextView)findViewById(R.id.tvRecur);
+        //tvRecurLabel = (TextView)findViewById(R.id.tvRecurLabel);
         tvVolume = (TextView)findViewById(R.id.tvVolume);
         recurDays = new ArrayList<Integer>();
         editMode = false;
@@ -130,13 +137,13 @@ public class EditCreateAlarm extends FragmentActivity {
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
 		
-		time.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+		tvTime.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 		tvVolume.setText(Util.getVolumePercent(Integer.toString(volume), maxVolumeStep));
 		seekBar.setProgress(volume);
 		
 		String textToShow = Util.getRecurText(recurDays);
 		
-		daysRecurring.setText(textToShow);
+		tvRecur.setText(textToShow);
 		
         tPicker = new TimePickerDialog(this, new OnTimeSetListener() {
 			
@@ -147,7 +154,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 				cal.set(Calendar.MINUTE, minuteOfDay);
 				
-				time.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+				tvTime.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 				
 				hour = hourOfDay;
 				minute = minuteOfDay;
@@ -236,7 +243,55 @@ public class EditCreateAlarm extends FragmentActivity {
 			}
 		});
         
-        time.setOnClickListener(new OnClickListener() {
+//        tvTime.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				tPicker.show();
+//			}
+//		});
+        
+//        tvVolume.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				showDialog(1);
+//			}
+//		});
+        
+//		arrowUp.setOnClickListener(new OnClickListener() {
+//					
+//			@Override
+//			public void onClick(View v) {
+//				tPicker.show();
+//			}
+//		});
+//		
+//		arrowDown.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				tPicker.show();
+//			}
+//		});
+        
+//        tvRecurLabel.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				showDialog(0);
+//			}
+//		});
+//        
+//        tvRecur.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				showDialog(0);
+//			}
+//		});
+		
+		timeTableRow.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -244,39 +299,15 @@ public class EditCreateAlarm extends FragmentActivity {
 			}
 		});
         
-        tvVolume.setOnClickListener(new OnClickListener() {
+		volumeTableRow.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				showDialog(1);
 			}
 		});
-        
-		arrowUp.setOnClickListener(new OnClickListener() {
-					
-			@Override
-			public void onClick(View v) {
-				tPicker.show();
-			}
-		});
 		
-		arrowDown.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				tPicker.show();
-			}
-		});
-        
-        daysRecurringLabel.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				showDialog(0);
-			}
-		});
-        
-        daysRecurring.setOnClickListener(new OnClickListener() {
+		recurTableRow.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -356,7 +387,7 @@ public class EditCreateAlarm extends FragmentActivity {
 					}
 					
 					String textToShow = Util.getRecurText(recurDays);
-					daysRecurring.setText(textToShow);
+					tvRecur.setText(textToShow);
 				}
 			});
 			return alert;
