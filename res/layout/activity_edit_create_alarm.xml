@@ -1,92 +1,107 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
+    android:id="@+id/TableLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:id="@+id/timeLinearLayout"
+    <TableRow
+        android:id="@+id/timeTableRow"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:background="@color/Grey" >
 
         <TextView
             android:id="@+id/tvTimeLabel"
             style="@style/timeLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:gravity="right"
             android:text="Time:" />
 
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Medium Text"
+            android:gravity="left"
+            android:text="6:30AM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/volumeLinearLayout"
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/volumeTableRow"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:layout_weight=".5" >
 
         <TextView
             android:id="@+id/tvVolumeLabel"
             style="@style/volumeLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:gravity="right"
             android:text="Volume:" />
 
         <TextView
             android:id="@+id/tvVolume"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Medium Text"
+            android:gravity="left"
+            android:text="69%"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
+    </TableRow>
 
-    <LinearLayout
-        android:id="@+id/recurLinearLayout"
+    <TableRow
+        android:id="@+id/recurTableRow"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:background="@color/Grey" >
 
         <TextView
             android:id="@+id/tvRecurLabel"
             style="@style/recurLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:gravity="right"
             android:text="Recurring:" />
 
         <TextView
             android:id="@+id/tvRecur"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="Small Text"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Weekdays"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-    </LinearLayout>
+    </TableRow>
 
-    <LinearLayout
-        android:id="@+id/buttonsLinearLayout"
+    <TableRow
+        android:id="@+id/buttonsTableRow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="bottom" >
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
             android:layout_weight="1"
             android:text="Cancel" />
 
@@ -94,10 +109,8 @@
             android:id="@+id/btnSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:layout_weight="1"
             android:text="Save" />
-    </LinearLayout>
+    </TableRow>
 
-</LinearLayout>
+</TableLayout>
