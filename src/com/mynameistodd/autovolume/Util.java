@@ -68,6 +68,10 @@ public class Util {
 			if (textToShow.equals("Mon, Tue, Wed, Thu, Fri, ")) {
 				textToShow = "Weekdays";
 			}
+			else if (textToShow.equals("Sun, Mon, Tue, Wed, Thu, Fri, Sat, "))
+			{
+				textToShow = "Everyday";
+			}
 			else if (!textToShow.equals("One Time")) {
 				textToShow = textToShow.substring(0, textToShow.length()-2);
 			}
