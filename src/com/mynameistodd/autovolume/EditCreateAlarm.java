@@ -104,6 +104,7 @@ public class EditCreateAlarm extends FragmentActivity {
         hour = cal.get(Calendar.HOUR_OF_DAY);
 		minute = cal.get(Calendar.MINUTE);
 		volume = 0;
+		recurDays.clear();
 		
         if (editMode)
         {
