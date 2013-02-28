@@ -120,10 +120,11 @@ public class ListAlarms extends ListActivity {
 			
 			String[] timeRecur = key.split(":");
 			
-			Map<String, String> tmp = new HashMap<String, String>();
+			Map<String, Object> tmp = new HashMap<String, Object>();
 			tmp.put("TIME", timeRecur[0] + ":" + timeRecur[1]);
 			tmp.put("RECUR", timeRecur[2]);
 			tmp.put("VOLUME", (String) allPrefs.get(key));
+			tmp.put("ENABLED", true);
 			listMapLocal.add(tmp);
 		}
 		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
@@ -137,7 +138,7 @@ public class ListAlarms extends ListActivity {
 		});
 
 		sa = new SimpleAdapter(context, listMapLocal,
-				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume }) {
+				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME", "ENABLED" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume, R.id.switch1 }) {
 			@Override
 			public void setViewText(TextView v, String text) {
 				super.setViewText(v, text);
