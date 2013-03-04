@@ -1,5 +1,6 @@
 package com.mynameistodd.autovolume;
 
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,9 +34,13 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
+import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.text.format.DateUtils;
@@ -175,6 +181,7 @@ public class ListAlarms extends ListActivity {
 				}
 			}
 		};
+		sa.setViewBinder(new MyViewBinder());
 		
 		setListAdapter(sa);
 	}
@@ -297,5 +304,27 @@ public class ListAlarms extends ListActivity {
 	{
 		BackupManager bm = new BackupManager(this);
 		bm.dataChanged();
+	}
+	
+	class MyViewBinder implements ViewBinder {
+
+		@SuppressLint("NewApi")
+		@Override
+		public boolean setViewValue(View view, Object data,	String textRepresentation) {
+			if (view.getClass().equals(Switch.class))
+			{
+				CompoundButton switchToggle = (CompoundButton)view;
+				switchToggle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+						boolean checked = isChecked;
+					}
+				});
+				return true;
+			}
+			return false;
+		}
+		
 	}
 }
