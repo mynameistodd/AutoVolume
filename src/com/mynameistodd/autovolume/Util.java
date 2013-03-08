@@ -1,6 +1,7 @@
 package com.mynameistodd.autovolume;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,6 @@ public class Util {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		return pendingIntent;
 	}
-	
 	public static String getVolumePercent(String volumeSet, Integer maxVolume)
 	{
 		float volume = Float.parseFloat(volumeSet);
@@ -82,5 +82,19 @@ public class Util {
 			
 		}
 		return textToShow;
+	}
+	public static List<Integer> getRecurList(String recurText)
+	{
+		List<Integer> recurDays = new ArrayList<Integer>();
+		String[] recurDaysArray = recurText.split("\\|");
+		if (recurDaysArray.length > 0) {
+			for (String recurDayStr : recurDaysArray) {
+				if (recurDayStr.length() > 0) {
+					int recurDay = Integer.parseInt(recurDayStr);
+					recurDays.add(recurDay);
+				}
+			}
+		}
+		return recurDays;
 	}
 }

@@ -36,6 +36,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
@@ -120,6 +121,7 @@ public class ListAlarms extends ListActivity {
 		super.onResume();
 
 		listMapLocal = new ArrayList<Map<String, ?>>();
+		List<Alarm> allAlarms = new ArrayList<Alarm>();
 
 		Map<String, ?> allPrefs = prefs.getAll();
 		for (String key : allPrefs.keySet()) {
@@ -132,6 +134,10 @@ public class ListAlarms extends ListActivity {
 			tmp.put("VOLUME", (String) allPrefs.get(key));
 			tmp.put("ENABLED", true);
 			listMapLocal.add(tmp);
+			
+			List<Integer> rd = Util.getRecurList((String) allPrefs.get(key));
+			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), true);
+			allAlarms.add(newAlarm);
 		}
 		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
 
@@ -143,6 +149,8 @@ public class ListAlarms extends ListActivity {
 			}
 		});
 
+		ArrayAdapter<Alarm> adapter = new MyArrayAdapter(this, R.layout.activity_list_alarm_item, allAlarms);
+		
 		sa = new SimpleAdapter(context, listMapLocal,
 				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME", "ENABLED" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume, R.id.switch1 }) {
 			@Override
@@ -183,7 +191,8 @@ public class ListAlarms extends ListActivity {
 		};
 		sa.setViewBinder(new MyViewBinder());
 		
-		setListAdapter(sa);
+		//setListAdapter(sa);
+		setListAdapter(adapter);
 	}
 
 	@Override
