@@ -57,7 +57,7 @@ public class ListAlarms extends ListActivity {
 	private Context contextThis;
 	private ListView list;
 	private static Map<String, ?> itemToDelete;
-	private static List<Map<String, ?>> listMapLocal;
+	//private static List<Map<String, ?>> listMapLocal;
 	//private SimpleAdapter sa;
 	private AudioManager audioManager;
 	private AlarmManager alarmManager;
@@ -120,7 +120,7 @@ public class ListAlarms extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 
-		listMapLocal = new ArrayList<Map<String, ?>>();
+		//listMapLocal = new ArrayList<Map<String, ?>>();
 		List<Alarm> allAlarms = new ArrayList<Alarm>();
 
 		Map<String, ?> allPrefs = prefs.getAll();
@@ -128,26 +128,26 @@ public class ListAlarms extends ListActivity {
 			
 			String[] timeRecur = key.split(":");
 			
-			Map<String, Object> tmp = new HashMap<String, Object>();
-			tmp.put("TIME", timeRecur[0] + ":" + timeRecur[1]);
-			tmp.put("RECUR", timeRecur[2]);
-			tmp.put("VOLUME", (String) allPrefs.get(key));
-			tmp.put("ENABLED", true);
-			listMapLocal.add(tmp);
+//			Map<String, Object> tmp = new HashMap<String, Object>();
+//			tmp.put("TIME", timeRecur[0] + ":" + timeRecur[1]);
+//			tmp.put("RECUR", timeRecur[2]);
+//			tmp.put("VOLUME", (String) allPrefs.get(key));
+//			tmp.put("ENABLED", true);
+//			listMapLocal.add(tmp);
 			
 			List<Integer> rd = Util.getRecurList((String) allPrefs.get(key));
 			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), true);
 			allAlarms.add(newAlarm);
 		}
-		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
-
-			@Override
-			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
-				int hour1 = Integer.parseInt(lhs.get("TIME").toString().substring(0, lhs.get("TIME").toString().indexOf(":")));
-				int hour2 = Integer.parseInt(rhs.get("TIME").toString().substring(0, rhs.get("TIME").toString().indexOf(":")));
-				return (hour1 == hour2) ? 0 : (hour1 > hour2) ? 1 : -1;
-			}
-		});
+//		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
+//
+//			@Override
+//			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
+//				int hour1 = Integer.parseInt(lhs.get("TIME").toString().substring(0, lhs.get("TIME").toString().indexOf(":")));
+//				int hour2 = Integer.parseInt(rhs.get("TIME").toString().substring(0, rhs.get("TIME").toString().indexOf(":")));
+//				return (hour1 == hour2) ? 0 : (hour1 > hour2) ? 1 : -1;
+//			}
+//		});
 
 		ArrayAdapter<Alarm> adapter = new MyArrayAdapter(this, R.layout.activity_list_alarm_item, allAlarms);
 		
@@ -227,7 +227,7 @@ public class ListAlarms extends ListActivity {
 //		intent.putExtra("VOLUME", Integer.parseInt(item.get("VOLUME")));
 		intent.putExtra("HOUR", item.getHour());
 		intent.putExtra("MINUTE", item.getMinute());
-		intent.putExtra("RECUR", "");
+		intent.putExtra("RECUR", item.getRecur().toArray());
 		intent.putExtra("VOLUME", item.getVolume());
 
 		startActivityForResult(intent, 1);
@@ -267,7 +267,7 @@ public class ListAlarms extends ListActivity {
 
 								prefsEditor.commit();
 
-								listMapLocal.remove(itemToDelete);
+								//listMapLocal.remove(itemToDelete);
 								//sa.notifyDataSetChanged();
 								requestBackup();
 							}
@@ -297,7 +297,7 @@ public class ListAlarms extends ListActivity {
 			return true;
 		case R.id.delete_all_prefs:
 			prefsEditor.clear().commit();
-			listMapLocal.clear();
+			//listMapLocal.clear();
 			//sa.notifyDataSetChanged();
 			requestBackup();
 			return true;
@@ -321,25 +321,25 @@ public class ListAlarms extends ListActivity {
 		bm.dataChanged();
 	}
 	
-	class MyViewBinder implements ViewBinder {
-
-		@SuppressLint("NewApi")
-		@Override
-		public boolean setViewValue(View view, Object data,	String textRepresentation) {
-			if (view.getClass().equals(Switch.class))
-			{
-				CompoundButton switchToggle = (CompoundButton)view;
-				switchToggle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						boolean checked = isChecked;
-					}
-				});
-				return true;
-			}
-			return false;
-		}
-		
-	}
+//	class MyViewBinder implements ViewBinder {
+//
+//		@SuppressLint("NewApi")
+//		@Override
+//		public boolean setViewValue(View view, Object data,	String textRepresentation) {
+//			if (view.getClass().equals(Switch.class))
+//			{
+//				CompoundButton switchToggle = (CompoundButton)view;
+//				switchToggle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//					
+//					@Override
+//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//						boolean checked = isChecked;
+//					}
+//				});
+//				return true;
+//			}
+//			return false;
+//		}
+//		
+//	}
 }
