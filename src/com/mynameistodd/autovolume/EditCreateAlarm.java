@@ -118,13 +118,14 @@ public class EditCreateAlarm extends FragmentActivity {
         	hour = callingIntent.getIntExtra("HOUR", hour);
         	minute = callingIntent.getIntExtra("MINUTE", minute);
         	volume = callingIntent.getIntExtra("VOLUME", volume);
-        	String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
+        	//String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
+        	int[] recurDaysArray = callingIntent.getIntArrayExtra("RECUR");
 			
-			for (String rd : recurDaysArray) {
-				if (rd.length() > 0) {
-					int rdi = Integer.parseInt(rd);
-					recurDays.add(rdi);
-				}
+			for (int rd : recurDaysArray) {
+				//if (rd.length() > 0) {
+					//int rdi = Integer.parseInt(rd);
+					recurDays.add(rd);
+				//}
 			}
         }
         else
@@ -168,19 +169,20 @@ public class EditCreateAlarm extends FragmentActivity {
 				
 				//Delete old alarm
 				if (editMode) {
-					String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
+					//String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
+					int[] recurDaysArray = callingIntent.getIntArrayExtra("RECUR");
 					
 					//Cancel the alarms
-					for (String recurDayStr : recurDaysArray) {
-						if (recurDayStr.length() > 0) {
-							int recurDay = Integer.parseInt(recurDayStr);
+					for (int recurDayStr : recurDaysArray) {
+						//if (recurDayStr.length() > 0) {
+							//int recurDay = Integer.parseInt(recurDayStr);
 							
-							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDay);
+							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 							alarmManager.cancel(pendingIntent);
-						}
+						//}
 					}
-					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR"));
-					Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntArrayExtra("RECUR"), "|"));
+					Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntArrayExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 				}
 				
 				final Calendar calNow = Calendar.getInstance();
@@ -431,19 +433,20 @@ public class EditCreateAlarm extends FragmentActivity {
 			
 			//Delete old alarm
 			if (editMode) {
-				String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
+				//String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
+				int[] recurDaysArray = callingIntent.getIntArrayExtra("RECUR");
 				
 				//Cancel the alarms
-				for (String recurDayStr : recurDaysArray) {
-					if (recurDayStr.length() > 0) {
-						int recurDay = Integer.parseInt(recurDayStr);
+				for (int recurDayStr : recurDaysArray) {
+					//if (recurDayStr.length() > 0) {
+						//int recurDay = Integer.parseInt(recurDayStr);
 						
-						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDay);
+						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 						alarmManager.cancel(pendingIntent);
-					}
+					//}
 				}
-				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR"));
-				Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + callingIntent.getStringExtra("RECUR") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntArrayExtra("RECUR"), "|"));
+				Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntArrayExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 			}
 			
 			prefsEditor.commit();
