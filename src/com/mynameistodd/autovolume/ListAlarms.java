@@ -227,7 +227,7 @@ public class ListAlarms extends ListActivity {
 //		intent.putExtra("VOLUME", Integer.parseInt(item.get("VOLUME")));
 		intent.putExtra("HOUR", item.getHour());
 		intent.putExtra("MINUTE", item.getMinute());
-		intent.putExtra("RECUR", item.getRecur().toArray());
+		intent.putIntegerArrayListExtra("RECUR", (ArrayList<Integer>) item.getRecur());
 		intent.putExtra("VOLUME", item.getVolume());
 
 		startActivityForResult(intent, 1);

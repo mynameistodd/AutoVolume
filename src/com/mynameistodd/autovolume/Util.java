@@ -97,7 +97,7 @@ public class Util {
 		}
 		return recurDays;
 	}
-	public static String getRecurDelim(int[] recurDays, String delimeter)
+	public static String getRecurDelim(List<Integer> recurDays, String delimeter)
 	{
 		String returnText = delimeter;
 		for (int i : recurDays) {
