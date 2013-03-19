@@ -1,20 +1,13 @@
 package com.mynameistodd.autovolume;
 
-import java.lang.reflect.Type;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -34,18 +27,10 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
-import android.widget.Switch;
-import android.widget.SimpleAdapter.ViewBinder;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.text.format.DateUtils;
-
 import com.google.ads.*;
 
 public class ListAlarms extends ListActivity {
@@ -56,13 +41,11 @@ public class ListAlarms extends ListActivity {
 	private Context context;
 	private Context contextThis;
 	private ListView list;
-	private static Map<String, ?> itemToDelete;
-	//private static List<Map<String, ?>> listMapLocal;
-	//private SimpleAdapter sa;
-	private AudioManager audioManager;
+	private Alarm alarmToDelete;
 	private AlarmManager alarmManager;
 	private AdView adView;
-	private Integer maxVolume;
+	private ArrayAdapter<Alarm> adapter;
+	private List<Alarm> allAlarms;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,11 +57,8 @@ public class ListAlarms extends ListActivity {
 		context = getApplicationContext();
 		contextThis = this;
 		list = getListView();
-		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		adView = new AdView(this, AdSize.SMART_BANNER, "a150719f918826b");
-		
-		maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
@@ -102,12 +82,12 @@ public class ListAlarms extends ListActivity {
 
 		list.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@SuppressWarnings({ "deprecation", "unchecked" })
+			@SuppressWarnings({ "deprecation" })
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 
-				itemToDelete = (HashMap<String, ?>) arg0.getItemAtPosition(arg2);
+				alarmToDelete = (Alarm) arg0.getItemAtPosition(arg2);
 
 				showDialog(0);
 				return true;
@@ -120,78 +100,28 @@ public class ListAlarms extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 
-		//listMapLocal = new ArrayList<Map<String, ?>>();
-		List<Alarm> allAlarms = new ArrayList<Alarm>();
+		allAlarms = new ArrayList<Alarm>();
 
 		Map<String, ?> allPrefs = prefs.getAll();
 		for (String key : allPrefs.keySet()) {
 			
 			String[] timeRecur = key.split(":");
 			
-//			Map<String, Object> tmp = new HashMap<String, Object>();
-//			tmp.put("TIME", timeRecur[0] + ":" + timeRecur[1]);
-//			tmp.put("RECUR", timeRecur[2]);
-//			tmp.put("VOLUME", (String) allPrefs.get(key));
-//			tmp.put("ENABLED", true);
-//			listMapLocal.add(tmp);
-			
-			List<Integer> rd = Util.getRecurList((String) allPrefs.get(key));
-			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), true);
+			List<Integer> rd = Util.getRecurList(timeRecur[2]);
+			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), true, this);
 			allAlarms.add(newAlarm);
 		}
-//		Collections.sort(listMapLocal, new Comparator<Map<String,?>>() {
-//
-//			@Override
-//			public int compare(Map<String, ?> lhs, Map<String, ?> rhs) {
-//				int hour1 = Integer.parseInt(lhs.get("TIME").toString().substring(0, lhs.get("TIME").toString().indexOf(":")));
-//				int hour2 = Integer.parseInt(rhs.get("TIME").toString().substring(0, rhs.get("TIME").toString().indexOf(":")));
-//				return (hour1 == hour2) ? 0 : (hour1 > hour2) ? 1 : -1;
-//			}
-//		});
+		Collections.sort(allAlarms, new Comparator<Alarm>() {
 
-		ArrayAdapter<Alarm> adapter = new MyArrayAdapter(this, R.layout.activity_list_alarm_item, allAlarms);
-		
-//		sa = new SimpleAdapter(context, listMapLocal,
-//				R.layout.activity_list_alarm_item, new String[] { "TIME", "RECUR", "VOLUME", "ENABLED" }, new int[] { R.id.tv_time, R.id.tv_recur, R.id.tv_volume, R.id.switch1 }) {
-//			@Override
-//			public void setViewText(TextView v, String text) {
-//				super.setViewText(v, text);
-//				if (v.getId() == R.id.tv_time) {
-//					String[] hourMinute = text.split(":");
-//					int hour = Integer.valueOf(hourMinute[0]);
-//					int minute = Integer.valueOf(hourMinute[1]);
-//
-//					Calendar c = Calendar.getInstance();
-//					c.set(Calendar.HOUR_OF_DAY, hour);
-//					c.set(Calendar.MINUTE, minute);
-//
-//					v.setText(DateUtils.formatDateTime(context,
-//							c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
-//				}
-//				else if (v.getId() == R.id.tv_recur) {
-//					
-//					List<Integer> recurDays = new ArrayList<Integer>();
-//					String[] recurDaysArray = text.split("\\|");
-//					if (recurDaysArray.length > 0) {
-//						for (String recurDayStr : recurDaysArray) {
-//							if (recurDayStr.length() > 0) {
-//								int recurDay = Integer.parseInt(recurDayStr);
-//								recurDays.add(recurDay);
-//							}
-//						}
-//					}
-//					
-//					String textToShow = Util.getRecurText(recurDays);
-//					v.setText(textToShow);
-//				}
-//				else if (v.getId() == R.id.tv_volume) {
-//					v.setText(Util.getVolumePercent(text, maxVolume));
-//				}
-//			}
-//		};
-//		sa.setViewBinder(new MyViewBinder());
-		
-		//setListAdapter(sa);
+			@Override
+			public int compare(Alarm lhs, Alarm rhs) {
+				int hour1 = lhs.getHour();
+				int hour2 = rhs.getHour();
+				return (hour1 == hour2) ? 0 : (hour1 > hour2) ? 1 : -1;
+			}
+		});
+
+		adapter = new MyArrayAdapter(this, R.layout.activity_list_alarm_item, allAlarms);
 		setListAdapter(adapter);
 	}
 
@@ -203,7 +133,7 @@ public class ListAlarms extends ListActivity {
 
 			// put in a Toast here that it was saved.
 			Toast.makeText(contextThis, "Saved!", Toast.LENGTH_SHORT).show();
-			//sa.notifyDataSetChanged();
+			adapter.notifyDataSetChanged();
 			requestBackup();
 		}
 
@@ -213,22 +143,15 @@ public class ListAlarms extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		//SimpleAdapter sa = (SimpleAdapter) l.getAdapter();
-		MyArrayAdapter sa = (MyArrayAdapter) l.getAdapter();
-		//Map<String, String> item = (Map<String, String>) sa.getItem(position);
-		Alarm item = sa.getItem(position);
-
-		//String[] time = item.get("TIME").split(":");
+		MyArrayAdapter adapter = (MyArrayAdapter) l.getAdapter();
+		Alarm item = adapter.getItem(position);
 
 		Intent intent = new Intent(context, EditCreateAlarm.class);
-//		intent.putExtra("HOUR", Integer.parseInt(time[0]));
-//		intent.putExtra("MINUTE", Integer.parseInt(time[1]));
-//		intent.putExtra("RECUR", item.get("RECUR"));
-//		intent.putExtra("VOLUME", Integer.parseInt(item.get("VOLUME")));
 		intent.putExtra("HOUR", item.getHour());
 		intent.putExtra("MINUTE", item.getMinute());
 		intent.putIntegerArrayListExtra("RECUR", (ArrayList<Integer>) item.getRecur());
 		intent.putExtra("VOLUME", item.getVolume());
+		intent.putExtra("ENABLED", item.isEnabled());
 
 		startActivityForResult(intent, 1);
 
@@ -248,27 +171,21 @@ public class ListAlarms extends ListActivity {
 							public void onClick(DialogInterface dialog, int id) {
 								Log.d("MYNAMEISTODD", "Clicked Yes");
 
-								//Delete old alarm
-								String[] recurDaysArray = ((String) itemToDelete.get("RECUR")).split("\\|");
+								//Delete old alarms
+								List<Integer> recurDaysArray = alarmToDelete.getRecur();
 								
 								//Cancel the alarms
-								for (String recurDayStr : recurDaysArray) {
-									if (recurDayStr.length() > 0) {
-										int recurDay = Integer.parseInt(recurDayStr);
-										
-										String[] hourMin = ((String) itemToDelete.get("TIME")).split(":");
-										
-										PendingIntent pendingIntent = Util.createPendingIntent(context, Integer.parseInt(hourMin[0]), Integer.parseInt(hourMin[1]), Integer.parseInt((String) itemToDelete.get("VOLUME")), recurDay);
-										alarmManager.cancel(pendingIntent);
-									}
+								for (int recurDay : recurDaysArray) {
+									PendingIntent pendingIntent = Util.createPendingIntent(context, alarmToDelete.getHour(), alarmToDelete.getMinute(), alarmToDelete.getVolume(), recurDay);
+									alarmManager.cancel(pendingIntent);
 								}
-								prefsEditor.remove(itemToDelete.get("TIME") + ":" + itemToDelete.get("RECUR"));
-								Log.d("MYNAMEISTODD", "Deleted:" + itemToDelete.get("TIME") + ":" + itemToDelete.get("RECUR") + " Volume:" + itemToDelete.get("VOLUME"));
+								prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|"));
+								Log.d("MYNAMEISTODD", "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + " Volume:" + alarmToDelete.getVolume());
 
 								prefsEditor.commit();
 
-								//listMapLocal.remove(itemToDelete);
-								//sa.notifyDataSetChanged();
+								allAlarms.remove(alarmToDelete);
+								adapter.notifyDataSetChanged();
 								requestBackup();
 							}
 						})
@@ -297,8 +214,8 @@ public class ListAlarms extends ListActivity {
 			return true;
 		case R.id.delete_all_prefs:
 			prefsEditor.clear().commit();
-			//listMapLocal.clear();
-			//sa.notifyDataSetChanged();
+			allAlarms.clear();
+			adapter.notifyDataSetChanged();
 			requestBackup();
 			return true;
 		default:
@@ -320,26 +237,4 @@ public class ListAlarms extends ListActivity {
 		BackupManager bm = new BackupManager(this);
 		bm.dataChanged();
 	}
-	
-//	class MyViewBinder implements ViewBinder {
-//
-//		@SuppressLint("NewApi")
-//		@Override
-//		public boolean setViewValue(View view, Object data,	String textRepresentation) {
-//			if (view.getClass().equals(Switch.class))
-//			{
-//				CompoundButton switchToggle = (CompoundButton)view;
-//				switchToggle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//					
-//					@Override
-//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//						boolean checked = isChecked;
-//					}
-//				});
-//				return true;
-//			}
-//			return false;
-//		}
-//		
-//	}
 }

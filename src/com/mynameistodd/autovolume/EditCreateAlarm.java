@@ -3,10 +3,7 @@ package com.mynameistodd.autovolume;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
-
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -27,15 +24,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.text.format.DateUtils;
 
 public class EditCreateAlarm extends FragmentActivity {
@@ -47,8 +40,6 @@ public class EditCreateAlarm extends FragmentActivity {
 	private AudioManager audioManager;
 	private AlarmManager alarmManager;
 	private static TextView tvTime;
-//	private static ImageView arrowUp;
-//	private static ImageView arrowDown;
 	private static TableRow timeTableRow;
 	private static TableRow volumeTableRow;
 	private static TableRow recurTableRow;
@@ -57,8 +48,8 @@ public class EditCreateAlarm extends FragmentActivity {
 	private static int hour = 0;
 	private static int minute = 0;
 	private static int volume = 0;
+	private static boolean enabled = true;
 	private Intent callingIntent;
-	//private TextView tvRecurLabel;
 	private TextView tvRecur;
 	private Context contextThis;
 	private static List<Integer> recurDays;
@@ -67,6 +58,7 @@ public class EditCreateAlarm extends FragmentActivity {
 	private TextView tvVolume;
 	private int maxVolumeStep;
 	private int nPickerVal = 0;
+	private Alarm alarm;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,14 +72,11 @@ public class EditCreateAlarm extends FragmentActivity {
         buttonSave = (Button)findViewById(R.id.btnSave);
         buttonCancel = (Button)findViewById(R.id.btnCancel);
         tvTime = (TextView)findViewById(R.id.tvTime);
-        //arrowUp = (ImageView)findViewById(R.id.imageView1);
-        //arrowDown = (ImageView)findViewById(R.id.imageView2);
         timeTableRow = (TableRow)findViewById(R.id.timeTableRow);
         volumeTableRow = (TableRow)findViewById(R.id.volumeTableRow);
         recurTableRow = (TableRow)findViewById(R.id.recurTableRow);
         seekBar = new SeekBar(contextThis);
         tvRecur = (TextView)findViewById(R.id.tvRecur);
-        //tvRecurLabel = (TextView)findViewById(R.id.tvRecurLabel);
         tvVolume = (TextView)findViewById(R.id.tvVolume);
         recurDays = new ArrayList<Integer>();
         editMode = false;
@@ -96,7 +85,7 @@ public class EditCreateAlarm extends FragmentActivity {
         seekBar.setMax(maxVolumeStep);
         
         callingIntent = getIntent();
-        if (callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("VOLUME"))
+        if (callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("VOLUME") && callingIntent.hasExtra("ENABLED"))
         {
         	editMode = true;
         }
@@ -111,6 +100,7 @@ public class EditCreateAlarm extends FragmentActivity {
         hour = cal.get(Calendar.HOUR_OF_DAY);
 		minute = cal.get(Calendar.MINUTE);
 		volume = 0;
+		enabled = true;
 		recurDays.clear();
 		
         if (editMode)
@@ -118,14 +108,11 @@ public class EditCreateAlarm extends FragmentActivity {
         	hour = callingIntent.getIntExtra("HOUR", hour);
         	minute = callingIntent.getIntExtra("MINUTE", minute);
         	volume = callingIntent.getIntExtra("VOLUME", volume);
-        	//String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
         	List<Integer> recurDaysArray = callingIntent.getIntegerArrayListExtra("RECUR");
+        	enabled = callingIntent.getBooleanExtra("ENABLED", enabled);
 			
 			for (int rd : recurDaysArray) {
-				//if (rd.length() > 0) {
-					//int rdi = Integer.parseInt(rd);
-					recurDays.add(rd);
-				//}
+				recurDays.add(rd);
 			}
         }
         else
@@ -134,6 +121,8 @@ public class EditCreateAlarm extends FragmentActivity {
 				recurDays.add(-1);
 			}
         }
+        
+        alarm = new Alarm(hour, minute, recurDays, volume, enabled, contextThis);
 		
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
@@ -151,7 +140,6 @@ public class EditCreateAlarm extends FragmentActivity {
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfDay) {
 				
-				//Calendar c = Calendar.getInstance();
 				cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 				cal.set(Calendar.MINUTE, minuteOfDay);
 				
@@ -169,17 +157,12 @@ public class EditCreateAlarm extends FragmentActivity {
 				
 				//Delete old alarm
 				if (editMode) {
-					//String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
 					List<Integer> recurDaysArray = callingIntent.getIntegerArrayListExtra("RECUR");
 					
 					//Cancel the alarms
 					for (int recurDayStr : recurDaysArray) {
-						//if (recurDayStr.length() > 0) {
-							//int recurDay = Integer.parseInt(recurDayStr);
-							
-							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
-							alarmManager.cancel(pendingIntent);
-						//}
+						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
+						alarmManager.cancel(pendingIntent);
 					}
 					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|"));
 					Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
@@ -188,9 +171,9 @@ public class EditCreateAlarm extends FragmentActivity {
 				final Calendar calNow = Calendar.getInstance();
 				//Save new alarm
 				if (recurDays.size() > 0) {
-					String recurDaysDelim = "|";
+					//String recurDaysDelim = "|";
 					for (int recurDay : recurDays) {
-						recurDaysDelim += recurDay + "|";
+						//recurDaysDelim += recurDay + "|";
 						Calendar cNew = Calendar.getInstance();
 						
 						if (recurDay != -1) {
@@ -224,12 +207,17 @@ public class EditCreateAlarm extends FragmentActivity {
 							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 					}
-					prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
-					Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
-					
+					//prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
+					//Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
+					alarm.setHour(hour);
+					alarm.setMinute(minute);
+					alarm.setRecur(recurDays);
+					alarm.setVolume(nPickerVal);
+					alarm.setEnabled(enabled);
+					alarm.save();
 				}
 				
-				prefsEditor.commit();
+				//prefsEditor.commit();
 				
 				setResult(RESULT_OK);
 				finish();
@@ -244,54 +232,6 @@ public class EditCreateAlarm extends FragmentActivity {
 				finish();
 			}
 		});
-        
-//        tvTime.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				tPicker.show();
-//			}
-//		});
-        
-//        tvVolume.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				showDialog(1);
-//			}
-//		});
-        
-//		arrowUp.setOnClickListener(new OnClickListener() {
-//					
-//			@Override
-//			public void onClick(View v) {
-//				tPicker.show();
-//			}
-//		});
-//		
-//		arrowDown.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				tPicker.show();
-//			}
-//		});
-        
-//        tvRecurLabel.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				showDialog(0);
-//			}
-//		});
-//        
-//        tvRecur.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				showDialog(0);
-//			}
-//		});
 		
 		timeTableRow.setOnClickListener(new OnClickListener() {
 			
@@ -433,17 +373,12 @@ public class EditCreateAlarm extends FragmentActivity {
 			
 			//Delete old alarm
 			if (editMode) {
-				//String[] recurDaysArray = callingIntent.getStringExtra("RECUR").split("\\|");
 				List<Integer> recurDaysArray = callingIntent.getIntegerArrayListExtra("RECUR");
 				
 				//Cancel the alarms
 				for (int recurDayStr : recurDaysArray) {
-					//if (recurDayStr.length() > 0) {
-						//int recurDay = Integer.parseInt(recurDayStr);
-						
-						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
-						alarmManager.cancel(pendingIntent);
-					//}
+					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
+					alarmManager.cancel(pendingIntent);
 				}
 				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|"));
 				Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));

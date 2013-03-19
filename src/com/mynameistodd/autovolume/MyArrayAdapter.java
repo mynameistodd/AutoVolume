@@ -37,7 +37,7 @@ public class MyArrayAdapter extends ArrayAdapter<Alarm> {
     	TextView volume = (TextView) rowView.findViewById(R.id.tv_volume);
     	CompoundButton enabled = (CompoundButton) rowView.findViewById(R.id.switch1);
 	    
-    	Alarm alarm = alarms.get(position);
+    	final Alarm alarm = alarms.get(position);
 
     	//set the time
 		Calendar c = Calendar.getInstance();
@@ -58,7 +58,7 @@ public class MyArrayAdapter extends ArrayAdapter<Alarm> {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				//alarm.setEnabled(isChecked);
+				alarm.setEnabled(isChecked);
 			}
 		});
 	    
