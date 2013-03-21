@@ -165,7 +165,8 @@ public class EditCreateAlarm extends FragmentActivity {
 						alarmManager.cancel(pendingIntent);
 					}
 					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|"));
-					Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+					Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+					prefsEditor.commit();
 				}
 				
 				final Calendar calNow = Calendar.getInstance();
@@ -189,7 +190,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, recurDay);
 							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 							
-							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 						else
 						{
@@ -204,11 +205,11 @@ public class EditCreateAlarm extends FragmentActivity {
 							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, (cNew.get(Calendar.DAY_OF_WEEK)-1));
 							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 							
-							Log.d("MYNAMEISTODD", "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 					}
 					//prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
-					//Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
+					//Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
 					alarm.setHour(hour);
 					alarm.setMinute(minute);
 					alarm.setRecur(recurDays);
@@ -286,12 +287,12 @@ public class EditCreateAlarm extends FragmentActivity {
 								if (!recurDays.contains(which))
 								{
 									recurDays.add(which);
-									Log.d("MYNAMEISTODD", "Add:" + which);
+									Log.d(Util.MYNAMEISTODD, "Add:" + which);
 								}
 								
 								if (recurDays.contains(-1)) {
 									recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
-									Log.d("MYNAMEISTODD", "Remove:-1");
+									Log.d(Util.MYNAMEISTODD, "Remove:-1");
 								}
 							}
 							else
@@ -299,20 +300,20 @@ public class EditCreateAlarm extends FragmentActivity {
 								if (recurDays.contains(which))
 								{
 									recurDays.remove(recurDays.indexOf(which));
-									Log.d("MYNAMEISTODD", "Remove:" + which);
+									Log.d(Util.MYNAMEISTODD, "Remove:" + which);
 								}
 							}
 							
 							if (recurDays.size() == 0) {
 								recurDays.add(-1);
-								Log.d("MYNAMEISTODD", "Add:-1");
+								Log.d(Util.MYNAMEISTODD, "Add:-1");
 							}
 						}
 					})
 					.setPositiveButton("Done",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int id) {
-									Log.d("MYNAMEISTODD", "Clicked Done in PickDays");
+									Log.d(Util.MYNAMEISTODD, "Clicked Done in PickDays");
 								}
 							});
 	
@@ -340,7 +341,7 @@ public class EditCreateAlarm extends FragmentActivity {
 			builder.setTitle("Set Volume").setPositiveButton("Set",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							Log.d("MYNAMEISTODD", "Clicked Done in SetVolume");
+							Log.d(Util.MYNAMEISTODD, "Clicked Done in SetVolume");
 						}
 					})
 					.setView(seekBar);
@@ -352,7 +353,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				public void onDismiss(DialogInterface dialog) {
 					nPickerVal = seekBar.getProgress();
 					tvVolume.setText(Util.getVolumePercent(Integer.toString(nPickerVal), maxVolumeStep));
-					Log.d("MYNAMEISTODD", "SetVolume" + nPickerVal);
+					Log.d(Util.MYNAMEISTODD, "SetVolume" + nPickerVal);
 				}
 			});
 			return alert;
@@ -381,7 +382,7 @@ public class EditCreateAlarm extends FragmentActivity {
 					alarmManager.cancel(pendingIntent);
 				}
 				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|"));
-				Log.d("MYNAMEISTODD", "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+				Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 			}
 			
 			prefsEditor.commit();

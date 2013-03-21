@@ -29,7 +29,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.d("MYNAMEISTODD", "Setting alarms...");
+    	Log.d(Util.MYNAMEISTODD, "Setting alarms...");
     	
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     	prefs = context.getSharedPreferences(Util.AUTOVOLUME, Context.MODE_PRIVATE);
@@ -52,7 +52,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 				if (rd.length() > 0) {
 					int rdi = Integer.parseInt(rd);
 					recurDays.add(rdi);
-					Log.d("MYNAMEISTODD", "recurDays add: " + rdi);
+					Log.d(Util.MYNAMEISTODD, "recurDays add: " + rdi);
 				}
 			}
 			
@@ -70,7 +70,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 					alarmManager.cancel(pendingIntent);
 					
 					prefsEditor.remove(hour + ":" + minute + ":" + tmp.get("RECUR"));
-					Log.d("MYNAMEISTODD", "Deleted: " + hour + ":" + minute + ":" + tmp.get("RECUR") + " Volume: " + nPickerVal);
+					Log.d(Util.MYNAMEISTODD, "Deleted: " + hour + ":" + minute + ":" + tmp.get("RECUR") + " Volume: " + nPickerVal);
 				}
 				
 				if (recurDay != -1) {
@@ -87,7 +87,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 					PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, nPickerVal, recurDay);
 					alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 					
-					Log.d("MYNAMEISTODD", "Repeating: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+					Log.d(Util.MYNAMEISTODD, "Repeating: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 				}
 				else
 				{
@@ -101,7 +101,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 						PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, nPickerVal, cNew.get(Calendar.DAY_OF_WEEK));
 						alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 						
-						Log.d("MYNAMEISTODD", "One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+						Log.d(Util.MYNAMEISTODD, "One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 					}
 				}
 			}

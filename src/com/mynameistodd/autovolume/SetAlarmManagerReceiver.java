@@ -35,8 +35,8 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		
 		Toast.makeText(arg0, "Volume changed!", Toast.LENGTH_SHORT).show();
 		
-		Log.d("MYNAMEISTODD", "Data from Intent:" + Uri.decode(arg1.getData().toString()));
-		Log.d("MYNAMEISTODD", "Volume set to:" + audioLevel);
+		Log.d(Util.MYNAMEISTODD, "Data from Intent:" + Uri.decode(arg1.getData().toString()));
+		Log.d(Util.MYNAMEISTODD, "Volume set to:" + audioLevel);
 		
 		maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 		double toFormat = (audioLevel.floatValue() / maxVolume.floatValue());

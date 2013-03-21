@@ -155,8 +155,8 @@ public class ListAlarms extends ListActivity {
 
 		startActivityForResult(intent, 1);
 
-		Log.d("MYNAMEISTODD", "Position:" + position);
-		Log.d("MYNAMEISTODD", "ID:" + id);
+		Log.d(Util.MYNAMEISTODD, "Position:" + position);
+		Log.d(Util.MYNAMEISTODD, "ID:" + id);
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class ListAlarms extends ListActivity {
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								Log.d("MYNAMEISTODD", "Clicked Yes");
+								Log.d(Util.MYNAMEISTODD, "Clicked Yes");
 
 								//Delete old alarms
 								List<Integer> recurDaysArray = alarmToDelete.getRecur();
@@ -180,7 +180,7 @@ public class ListAlarms extends ListActivity {
 									alarmManager.cancel(pendingIntent);
 								}
 								prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|"));
-								Log.d("MYNAMEISTODD", "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + " Volume:" + alarmToDelete.getVolume());
+								Log.d(Util.MYNAMEISTODD, "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + " Volume:" + alarmToDelete.getVolume());
 
 								prefsEditor.commit();
 
@@ -191,7 +191,7 @@ public class ListAlarms extends ListActivity {
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						Log.d("MYNAMEISTODD", "Clicked No");
+						Log.d(Util.MYNAMEISTODD, "Clicked No");
 						dialog.cancel();
 					}
 				});

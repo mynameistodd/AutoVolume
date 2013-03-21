@@ -56,15 +56,16 @@ public class Alarm {
 	}
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+		Log.d(Util.MYNAMEISTODD, "Enabled: " + enabled);
 	}
 	public void save() {
 		prefsEditor.putString(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|"), String.valueOf(volume));
-		Log.d("MYNAMEISTODD", "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume));
+		Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume));
 		prefsEditor.commit();
 	}
 	public void remove() {
 		prefsEditor.remove(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|"));
-		Log.d("MYNAMEISTODD", "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume);
+		Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume);
 		prefsEditor.commit();
 	}
 }
