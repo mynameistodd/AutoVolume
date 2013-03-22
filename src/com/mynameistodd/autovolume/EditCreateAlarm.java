@@ -85,7 +85,7 @@ public class EditCreateAlarm extends FragmentActivity {
         seekBar.setMax(maxVolumeStep);
         
         callingIntent = getIntent();
-        if (callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("VOLUME") && callingIntent.hasExtra("ENABLED"))
+        if (callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("ENABLED") && callingIntent.hasExtra("VOLUME"))
         {
         	editMode = true;
         }
@@ -164,8 +164,8 @@ public class EditCreateAlarm extends FragmentActivity {
 						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 						alarmManager.cancel(pendingIntent);
 					}
-					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|"));
-					Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
+					Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 					prefsEditor.commit();
 				}
 				
@@ -381,8 +381,8 @@ public class EditCreateAlarm extends FragmentActivity {
 					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 					alarmManager.cancel(pendingIntent);
 				}
-				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|"));
-				Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
+				Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 			}
 			
 			prefsEditor.commit();

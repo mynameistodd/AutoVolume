@@ -62,6 +62,19 @@ public class ListAlarms extends ListActivity {
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
+		if (!prefs.getBoolean("pref_fix_1", false)) {
+			Map<String, ?> allPrefs = prefs.getAll();
+			for (String key : allPrefs.keySet()) {
+				if (!key.startsWith("pref")) {
+					String value = prefs.getString(key, "0");
+					String newKey = key + ":true";
+					prefsEditor.putString(newKey, value);
+					prefsEditor.remove(key);
+				}
+			}
+			prefsEditor.putBoolean("pref_fix_1", true);
+			prefsEditor.commit();
+		}
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout1);
 		layout.addView(adView);
 		AdRequest adRequest = new AdRequest();
@@ -108,7 +121,7 @@ public class ListAlarms extends ListActivity {
 			String[] timeRecur = key.split(":");
 			
 			List<Integer> rd = Util.getRecurList(timeRecur[2]);
-			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), true, this);
+			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), Boolean.parseBoolean(timeRecur[3]), this);
 			allAlarms.add(newAlarm);
 		}
 		Collections.sort(allAlarms, new Comparator<Alarm>() {
@@ -179,8 +192,8 @@ public class ListAlarms extends ListActivity {
 									PendingIntent pendingIntent = Util.createPendingIntent(context, alarmToDelete.getHour(), alarmToDelete.getMinute(), alarmToDelete.getVolume(), recurDay);
 									alarmManager.cancel(pendingIntent);
 								}
-								prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|"));
-								Log.d(Util.MYNAMEISTODD, "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + " Volume:" + alarmToDelete.getVolume());
+								prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled());
+								Log.d(Util.MYNAMEISTODD, "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled() + " Volume:" + alarmToDelete.getVolume());
 
 								prefsEditor.commit();
 

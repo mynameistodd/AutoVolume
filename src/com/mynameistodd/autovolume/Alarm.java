@@ -59,12 +59,12 @@ public class Alarm {
 		Log.d(Util.MYNAMEISTODD, "Enabled: " + enabled);
 	}
 	public void save() {
-		prefsEditor.putString(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|"), String.valueOf(volume));
+		prefsEditor.putString(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled, String.valueOf(volume));
 		Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume));
 		prefsEditor.commit();
 	}
 	public void remove() {
-		prefsEditor.remove(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|"));
+		prefsEditor.remove(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled);
 		Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume);
 		prefsEditor.commit();
 	}
