@@ -45,6 +45,7 @@ public class EditCreateAlarm extends FragmentActivity {
 	private static TableRow recurTableRow;
 	private TimePickerDialog tPicker;
 	private static Calendar cal;
+	private static long id = 0;
 	private static int hour = 0;
 	private static int minute = 0;
 	private static int volume = 0;
@@ -85,7 +86,7 @@ public class EditCreateAlarm extends FragmentActivity {
         seekBar.setMax(maxVolumeStep);
         
         callingIntent = getIntent();
-        if (callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("ENABLED") && callingIntent.hasExtra("VOLUME"))
+        if (callingIntent.hasExtra("ID") && callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("ENABLED") && callingIntent.hasExtra("VOLUME"))
         {
         	editMode = true;
         }
@@ -97,6 +98,7 @@ public class EditCreateAlarm extends FragmentActivity {
 		
         cal = Calendar.getInstance();
         
+        id = 0;
         hour = cal.get(Calendar.HOUR_OF_DAY);
 		minute = cal.get(Calendar.MINUTE);
 		volume = 0;
@@ -105,6 +107,7 @@ public class EditCreateAlarm extends FragmentActivity {
 		
         if (editMode)
         {
+        	id = callingIntent.getLongExtra("ID", 0);
         	hour = callingIntent.getIntExtra("HOUR", hour);
         	minute = callingIntent.getIntExtra("MINUTE", minute);
         	volume = callingIntent.getIntExtra("VOLUME", volume);
@@ -122,7 +125,7 @@ public class EditCreateAlarm extends FragmentActivity {
 			}
         }
         
-        alarm = new Alarm(hour, minute, recurDays, volume, enabled, contextThis);
+        alarm = new Alarm(id, hour, minute, recurDays, volume, enabled, contextThis);
 		
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
@@ -164,9 +167,9 @@ public class EditCreateAlarm extends FragmentActivity {
 						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 						alarmManager.cancel(pendingIntent);
 					}
-					prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
-					Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
-					prefsEditor.commit();
+					//prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
+					//Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+					//prefsEditor.commit();
 				}
 				
 				final Calendar calNow = Calendar.getInstance();
@@ -381,11 +384,12 @@ public class EditCreateAlarm extends FragmentActivity {
 					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 					alarmManager.cancel(pendingIntent);
 				}
-				prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
-				Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
+				//prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
+				//Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 			}
 			
-			prefsEditor.commit();
+			//prefsEditor.commit();
+			alarm.remove();
 			
 			setResult(RESULT_OK);
 			finish();

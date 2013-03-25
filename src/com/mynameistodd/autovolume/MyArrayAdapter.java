@@ -58,6 +58,7 @@ public class MyArrayAdapter extends ArrayAdapter<Alarm> {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				//alarm.remove();
 				alarm.setEnabled(isChecked);
 				alarm.save();
 			}

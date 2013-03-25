@@ -1,6 +1,7 @@
 package com.mynameistodd.autovolume;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -62,13 +63,21 @@ public class ListAlarms extends ListActivity {
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
+//		prefsEditor.putString("8:00:|1|2|3|4|5|", "2");
+//		prefsEditor.putString("17:00:|1|2|3|4|5|", "7");
+//		prefsEditor.putString("22:00:|1|2|3|4|5|", "1");
+//		prefsEditor.putBoolean("pref_fix_1", false);
+//		prefsEditor.commit();
+		
 		if (!prefs.getBoolean("pref_fix_1", false)) {
 			Map<String, ?> allPrefs = prefs.getAll();
 			for (String key : allPrefs.keySet()) {
 				if (!key.startsWith("pref")) {
 					String value = prefs.getString(key, "0");
-					String newKey = key + ":true";
-					prefsEditor.putString(newKey, value);
+					String newValue = key + ":true:" + value;
+					
+					String newKey = String.valueOf(Calendar.getInstance().getTimeInMillis());
+					prefsEditor.putString(newKey, newValue);
 					prefsEditor.remove(key);
 				}
 			}
@@ -117,12 +126,18 @@ public class ListAlarms extends ListActivity {
 
 		Map<String, ?> allPrefs = prefs.getAll();
 		for (String key : allPrefs.keySet()) {
-			
-			String[] timeRecur = key.split(":");
-			
-			List<Integer> rd = Util.getRecurList(timeRecur[2]);
-			Alarm newAlarm = new Alarm(Integer.parseInt(timeRecur[0]), Integer.parseInt(timeRecur[1]), rd, Integer.parseInt((String) allPrefs.get(key)), Boolean.parseBoolean(timeRecur[3]), this);
-			allAlarms.add(newAlarm);
+			if (!key.startsWith("pref")) {
+				String[] timeRecur = prefs.getString(key, "").split(":");
+				
+				int tmpHour = Integer.parseInt(timeRecur[0]);
+				int tmpMinute = Integer.parseInt(timeRecur[1]);
+				List<Integer> tmpRecur = Util.getRecurList(timeRecur[2]);
+				boolean tmpEnabled = Boolean.parseBoolean( (timeRecur.length > 3) ? timeRecur[3] : "true");
+				int tmpVolume = Integer.parseInt( (timeRecur.length > 4) ? timeRecur[4] : "0");
+				
+				Alarm newAlarm = new Alarm(Long.parseLong(key), tmpHour, tmpMinute, tmpRecur, tmpVolume, tmpEnabled, this);
+				allAlarms.add(newAlarm);
+			}
 		}
 		Collections.sort(allAlarms, new Comparator<Alarm>() {
 
@@ -160,6 +175,7 @@ public class ListAlarms extends ListActivity {
 		Alarm item = adapter.getItem(position);
 
 		Intent intent = new Intent(context, EditCreateAlarm.class);
+		intent.putExtra("ID", item.getId());
 		intent.putExtra("HOUR", item.getHour());
 		intent.putExtra("MINUTE", item.getMinute());
 		intent.putIntegerArrayListExtra("RECUR", (ArrayList<Integer>) item.getRecur());
@@ -192,11 +208,12 @@ public class ListAlarms extends ListActivity {
 									PendingIntent pendingIntent = Util.createPendingIntent(context, alarmToDelete.getHour(), alarmToDelete.getMinute(), alarmToDelete.getVolume(), recurDay);
 									alarmManager.cancel(pendingIntent);
 								}
-								prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled());
-								Log.d(Util.MYNAMEISTODD, "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled() + " Volume:" + alarmToDelete.getVolume());
+								//prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled());
+								//Log.d(Util.MYNAMEISTODD, "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled() + " Volume:" + alarmToDelete.getVolume());
 
-								prefsEditor.commit();
-
+								//prefsEditor.commit();
+								
+								alarmToDelete.remove();
 								allAlarms.remove(alarmToDelete);
 								adapter.notifyDataSetChanged();
 								requestBackup();
