@@ -16,8 +16,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,8 +31,6 @@ import android.text.format.DateUtils;
 
 public class EditCreateAlarm extends FragmentActivity {
 
-	private SharedPreferences prefs;
-	private Editor prefsEditor;
 	private Button buttonSave;
 	private Button buttonCancel;
 	private AudioManager audioManager;
@@ -66,8 +62,6 @@ public class EditCreateAlarm extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_create_alarm);
         contextThis = this;
-        prefs = getSharedPreferences(Util.AUTOVOLUME, MODE_PRIVATE);
-		prefsEditor = prefs.edit();
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         buttonSave = (Button)findViewById(R.id.btnSave);
@@ -167,17 +161,12 @@ public class EditCreateAlarm extends FragmentActivity {
 						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 						alarmManager.cancel(pendingIntent);
 					}
-					//prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
-					//Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
-					//prefsEditor.commit();
 				}
 				
 				final Calendar calNow = Calendar.getInstance();
 				//Save new alarm
 				if (recurDays.size() > 0) {
-					//String recurDaysDelim = "|";
 					for (int recurDay : recurDays) {
-						//recurDaysDelim += recurDay + "|";
 						Calendar cNew = Calendar.getInstance();
 						
 						if (recurDay != -1) {
@@ -211,8 +200,7 @@ public class EditCreateAlarm extends FragmentActivity {
 							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 						}
 					}
-					//prefsEditor.putString(hour + ":" + minute + ":" + recurDaysDelim, String.valueOf(nPickerVal));
-					//Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + recurDaysDelim + " Volume:" + String.valueOf(nPickerVal));
+					
 					alarm.setHour(hour);
 					alarm.setMinute(minute);
 					alarm.setRecur(recurDays);
@@ -220,8 +208,6 @@ public class EditCreateAlarm extends FragmentActivity {
 					alarm.setEnabled(enabled);
 					alarm.save();
 				}
-				
-				//prefsEditor.commit();
 				
 				setResult(RESULT_OK);
 				finish();
@@ -384,11 +370,8 @@ public class EditCreateAlarm extends FragmentActivity {
 					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
 					alarmManager.cancel(pendingIntent);
 				}
-				//prefsEditor.remove(callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true));
-				//Log.d(Util.MYNAMEISTODD, "Deleted:" + callingIntent.getIntExtra("HOUR", 0) + ":" + callingIntent.getIntExtra("MINUTE", 0) + ":" + Util.getRecurDelim(callingIntent.getIntegerArrayListExtra("RECUR"), "|") + ":" + callingIntent.getBooleanExtra("ENABLED", true) + " Volume:" + callingIntent.getIntExtra("VOLUME", 0));
 			}
 			
-			//prefsEditor.commit();
 			alarm.remove();
 			
 			setResult(RESULT_OK);

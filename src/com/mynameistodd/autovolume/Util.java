@@ -12,7 +12,7 @@ import android.net.Uri;
 public class Util {
 
 	static final String AUTOVOLUME = "AUTOVOLUME";
-	static final String MYNAMEISTODD = Util.MYNAMEISTODD;
+	static final String MYNAMEISTODD = "MYNAMEISTODD";
 	
 	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay) {
 		Intent intent = new Intent(context, SetAlarmManagerReceiver.class);

@@ -3,13 +3,11 @@ package com.mynameistodd.autovolume;
 import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class Alarm {
 
-	private SharedPreferences prefs;
 	private Editor prefsEditor;
 	
 	private long id;
@@ -27,14 +25,11 @@ public class Alarm {
 		this.volume = volume;
 		this.enabled = enabled;
 		
-		prefsEditor = context.getSharedPreferences(Util.AUTOVOLUME, context.MODE_PRIVATE).edit();
+		prefsEditor = context.getSharedPreferences(Util.AUTOVOLUME, Context.MODE_PRIVATE).edit();
 	}
 	public long getId() {
 		return id;
 	}
-//	public void setId(long id) {
-//		this.id = id;
-//	}
 	public int getHour() {
 		return hour;
 	}
@@ -67,13 +62,11 @@ public class Alarm {
 		Log.d(Util.MYNAMEISTODD, "Enabled: " + enabled);
 	}
 	public void save() {
-		//prefsEditor.putString(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled, String.valueOf(volume));
 		prefsEditor.putString(String.valueOf(id), hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled + ":" + String.valueOf(volume));
 		Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume));
 		prefsEditor.commit();
 	}
 	public void remove() {
-		//prefsEditor.remove(hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled);
 		prefsEditor.remove(String.valueOf(id));
 		Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume);
 		prefsEditor.commit();

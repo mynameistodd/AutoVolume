@@ -76,7 +76,10 @@ public class ListAlarms extends ListActivity {
 					String value = prefs.getString(key, "0");
 					String newValue = key + ":true:" + value;
 					
-					String newKey = String.valueOf(Calendar.getInstance().getTimeInMillis());
+					Calendar c = Calendar.getInstance();
+					c.add(Calendar.MINUTE, -2);
+					
+					String newKey = String.valueOf(c.getTimeInMillis());
 					prefsEditor.putString(newKey, newValue);
 					prefsEditor.remove(key);
 				}
@@ -208,11 +211,7 @@ public class ListAlarms extends ListActivity {
 									PendingIntent pendingIntent = Util.createPendingIntent(context, alarmToDelete.getHour(), alarmToDelete.getMinute(), alarmToDelete.getVolume(), recurDay);
 									alarmManager.cancel(pendingIntent);
 								}
-								//prefsEditor.remove(alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled());
-								//Log.d(Util.MYNAMEISTODD, "Deleted:" + alarmToDelete.getHour() + ":" + alarmToDelete.getMinute() + ":" + Util.getRecurDelim(alarmToDelete.getRecur(), "|") + ":" + alarmToDelete.isEnabled() + " Volume:" + alarmToDelete.getVolume());
 
-								//prefsEditor.commit();
-								
 								alarmToDelete.remove();
 								allAlarms.remove(alarmToDelete);
 								adapter.notifyDataSetChanged();
