@@ -9,7 +9,7 @@ import java.util.Map;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.app.AlarmManager;
+//import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -43,7 +43,7 @@ public class ListAlarms extends ListActivity {
 	private Context contextThis;
 	private ListView list;
 	private Alarm alarmToDelete;
-	private AlarmManager alarmManager;
+	//private AlarmManager alarmManager;
 	private AdView adView;
 	private ArrayAdapter<Alarm> adapter;
 	private List<Alarm> allAlarms;
@@ -58,7 +58,7 @@ public class ListAlarms extends ListActivity {
 		context = getApplicationContext();
 		contextThis = this;
 		list = getListView();
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		//alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		adView = new AdView(this, AdSize.SMART_BANNER, "a150719f918826b");
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -203,15 +203,16 @@ public class ListAlarms extends ListActivity {
 							public void onClick(DialogInterface dialog, int id) {
 								Log.d(Util.MYNAMEISTODD, "Clicked Yes");
 
-								//Delete old alarms
-								List<Integer> recurDaysArray = alarmToDelete.getRecur();
-								
-								//Cancel the alarms
-								for (int recurDay : recurDaysArray) {
-									PendingIntent pendingIntent = Util.createPendingIntent(context, alarmToDelete.getHour(), alarmToDelete.getMinute(), alarmToDelete.getVolume(), recurDay);
-									alarmManager.cancel(pendingIntent);
-								}
+//								//Delete old alarms
+//								List<Integer> recurDaysArray = alarmToDelete.getRecur();
+//								
+//								//Cancel the alarms
+//								for (int recurDay : recurDaysArray) {
+//									PendingIntent pendingIntent = Util.createPendingIntent(context, alarmToDelete.getHour(), alarmToDelete.getMinute(), alarmToDelete.getVolume(), recurDay, alarmToDelete.isEnabled());
+//									alarmManager.cancel(pendingIntent);
+//								}
 
+								alarmToDelete.cancel();
 								alarmToDelete.remove();
 								allAlarms.remove(alarmToDelete);
 								adapter.notifyDataSetChanged();

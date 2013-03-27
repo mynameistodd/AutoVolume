@@ -92,7 +92,7 @@ public class EditCreateAlarm extends FragmentActivity {
 		
         cal = Calendar.getInstance();
         
-        id = 0;
+        id = cal.getTimeInMillis();
         hour = cal.get(Calendar.HOUR_OF_DAY);
 		minute = cal.get(Calendar.MINUTE);
 		volume = 0;
@@ -158,7 +158,7 @@ public class EditCreateAlarm extends FragmentActivity {
 					
 					//Cancel the alarms
 					for (int recurDayStr : recurDaysArray) {
-						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
+						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr, callingIntent.getBooleanExtra("ENABLED", enabled));
 						alarmManager.cancel(pendingIntent);
 					}
 				}
@@ -166,40 +166,42 @@ public class EditCreateAlarm extends FragmentActivity {
 				final Calendar calNow = Calendar.getInstance();
 				//Save new alarm
 				if (recurDays.size() > 0) {
-					for (int recurDay : recurDays) {
-						Calendar cNew = Calendar.getInstance();
-						
-						if (recurDay != -1) {
-							cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
-							cNew.set(Calendar.HOUR_OF_DAY, hour);
-							cNew.set(Calendar.MINUTE, minute);
-							cNew.set(Calendar.SECOND, 0);
-							if (cNew.before(calNow)) {
-								cNew.roll(Calendar.WEEK_OF_YEAR, 1);
-							}
-							
-							//Set alarms
-							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, recurDay);
-							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
-							
-							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
-						}
-						else
-						{
-							cNew.set(Calendar.HOUR_OF_DAY, hour);
-							cNew.set(Calendar.MINUTE, minute);
-							cNew.set(Calendar.SECOND, 0);
-							if (cNew.before(calNow)) {
-								cNew.roll(Calendar.DAY_OF_WEEK, 1);
-							}
-							
-							//Set one-time alarm
-							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, (cNew.get(Calendar.DAY_OF_WEEK)-1));
-							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
-							
-							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
-						}
-					}
+//					for (int recurDay : recurDays) {
+//						Calendar cNew = Calendar.getInstance();
+//						
+//						if (recurDay != -1) {
+//							cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
+//							cNew.set(Calendar.HOUR_OF_DAY, hour);
+//							cNew.set(Calendar.MINUTE, minute);
+//							cNew.set(Calendar.SECOND, 0);
+//							if (cNew.before(calNow)) {
+//								cNew.roll(Calendar.WEEK_OF_YEAR, 1);
+//							}
+//							
+//							//Set alarms
+//							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, recurDay, enabled);
+//							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
+//							
+//							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+//						}
+//						else
+//						{
+//							cNew.set(Calendar.HOUR_OF_DAY, hour);
+//							cNew.set(Calendar.MINUTE, minute);
+//							cNew.set(Calendar.SECOND, 0);
+//							if (cNew.before(calNow)) {
+//								cNew.roll(Calendar.DAY_OF_WEEK, 1);
+//							}
+//							
+//							//Set one-time alarm
+//							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, (cNew.get(Calendar.DAY_OF_WEEK)-1), enabled);
+//							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
+//							
+//							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+//						}
+//					}
+					
+					alarm.schedule();
 					
 					alarm.setHour(hour);
 					alarm.setMinute(minute);
@@ -367,7 +369,7 @@ public class EditCreateAlarm extends FragmentActivity {
 				
 				//Cancel the alarms
 				for (int recurDayStr : recurDaysArray) {
-					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr);
+					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr, callingIntent.getBooleanExtra("ENABLED", enabled));
 					alarmManager.cancel(pendingIntent);
 				}
 			}

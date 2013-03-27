@@ -79,7 +79,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 					
 					if (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) {
 						//Cancel the alarms already scheduled
-						PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, recurDay);
+						PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, recurDay, tmpEnabled);
 						alarmManager.cancel(pendingIntent);
 						
 						//prefsEditor.remove(hour + ":" + minute + ":" + tmp.get("RECUR"));
@@ -97,7 +97,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 						}
 						if (tmpEnabled) {
 							//Set alarms
-							PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, recurDay);
+							PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, recurDay, tmpEnabled);
 							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 							
 							Log.d(Util.MYNAMEISTODD, "Repeating: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
@@ -112,7 +112,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 						if (tmpEnabled && cNew.after(calNow)) {
 							
 							//Set one-time alarm
-							PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, cNew.get(Calendar.DAY_OF_WEEK));
+							PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, cNew.get(Calendar.DAY_OF_WEEK), tmpEnabled);
 							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 							
 							Log.d(Util.MYNAMEISTODD, "One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));

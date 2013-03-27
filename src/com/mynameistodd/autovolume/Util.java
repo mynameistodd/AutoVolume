@@ -14,9 +14,9 @@ public class Util {
 	static final String AUTOVOLUME = "AUTOVOLUME";
 	static final String MYNAMEISTODD = "MYNAMEISTODD";
 	
-	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay) {
+	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay, boolean enabled) {
 		Intent intent = new Intent(context, SetAlarmManagerReceiver.class);
-		String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + volume;
+		String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + volume + "/" + enabled;
 		Uri data = Uri.parse(Uri.encode(raw));
 		intent.setData(data);
 		intent.putExtra("AUDIO_LEVEL", volume);
