@@ -1,0 +1,23 @@
+# incremental data. DO NOT EDIT.
+# format is <lastModified> <length> <SHA-1> <path>
+# Encoding is UTF-8
+1372951684000 2287 96a2a6ae728730715635456dacd2a48347219cf1 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-mdpi/ic_launcher.png
+1372951684000 312 524a54c4000f373331abbb0ceef5a635324fbdb6 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/menu/activity_list_alarms.xml
+1372951684000 405 c39eb64353e09418783e2911572c1f8b2c5daf78 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/xml/preferences.xml
+1372951684000 240 590953c44d45a9c362aca602dddf5be7a53a7a01 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/menu/activity_list_alarm_item.xml
+1372951684000 1177 9cb158410a89b1e9a5626520b8d8ed53228c805d /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/layout/activity_list_alarms.xml
+1372951684000 240 590953c44d45a9c362aca602dddf5be7a53a7a01 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/menu/activity_settings.xml
+1372951684000 3199 9396c0118b259887714f6ef3a240c711618ae79a /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-xhdpi/ic_action_search.png
+1372951684000 3120 7ec7001ffd10cd29e137c2c3baab0c32e2ef76d5 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-hdpi/ic_action_search.png
+1372951684000 1446 b39808468d7ca88e04124451a66def0431f9167c /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/layout/activity_list_alarm_item.xml
+1372951684000 2324 95c94f55b0553cca3970f0b7b025571fb426a2f1 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/values/values.xml
+1372951684000 1432 e22fbfa646c1fd5c6a97f28f1a5680a352870737 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/layout-v14/activity_list_alarm_item.xml
+1372951684000 1727 d0531adf3daf0318bc64c925b6cc65ee8596d520 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-ldpi/ic_launcher.png
+1372951684000 158 48e8b9456873197cb39d4817b4670c5a41abd622 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/menu/activity_edit_create_alarm.xml
+1372951684000 1179 f03288fdc651b1e417962305a5be6f4e9573d485 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/values-v11/values.xml
+1372951684000 5711 db490bd3b2efa743fc4b86f1dd5f07387c6af8f2 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-xhdpi/ic_launcher.png
+1372951684000 512 9a1f2c5011842623b8c45956947e1d5bd0c08797 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/layout/activity_settings.xml
+1372951684000 3960 8e2bd57354bd5adf71f8cc1dc82f73bc86880ddb /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-hdpi/ic_launcher.png
+1372951684000 3879 f3359e061e86fbb07cea3a57ee3ea62540df5961 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/layout/activity_edit_create_alarm.xml
+1372951684000 201 c15ac040f51040a81ba95a00395c84263843b14d /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/values-large/values.xml
+1372951684000 3030 bca2289cd09bc6a3b4a4507cfd6ecc23431826c5 /Users/todd/Documents/workspace/AutoVolume/build/res/all/debug/drawable-mdpi/ic_action_search.png
