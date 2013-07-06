@@ -23,35 +23,40 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 	private AudioManager audioManager;
 	private Integer audioLevel;
 	private Integer maxVolume;
+    private Boolean enabled;
 	
 	@Override
 	public void onReceive(Context arg0, Intent arg1) {
 		audioManager = (AudioManager) arg0.getSystemService(Context.AUDIO_SERVICE);
 		audioLevel = arg1.getIntExtra("AUDIO_LEVEL", 0);
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);
-		boolean pref_notify = sharedPref.getBoolean("pref_notify", false);
-		
-		audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, AudioManager.FLAG_SHOW_UI);
-		
-		Toast.makeText(arg0, "Volume changed!", Toast.LENGTH_SHORT).show();
-		
-		Log.d(Util.MYNAMEISTODD, "Data from Intent:" + Uri.decode(arg1.getData().toString()));
-		Log.d(Util.MYNAMEISTODD, "Volume set to:" + audioLevel);
-		
-		maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-		double toFormat = (audioLevel.floatValue() / maxVolume.floatValue());
-		
-		if (pref_notify) {
-			NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
-			Notification notification = new Notification(R.drawable.ic_launcher, "Volume has been changed", System.currentTimeMillis());
-			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			
-			Intent notificationIntent = new Intent(arg0, ListAlarms.class);
-			PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-	
-			notification.setLatestEventInfo(arg0, "Scheduled volume change", "Set to: " + NumberFormat.getPercentInstance().format(toFormat), contentIntent);
-			mNotificationManager.notify(1, notification);
-		}
+        enabled = arg1.getBooleanExtra("ENABLED", false);
+
+        if (enabled) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);
+            boolean pref_notify = sharedPref.getBoolean("pref_notify", false);
+
+            audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, AudioManager.FLAG_SHOW_UI);
+
+            Toast.makeText(arg0, "Volume changed!", Toast.LENGTH_SHORT).show();
+
+            Log.d(Util.MYNAMEISTODD, "Data from Intent:" + Uri.decode(arg1.getData().toString()));
+            Log.d(Util.MYNAMEISTODD, "Volume set to:" + audioLevel);
+
+            maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+            double toFormat = (audioLevel.floatValue() / maxVolume.floatValue());
+
+            if (pref_notify) {
+                NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification notification = new Notification(R.drawable.ic_launcher, "Volume has been changed", System.currentTimeMillis());
+                notification.flags = Notification.FLAG_AUTO_CANCEL;
+
+                Intent notificationIntent = new Intent(arg0, ListAlarms.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                notification.setLatestEventInfo(arg0, "Scheduled volume change", "Set to: " + NumberFormat.getPercentInstance().format(toFormat), contentIntent);
+                mNotificationManager.notify(1, notification);
+            }
+        }
 //		NotificationCompat.Builder mBuilder =
 //		        new NotificationCompat.Builder(arg0)
 //		        .setSmallIcon(R.drawable.ic_launcher)

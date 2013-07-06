@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 public class Util {
 
@@ -17,9 +18,13 @@ public class Util {
 	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay, boolean enabled) {
 		Intent intent = new Intent(context, SetAlarmManagerReceiver.class);
 		String raw = "mnit://" + recurDay + "/" + hour + ":" + minute + "/" + volume + "/" + enabled;
+        Log.d(Util.MYNAMEISTODD, "PendingIntent: " + raw);
 		Uri data = Uri.parse(Uri.encode(raw));
 		intent.setData(data);
+        intent.putExtra("HOUR", hour);
+        intent.putExtra("MINUTE", minute);
 		intent.putExtra("AUDIO_LEVEL", volume);
+        intent.putExtra("ENABLED", enabled);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		return pendingIntent;
 	}

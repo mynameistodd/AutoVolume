@@ -67,16 +67,15 @@ public class Alarm {
 	}
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-		Log.d(Util.MYNAMEISTODD, "Enabled: " + enabled);
 	}
 	public void save() {
 		prefsEditor.putString(String.valueOf(id), hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled + ":" + String.valueOf(volume));
-		Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume));
+		Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume) + " Enabled:" + String.valueOf(enabled));
 		prefsEditor.commit();
 	}
 	public void remove() {
 		prefsEditor.remove(String.valueOf(id));
-		Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume);
+		Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume + "Enabled:" + enabled);
 		prefsEditor.commit();
 	}
 	public void cancel() {
@@ -103,7 +102,7 @@ public class Alarm {
 				PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, volume, recurDay, enabled);
 				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
 				
-				Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+				Log.d(Util.MYNAMEISTODD, "Schedule-Repeating: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 			}
 			else
 			{
@@ -115,10 +114,10 @@ public class Alarm {
 				}
 				
 				//Set one-time alarm
-				PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, volume, (cNew.get(Calendar.DAY_OF_WEEK)-1), enabled);
+				PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, volume, -1, enabled);
 				alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 				
-				Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
+				Log.d(Util.MYNAMEISTODD, "Schedule-One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 			}
 		}
 	}

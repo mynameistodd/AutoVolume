@@ -112,7 +112,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 						if (tmpEnabled && cNew.after(calNow)) {
 							
 							//Set one-time alarm
-							PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, cNew.get(Calendar.DAY_OF_WEEK), tmpEnabled);
+							PendingIntent pendingIntent = Util.createPendingIntent(context, tmpHour, tmpMinute, tmpVolume, -1, tmpEnabled);
 							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
 							
 							Log.d(Util.MYNAMEISTODD, "One-Time: " + DateUtils.formatDateTime(context, cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));

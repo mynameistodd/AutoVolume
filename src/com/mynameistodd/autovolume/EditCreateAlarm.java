@@ -200,15 +200,15 @@ public class EditCreateAlarm extends FragmentActivity {
 //							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
 //						}
 //					}
-					
-					alarm.schedule();
-					
+
 					alarm.setHour(hour);
 					alarm.setMinute(minute);
 					alarm.setRecur(recurDays);
 					alarm.setVolume(nPickerVal);
 					alarm.setEnabled(enabled);
-					alarm.save();
+
+                    alarm.schedule();
+                    alarm.save();
 				}
 				
 				setResult(RESULT_OK);
