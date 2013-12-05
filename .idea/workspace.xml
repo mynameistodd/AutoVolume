@@ -30,7 +30,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16b64911-b9dc-4fd9-8cf6-f2a6edece9b7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AutoVolume.iws" />
@@ -103,7 +103,7 @@
       <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="57" selection-end="57" vertical-scroll-proportion="0.14251782" vertical-offset="0" max-vertical-offset="421">
+            <state line="60" column="26" selection-start="706" selection-end="706" vertical-scroll-proportion="2.1377673" vertical-offset="0" max-vertical-offset="990">
               <folding />
             </state>
           </provider>
@@ -1154,6 +1154,11 @@
       <created>1372774662846</created>
       <updated>1372774662846</updated>
     </task>
+    <task id="LOCAL-00001" summary="Reorganize to AndroidStudio project layouts&#10;">
+      <created>1386211793295</created>
+      <updated>1386211793295</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1222,6 +1227,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="Reorganize to AndroidStudio project layouts&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reorganize to AndroidStudio project layouts&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1298,11 +1305,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Auto Volume/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="678" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1080">
@@ -1317,9 +1319,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="678">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="57" selection-end="57" vertical-scroll-proportion="0.14251782" vertical-offset="0" max-vertical-offset="421">
+        <state line="60" column="26" selection-start="706" selection-end="706" vertical-scroll-proportion="2.1377673" vertical-offset="0" max-vertical-offset="990">
           <folding />
         </state>
       </provider>
