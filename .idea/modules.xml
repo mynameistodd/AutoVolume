@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Auto Volume/Auto Volume.iml" filepath="$PROJECT_DIR$/Auto Volume/Auto Volume.iml" />
       <module fileurl="file://$PROJECT_DIR$/AutoVolume.iml" filepath="$PROJECT_DIR$/AutoVolume.iml" />
     </modules>
   </component>
