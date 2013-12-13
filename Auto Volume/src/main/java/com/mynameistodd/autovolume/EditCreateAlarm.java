@@ -1,10 +1,5 @@
 package com.mynameistodd.autovolume;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import android.media.AudioManager;
-import android.os.Bundle;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +11,10 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +25,12 @@ import android.widget.SeekBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.support.v4.app.FragmentActivity;
-import android.text.format.DateUtils;
+
+import com.google.analytics.tracking.android.EasyTracker;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class EditCreateAlarm extends FragmentActivity {
 
@@ -85,7 +88,13 @@ public class EditCreateAlarm extends FragmentActivity {
         	editMode = true;
         }
 	}
-	
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -249,7 +258,13 @@ public class EditCreateAlarm extends FragmentActivity {
 			}
 		});
     }
-	
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
+    }
+
 	@Override
 	@Deprecated
 	protected Dialog onCreateDialog(int id) {

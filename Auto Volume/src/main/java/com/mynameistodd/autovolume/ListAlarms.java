@@ -1,25 +1,16 @@
 package com.mynameistodd.autovolume;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-//import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.PendingIntent;
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +18,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import com.google.android.gms.ads.*;
+
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+//import android.app.AlarmManager;
 
 public class ListAlarms extends ListActivity {
 
@@ -123,7 +127,13 @@ public class ListAlarms extends ListActivity {
 		});
 	}
 
-	@Override
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
+
+    @Override
 	protected void onResume() {
 		super.onResume();
 
@@ -158,7 +168,13 @@ public class ListAlarms extends ListActivity {
 		setListAdapter(adapter);
 	}
 
-	@Override
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
+    }
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 

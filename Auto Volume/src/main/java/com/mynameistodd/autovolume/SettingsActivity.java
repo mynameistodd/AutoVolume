@@ -2,10 +2,8 @@ package com.mynameistodd.autovolume;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+
+import com.google.analytics.tracking.android.EasyTracker;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -13,5 +11,17 @@ public class SettingsActivity extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
     }
 }

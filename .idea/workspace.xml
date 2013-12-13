@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AndroidConfiguredLogFilters">
-    <filters>
-      <filter>
-        <option name="logLevel" value="verbose" />
-        <option name="logMessagePattern" value="^(?!.*(nativeGetEnabledTags)).*$" />
-        <option name="logTagPattern" value="" />
-        <option name="name" value="Unnamed-0" />
-        <option name="packageNamePattern" value="" />
-        <option name="pid" value="" />
-      </filter>
-    </filters>
-  </component>
   <component name="AndroidLayoutPreviewToolWindow">
     <option name="state">
       <GlobalState />
@@ -25,12 +13,19 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="MYNAMEISTODD" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="mynameis" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16b64911-b9dc-4fd9-8cf6-f2a6edece9b7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Auto Volume/libs/libGoogleAnalyticsServices.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Auto Volume/src/main/res/values/analytics.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Auto Volume/Auto Volume.iml" afterPath="$PROJECT_DIR$/Auto Volume/Auto Volume.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/EditCreateAlarm.java" afterPath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/EditCreateAlarm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarmItem.java" afterPath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarmItem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarms.java" afterPath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarms.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SettingsActivity.java" afterPath="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SettingsActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Auto Volume/build.gradle" afterPath="$PROJECT_DIR$/Auto Volume/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AutoVolume.iws" />
@@ -100,10 +95,83 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="ListAlarms.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarms.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="26" selection-start="706" selection-end="706" vertical-scroll-proportion="2.1377673" vertical-offset="0" max-vertical-offset="990">
+            <state line="130" column="0" selection-start="3984" selection-end="3984" vertical-scroll-proportion="0.739726" vertical-offset="90" max-vertical-offset="1350">
+              <folding>
+                <element signature="method#onCreate#0;class#ListAlarms#0" expanded="false" />
+                <element signature="e#3658#3694#0" expanded="false" />
+                <element signature="method#onResume#0;class#ListAlarms#0" expanded="false" />
+                <element signature="method#onActivityResult#0;class#ListAlarms#0" expanded="false" />
+                <element signature="method#onListItemClick#0;class#ListAlarms#0" expanded="false" />
+                <element signature="method#onCreateDialog#0;class#ListAlarms#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ListAlarmItem.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarmItem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="5" selection-start="408" selection-end="671" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SettingsActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SettingsActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="5" selection-start="796" selection-end="796" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EditCreateAlarm.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/EditCreateAlarm.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="97" column="4" selection-start="3491" selection-end="3491" vertical-scroll-proportion="0.0" vertical-offset="610" max-vertical-offset="1830">
+              <folding>
+                <element signature="method#onResume#0;class#EditCreateAlarm#0" expanded="false" />
+                <element signature="method#onCreateDialog#0;class#EditCreateAlarm#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="52" column="13" selection-start="1948" selection-end="1948" vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1080">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="231" max-vertical-offset="675">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SetAlarmManagerReceiver.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SetAlarmManagerReceiver.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="87" column="0" selection-start="3966" selection-end="3966" vertical-scroll-proportion="0.0" vertical-offset="520" max-vertical-offset="1185">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="analytics.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/res/values/analytics.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="46" selection-start="155" selection-end="155" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
               <folding />
             </state>
           </provider>
@@ -831,7 +899,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="1386159213000" />
+        <entry key="$PROJECT_DIR$" value="1386211721000" />
       </map>
     </option>
   </component>
@@ -846,6 +914,11 @@
         <option value="$PROJECT_DIR$/src/com/mynameistodd/autovolume/Alarm.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarms.java" />
+        <option value="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarmItem.java" />
+        <option value="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SettingsActivity.java" />
+        <option value="$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/EditCreateAlarm.java" />
+        <option value="$PROJECT_DIR$/Auto Volume/src/main/res/values/analytics.xml" />
       </list>
     </option>
   </component>
@@ -900,6 +973,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -922,15 +996,154 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Auto Volume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Auto Volume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Auto Volume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Auto Volume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Auto Volume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="autovolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AutoVolume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Auto Volume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Android SDK" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.16210938" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
@@ -948,6 +1161,9 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Auto Volume/libs/libGoogleAnalyticsServices.jar" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -983,6 +1199,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -1008,19 +1237,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -1158,7 +1374,11 @@
       <created>1386211793295</created>
       <updated>1386211793295</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Reorganize to AndroidStudio project layouts&#10;">
+      <created>1386211980247</created>
+      <updated>1386211980247</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1185,15 +1405,16 @@
     <frame x="0" y="22" width="1440" height="824" extended-state="6" />
     <editor active="false" />
     <layout>
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" x="100" y="122" width="1240" height="624" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3286119" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44334278" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3045326" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37393767" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24605452" sideWeight="0.28125" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24605452" sideWeight="0.28125" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1238,6 +1459,13 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="26" selection-start="706" selection-end="706" vertical-scroll-proportion="0.0" vertical-offset="900" max-vertical-offset="990">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="26" selection-start="26" selection-end="26" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="90">
@@ -1305,31 +1533,102 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="678" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="26" selection-start="706" selection-end="706" vertical-scroll-proportion="1.3966746" vertical-offset="312" max-vertical-offset="990">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/AutoVolumeBackupAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="54" selection-start="195" selection-end="195" vertical-scroll-proportion="0.12875536" vertical-offset="0" max-vertical-offset="466">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/BootTimeZoneBR.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="13" selection-start="529" selection-end="529" vertical-scroll-proportion="0.13245033" vertical-offset="0" max-vertical-offset="1755">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/MyArrayAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="13" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarmItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="5" selection-start="408" selection-end="671" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SettingsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="5" selection-start="796" selection-end="796" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/EditCreateAlarm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="97" column="4" selection-start="3491" selection-end="3491" vertical-scroll-proportion="0.0" vertical-offset="610" max-vertical-offset="1830">
+          <folding>
+            <element signature="method#onResume#0;class#EditCreateAlarm#0" expanded="false" />
+            <element signature="method#onCreateDialog#0;class#EditCreateAlarm#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/SetAlarmManagerReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="0" selection-start="3966" selection-end="3966" vertical-scroll-proportion="0.0" vertical-offset="520" max-vertical-offset="1185">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/res/values/analytics.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="46" selection-start="155" selection-end="155" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1080">
+        <state line="52" column="13" selection-start="1948" selection-end="1948" vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1080">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Auto Volume/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="678">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="231" max-vertical-offset="675">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Auto Volume/.gitignore">
+    <entry file="file://$PROJECT_DIR$/Auto Volume/src/main/java/com/mynameistodd/autovolume/ListAlarms.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="678">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="26" selection-start="706" selection-end="706" vertical-scroll-proportion="2.1377673" vertical-offset="0" max-vertical-offset="990">
-          <folding />
+        <state line="130" column="0" selection-start="3984" selection-end="3984" vertical-scroll-proportion="0.739726" vertical-offset="90" max-vertical-offset="1350">
+          <folding>
+            <element signature="method#onCreate#0;class#ListAlarms#0" expanded="false" />
+            <element signature="e#3658#3694#0" expanded="false" />
+            <element signature="method#onResume#0;class#ListAlarms#0" expanded="false" />
+            <element signature="method#onActivityResult#0;class#ListAlarms#0" expanded="false" />
+            <element signature="method#onListItemClick#0;class#ListAlarms#0" expanded="false" />
+            <element signature="method#onCreateDialog#0;class#ListAlarms#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1409,7 +1708,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>support-v4-18.0.0</last-edited>
+          <last-edited>ComGoogleAndroidGmsPlayServices4030.aar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
