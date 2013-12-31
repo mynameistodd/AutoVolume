@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 apply plugin: 'android'
@@ -15,20 +15,24 @@ repositories {
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.0'
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 19
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFile getDefaultProguardFile('proguard-android.txt')
+    signingConfigs {
+        myConfig {
+            storeFile file('/Users/todd/Documents/workspace/keystore')
+            keyPassword 'Oday1484'
+            storePassword 'Oday1484'
+            keyAlias 'keyalias'
         }
     }
-    productFlavors {
-        defaultFlavor {
-            proguardFile 'proguard-rules.txt'
+    buildTypes {
+        release {
+            jniDebugBuild false
+            runProguard false
+            signingConfig signingConfigs.myConfig
+            debuggable false
         }
     }
 }

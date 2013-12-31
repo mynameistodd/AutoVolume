@@ -1,14 +1,14 @@
 package com.mynameistodd.autovolume;
 
-import java.util.Calendar;
-import java.util.List;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.text.format.DateUtils;
 import android.util.Log;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class Alarm {
 
@@ -22,7 +22,12 @@ public class Alarm {
 	private int volume;
 	private boolean enabled;
 	private Context context;
-	public Alarm(long id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, Context context) {
+
+    public Alarm(Context context) {
+        this.context = context;
+    }
+
+    public Alarm(long id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, Context context) {
 		super();
 		this.id = id;
 		this.hour = hour;
@@ -38,6 +43,9 @@ public class Alarm {
 	public long getId() {
 		return id;
 	}
+    public void setId(int id) {
+        this.id = id;
+    }
 	public int getHour() {
 		return hour;
 	}
