@@ -8,8 +8,7 @@
         android:id="@+id/timeTableRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".5"
-        android:background="@color/Grey" >
+        android:layout_weight="30">
 
         <TextView
             android:id="@+id/tvTimeLabel"
@@ -38,7 +37,7 @@
         android:id="@+id/volumeTableRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".5" >
+        android:layout_weight="30" >
 
         <TextView
             android:id="@+id/tvVolumeLabel"
@@ -66,8 +65,7 @@
         android:id="@+id/recurTableRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".5"
-        android:background="@color/Grey" >
+        android:layout_weight="30">
 
         <TextView
             android:id="@+id/tvRecurLabel"
@@ -95,8 +93,9 @@
         android:id="@+id/buttonsTableRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="bottom" >
+        android:layout_weight="10"
+        android:gravity="bottom"
+        android:layout_marginBottom="16dp">
 
         <Button
             android:id="@+id/btnCancel"

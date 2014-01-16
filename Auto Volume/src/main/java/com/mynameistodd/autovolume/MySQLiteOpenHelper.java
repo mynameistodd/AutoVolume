@@ -60,6 +60,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         ct.put(ALARM_COLUMN_VOLUME, alarm.getVolume());
         long rows = db.insert(ALARM_TABLE_NAME, null, ct);
 
+        db.close();
+        helper.close();
         if (rows > 0) { return true; } else { return false; }
     }
 
@@ -71,9 +73,33 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[] {String.valueOf(alarm.getId())};
         int rows = db.delete(ALARM_TABLE_NAME, whereClause, whereArgs);
 
+        db.close();
+        helper.close();
         if (rows > 0) { return true; } else { return false; }
     }
 
+    public static Alarm getAlarm(Context context, int id)
+    {
+        Alarm alarm = null;
+        MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String whereClause = BaseColumns._ID + " = ?";
+        String[] whereArgs = new String[] {String.valueOf(id)};
+        Cursor dbCursor = db.query(ALARM_TABLE_NAME, null, whereClause, whereArgs, null, null, null);
+        if (dbCursor.moveToFirst())
+        {
+            alarm = new Alarm(context);
+            alarm.setId(dbCursor.getInt(dbCursor.getColumnIndex(BaseColumns._ID)));
+            alarm.setHour(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_HOUR)));
+            alarm.setMinute(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_MINUTE)));
+            alarm.setRecur(Util.getRecurList(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_RECUR))));
+            alarm.setEnabled(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_ENABLED)) > 0);
+            alarm.setVolume(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_VOLUME)));
+        }
+        db.close();
+        helper.close();
+        return alarm;
+    }
     public static List<Alarm> getAllAlarms(Context context) {
         List<Alarm> alarms = new ArrayList<Alarm>();
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
@@ -90,6 +116,27 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             alarm.setVolume(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_VOLUME)));
             alarms.add(alarm);
         }
+        db.close();
+        helper.close();
         return alarms;
+    }
+
+    public static boolean updateAlarm(Context context, Alarm alarm) {
+        MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues ct = new ContentValues();
+        String whereClause = BaseColumns._ID + " = ?";
+        String[] whereArgs = new String[] {String.valueOf(alarm.getId())};
+        ct.put(BaseColumns._ID, alarm.getId());
+        ct.put(ALARM_COLUMN_HOUR, alarm.getHour());
+        ct.put(ALARM_COLUMN_MINUTE, alarm.getMinute());
+        ct.put(ALARM_COLUMN_RECUR, Util.getRecurDelim(alarm.getRecur(), "|"));
+        ct.put(ALARM_COLUMN_ENABLED, alarm.isEnabled());
+        ct.put(ALARM_COLUMN_VOLUME, alarm.getVolume());
+        int rows = db.update(ALARM_TABLE_NAME, ct, whereClause, whereArgs);
+
+        db.close();
+        helper.close();
+        if (rows > 0) { return true; } else { return false; }
     }
 }

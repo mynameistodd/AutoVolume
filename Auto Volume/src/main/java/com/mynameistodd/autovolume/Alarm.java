@@ -12,10 +12,9 @@ import java.util.List;
 
 public class Alarm {
 
-	private Editor prefsEditor;
 	private AlarmManager alarmManager;
 	
-	private long id;
+	private int id;
 	private int hour;
 	private int minute;
 	private List<Integer> recur;
@@ -25,9 +24,10 @@ public class Alarm {
 
     public Alarm(Context context) {
         this.context = context;
+        init();
     }
 
-    public Alarm(long id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, Context context) {
+    public Alarm(int id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, Context context) {
 		super();
 		this.id = id;
 		this.hour = hour;
@@ -36,11 +36,14 @@ public class Alarm {
 		this.volume = volume;
 		this.enabled = enabled;
 		this.context = context;
-		
-		prefsEditor = context.getSharedPreferences(Util.AUTOVOLUME, Context.MODE_PRIVATE).edit();
-		alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        init();
 	}
-	public long getId() {
+
+    private void init() {
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    }
+
+	public int getId() {
 		return id;
 	}
     public void setId(int id) {
@@ -77,14 +80,19 @@ public class Alarm {
 		this.enabled = enabled;
 	}
 	public void save() {
-		prefsEditor.putString(String.valueOf(id), hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + ":" + enabled + ":" + String.valueOf(volume));
-		Log.d(Util.MYNAMEISTODD, "Saved:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume) + " Enabled:" + String.valueOf(enabled));
-		prefsEditor.commit();
+		if (this.id <= 0) {
+            MySQLiteOpenHelper.insertAlarm(context, this);
+            Log.d(Util.MYNAMEISTODD, "Inserted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume) + " Enabled:" + String.valueOf(enabled));
+        }
+        else {
+            MySQLiteOpenHelper.updateAlarm(context, this);
+            Log.d(Util.MYNAMEISTODD, "Updated:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume) + " Enabled:" + String.valueOf(enabled));
+        }
 	}
-	public void remove() {
-		prefsEditor.remove(String.valueOf(id));
-		Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume + "Enabled:" + enabled);
-		prefsEditor.commit();
+	public void delete() {
+        this.cancel();
+        MySQLiteOpenHelper.deleteAlarm(context, this);
+        Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume + "Enabled:" + enabled);
 	}
 	public void cancel() {
 		for (int recurDay : recur) {

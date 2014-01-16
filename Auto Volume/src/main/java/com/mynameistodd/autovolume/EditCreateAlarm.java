@@ -1,404 +1,372 @@
 package com.mynameistodd.autovolume;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.analytics.tracking.android.EasyTracker;
+//import com.google.analytics.tracking.android.EasyTracker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditCreateAlarm extends FragmentActivity {
+public class EditCreateAlarm extends Fragment {
 
-	private Button buttonSave;
-	private Button buttonCancel;
-	private AudioManager audioManager;
-	private AlarmManager alarmManager;
-	private static TextView tvTime;
-	private static TableRow timeTableRow;
-	private static TableRow volumeTableRow;
-	private static TableRow recurTableRow;
-	private TimePickerDialog tPicker;
-	private static Calendar cal;
-	private static long id = 0;
-	private static int hour = 0;
-	private static int minute = 0;
-	private static int volume = 0;
-	private static boolean enabled = true;
-	private Intent callingIntent;
-	private TextView tvRecur;
-	private Context contextThis;
-	private static List<Integer> recurDays;
-	private static boolean editMode = false;
-	private SeekBar seekBar;
-	private TextView tvVolume;
-	private int maxVolumeStep;
-	private int nPickerVal = 0;
-	private Alarm alarm;
+    private Button buttonSave;
+    private Button buttonCancel;
+    private AudioManager audioManager;
+    private AlarmManager alarmManager;
+    private static TextView tvTime;
+    private static TableRow timeTableRow;
+    private static TableRow volumeTableRow;
+    private static TableRow recurTableRow;
+    private TimePickerDialog tPicker;
+    private static Calendar cal;
+    private static int id = 0;
+    private static int hour = 0;
+    private static int minute = 0;
+    private static int volume = 0;
+    private static boolean enabled = true;
+    private Bundle args;
+    private TextView tvRecur;
+    private Context contextThis;
+    private static List<Integer> recurDays;
+    private static boolean editMode = false;
+    private TextView tvVolume;
+    private int maxVolumeStep;
+    private int nPickerVal = 0;
+    private Alarm alarm;
+    EditCreateAlarmCallbacks mCallbacks;
 
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_create_alarm);
-        contextThis = this;
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        buttonSave = (Button)findViewById(R.id.btnSave);
-        buttonCancel = (Button)findViewById(R.id.btnCancel);
-        tvTime = (TextView)findViewById(R.id.tvTime);
-        timeTableRow = (TableRow)findViewById(R.id.timeTableRow);
-        volumeTableRow = (TableRow)findViewById(R.id.volumeTableRow);
-        recurTableRow = (TableRow)findViewById(R.id.recurTableRow);
-        seekBar = new SeekBar(contextThis);
-        tvRecur = (TextView)findViewById(R.id.tvRecur);
-        tvVolume = (TextView)findViewById(R.id.tvVolume);
-        recurDays = new ArrayList<Integer>();
-        editMode = false;
-        
-        maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-        seekBar.setMax(maxVolumeStep);
-        
-        callingIntent = getIntent();
-        if (callingIntent.hasExtra("ID") && callingIntent.hasExtra("HOUR") && callingIntent.hasExtra("MINUTE") && callingIntent.hasExtra("RECUR") && callingIntent.hasExtra("ENABLED") && callingIntent.hasExtra("VOLUME"))
-        {
-        	editMode = true;
-        }
-	}
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EasyTracker.getInstance(this).activityStart(this);
+    public interface EditCreateAlarmCallbacks {
+        public void onAlarmDismiss();
     }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-        cal = Calendar.getInstance();
-        
-        id = cal.getTimeInMillis();
-        hour = cal.get(Calendar.HOUR_OF_DAY);
-		minute = cal.get(Calendar.MINUTE);
-		volume = 0;
-		enabled = true;
-		recurDays.clear();
-		
-        if (editMode)
-        {
-        	id = callingIntent.getLongExtra("ID", 0);
-        	hour = callingIntent.getIntExtra("HOUR", hour);
-        	minute = callingIntent.getIntExtra("MINUTE", minute);
-        	volume = callingIntent.getIntExtra("VOLUME", volume);
-        	List<Integer> recurDaysArray = callingIntent.getIntegerArrayListExtra("RECUR");
-        	enabled = callingIntent.getBooleanExtra("ENABLED", enabled);
-			
-			for (int rd : recurDaysArray) {
-				recurDays.add(rd);
-			}
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (EditCreateAlarmCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement EditCreateAlarmCallbacks");
         }
-        else
-        {
-        	if (!recurDays.contains(-1)) {
-				recurDays.add(-1);
-			}
-        }
-        
-        alarm = new Alarm(id, hour, minute, recurDays, volume, enabled, contextThis);
-		
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		cal.set(Calendar.MINUTE, minute);
-		
-		tvTime.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
-		tvVolume.setText(Util.getVolumePercent(Integer.toString(volume), maxVolumeStep));
-		seekBar.setProgress(volume);
-		
-		String textToShow = Util.getRecurText(recurDays);
-		
-		tvRecur.setText(textToShow);
-		
-        tPicker = new TimePickerDialog(this, new OnTimeSetListener() {
-			
-			@Override
-			public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfDay) {
-				
-				cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				cal.set(Calendar.MINUTE, minuteOfDay);
-				
-				tvTime.setText(DateUtils.formatDateTime(getApplicationContext(), cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
-				
-				hour = hourOfDay;
-				minute = minuteOfDay;
-			}
-		}, hour, minute, false);
-		
-        buttonSave.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				//Delete old alarm
-				if (editMode) {
-					List<Integer> recurDaysArray = callingIntent.getIntegerArrayListExtra("RECUR");
-					
-					//Cancel the alarms
-					for (int recurDayStr : recurDaysArray) {
-						PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr, callingIntent.getBooleanExtra("ENABLED", enabled));
-						alarmManager.cancel(pendingIntent);
-					}
-				}
-				
-				final Calendar calNow = Calendar.getInstance();
-				//Save new alarm
-				if (recurDays.size() > 0) {
-//					for (int recurDay : recurDays) {
-//						Calendar cNew = Calendar.getInstance();
-//						
-//						if (recurDay != -1) {
-//							cNew.set(Calendar.DAY_OF_WEEK, recurDay+1);
-//							cNew.set(Calendar.HOUR_OF_DAY, hour);
-//							cNew.set(Calendar.MINUTE, minute);
-//							cNew.set(Calendar.SECOND, 0);
-//							if (cNew.before(calNow)) {
-//								cNew.roll(Calendar.WEEK_OF_YEAR, 1);
-//							}
-//							
-//							//Set alarms
-//							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, recurDay, enabled);
-//							alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), 604800000, pendingIntent);
-//							
-//							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
-//						}
-//						else
-//						{
-//							cNew.set(Calendar.HOUR_OF_DAY, hour);
-//							cNew.set(Calendar.MINUTE, minute);
-//							cNew.set(Calendar.SECOND, 0);
-//							if (cNew.before(calNow)) {
-//								cNew.roll(Calendar.DAY_OF_WEEK, 1);
-//							}
-//							
-//							//Set one-time alarm
-//							PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), hour, minute, nPickerVal, (cNew.get(Calendar.DAY_OF_WEEK)-1), enabled);
-//							alarmManager.set(AlarmManager.RTC_WAKEUP, cNew.getTimeInMillis(), pendingIntent);
-//							
-//							Log.d(Util.MYNAMEISTODD, "Time: " + DateUtils.formatDateTime(getApplicationContext(), cNew.getTimeInMillis(), (DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME)));
-//						}
-//					}
+    }
 
-					alarm.setHour(hour);
-					alarm.setMinute(minute);
-					alarm.setRecur(recurDays);
-					alarm.setVolume(nPickerVal);
-					alarm.setEnabled(enabled);
+    public EditCreateAlarm() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        contextThis = getActivity();
+        audioManager = (AudioManager) contextThis.getSystemService(contextThis.AUDIO_SERVICE);
+        alarmManager = (AlarmManager) contextThis.getSystemService(contextThis.ALARM_SERVICE);
+
+        recurDays = new ArrayList<Integer>();
+        maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+        args = getArguments();
+        editMode = args.getInt("ID", 0) > 0;
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View myLayout = inflater.inflate(R.layout.activity_edit_create_alarm, container, false);
+        buttonSave = (Button) myLayout.findViewById(R.id.btnSave);
+        buttonCancel = (Button) myLayout.findViewById(R.id.btnCancel);
+        tvTime = (TextView) myLayout.findViewById(R.id.tvTime);
+        timeTableRow = (TableRow) myLayout.findViewById(R.id.timeTableRow);
+        volumeTableRow = (TableRow) myLayout.findViewById(R.id.volumeTableRow);
+        recurTableRow = (TableRow) myLayout.findViewById(R.id.recurTableRow);
+        tvRecur = (TextView) myLayout.findViewById(R.id.tvRecur);
+        tvVolume = (TextView) myLayout.findViewById(R.id.tvVolume);
+
+        return myLayout;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //EasyTracker.getInstance(this).activityStart(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        cal = Calendar.getInstance();
+
+        id = 0;
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minute = cal.get(Calendar.MINUTE);
+        volume = 0;
+        enabled = true;
+        recurDays.clear();
+
+        if (editMode) {
+            alarm = MySQLiteOpenHelper.getAlarm(contextThis, args.getInt("ID"));
+            id = alarm.getId();
+            hour = alarm.getHour();
+            minute = alarm.getMinute();
+            volume = alarm.getVolume();
+            List<Integer> recurDaysArray = alarm.getRecur();
+            enabled = alarm.isEnabled();
+
+            for (int rd : recurDaysArray) {
+                recurDays.add(rd);
+            }
+        } else {
+            alarm = new Alarm(id, hour, minute, recurDays, volume, enabled, contextThis);
+            if (!recurDays.contains(-1)) {
+                recurDays.add(-1);
+            }
+        }
+
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+
+        tvTime.setText(DateUtils.formatDateTime(contextThis, cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+        tvVolume.setText(Util.getVolumePercent(Integer.toString(volume), maxVolumeStep));
+        nPickerVal = volume;
+
+        String textToShow = Util.getRecurText(recurDays);
+        tvRecur.setText(textToShow);
+
+        tPicker = new TimePickerDialog(contextThis, new OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfDay) {
+
+                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                cal.set(Calendar.MINUTE, minuteOfDay);
+
+                tvTime.setText(DateUtils.formatDateTime(contextThis, cal.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+
+                hour = hourOfDay;
+                minute = minuteOfDay;
+            }
+        }, hour, minute, false);
+
+        buttonSave.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                //Delete old alarm
+                if (editMode) {
+                    alarm.cancel();
+                }
+
+                //Save new alarm
+                if (recurDays.size() > 0) {
+                    alarm.setHour(hour);
+                    alarm.setMinute(minute);
+                    alarm.setRecur(recurDays);
+                    alarm.setVolume(nPickerVal);
+                    alarm.setEnabled(enabled);
 
                     alarm.schedule();
                     alarm.save();
-				}
-				
-				setResult(RESULT_OK);
-				finish();
-			}
-		});
-        
+                }
+
+                mCallbacks.onAlarmDismiss();
+            }
+        });
+
         buttonCancel.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				setResult(RESULT_CANCELED);
-				finish();
-			}
-		});
-		
-		timeTableRow.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				tPicker.show();
-			}
-		});
-        
-		volumeTableRow.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				showDialog(1);
-			}
-		});
-		
-		recurTableRow.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				showDialog(0);
-			}
-		});
+
+            @Override
+            public void onClick(View v) {
+                mCallbacks.onAlarmDismiss();
+            }
+        });
+
+        timeTableRow.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                tPicker.show();
+            }
+        });
+
+        volumeTableRow.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                VolumeDialog volumeDialog = new VolumeDialog();
+                Bundle args = new Bundle();
+                args.putInt("VOLUME", nPickerVal);
+                volumeDialog.setArguments(args);
+                volumeDialog.show(getFragmentManager(), "volumeDialog");
+            }
+        });
+
+        recurTableRow.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                RecurDaysDialog recurDaysDialog = new RecurDaysDialog();
+                recurDaysDialog.show(getFragmentManager(), "recurDialog");
+            }
+        });
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
-        EasyTracker.getInstance(this).activityStop(this);
+        //EasyTracker.getInstance(this).activityStop(this);
     }
 
-	@Override
-	@Deprecated
-	protected Dialog onCreateDialog(int id) {
-		if (id == 0) {
-		
-			final CharSequence[] items = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-			boolean[] itemsChecked = new boolean[7];
-			
-			if (editMode) {
-				for (int rd : recurDays) {
-					if (rd >= 0) {
-						itemsChecked[rd] = true;
-					}
-				}
-			}
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
-			builder.setTitle("Pick recurring days")
-					.setMultiChoiceItems(items, itemsChecked, new OnMultiChoiceClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-							//keep track of the selected items
-							if (isChecked)
-							{
-								if (!recurDays.contains(which))
-								{
-									recurDays.add(which);
-									Log.d(Util.MYNAMEISTODD, "Add:" + which);
-								}
-								
-								if (recurDays.contains(-1)) {
-									recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
-									Log.d(Util.MYNAMEISTODD, "Remove:-1");
-								}
-							}
-							else
-							{
-								if (recurDays.contains(which))
-								{
-									recurDays.remove(recurDays.indexOf(which));
-									Log.d(Util.MYNAMEISTODD, "Remove:" + which);
-								}
-							}
-							
-							if (recurDays.size() == 0) {
-								recurDays.add(-1);
-								Log.d(Util.MYNAMEISTODD, "Add:-1");
-							}
-						}
-					})
-					.setPositiveButton("Done",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									Log.d(Util.MYNAMEISTODD, "Clicked Done in PickDays");
-								}
-							});
-	
-			AlertDialog alert = builder.create();
-			alert.setOnDismissListener(new OnDismissListener() {
-				
-				@Override
-				public void onDismiss(DialogInterface dialog) {
-					if (recurDays.size() == 0)
-					{
-						if (!recurDays.contains(-1)) {
-							recurDays.add(-1);
-						}
-					}
-					
-					String textToShow = Util.getRecurText(recurDays);
-					tvRecur.setText(textToShow);
-				}
-			});
-			return alert;
-		}
-		else
-		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
-			builder.setTitle("Set Volume").setPositiveButton("Set",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							Log.d(Util.MYNAMEISTODD, "Clicked Done in SetVolume");
-						}
-					})
-					.setView(seekBar);
-			
-			AlertDialog alert = builder.create();
-			alert.setOnDismissListener(new OnDismissListener() {
-				
-				@Override
-				public void onDismiss(DialogInterface dialog) {
-					nPickerVal = seekBar.getProgress();
-					tvVolume.setText(Util.getVolumePercent(Integer.toString(nPickerVal), maxVolumeStep));
-					Log.d(Util.MYNAMEISTODD, "SetVolume" + nPickerVal);
-				}
-			});
-			return alert;
-		}
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_edit_create_alarm, menu);
-		return true;
-	}
+    public class RecurDaysDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            super.onCreateDialog(savedInstanceState);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		
-		case R.id.menu_delete:
-			
-			//Delete old alarm
-			if (editMode) {
-				List<Integer> recurDaysArray = callingIntent.getIntegerArrayListExtra("RECUR");
-				
-				//Cancel the alarms
-				for (int recurDayStr : recurDaysArray) {
-					PendingIntent pendingIntent = Util.createPendingIntent(getApplicationContext(), callingIntent.getIntExtra("HOUR", 0), callingIntent.getIntExtra("MINUTE", 0), callingIntent.getIntExtra("VOLUME", 0), recurDayStr, callingIntent.getBooleanExtra("ENABLED", enabled));
-					alarmManager.cancel(pendingIntent);
-				}
-			}
-			
-			alarm.remove();
-			
-			setResult(RESULT_OK);
-			finish();
-			return true;
-		
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-		
-	}
-	
+            final CharSequence[] items = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+            boolean[] itemsChecked = new boolean[7];
+
+            if (editMode) {
+                for (int rd : recurDays) {
+                    if (rd >= 0) {
+                        itemsChecked[rd] = true;
+                    }
+                }
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
+            builder.setTitle("Pick recurring days")
+                    .setMultiChoiceItems(items, itemsChecked, new OnMultiChoiceClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            //keep track of the selected items
+                            if (isChecked) {
+                                if (!recurDays.contains(which)) {
+                                    recurDays.add(which);
+                                    Log.d(Util.MYNAMEISTODD, "Add:" + which);
+                                }
+
+                                if (recurDays.contains(-1)) {
+                                    recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
+                                    Log.d(Util.MYNAMEISTODD, "Remove:-1");
+                                }
+                            } else {
+                                if (recurDays.contains(which)) {
+                                    recurDays.remove(recurDays.indexOf(which));
+                                    Log.d(Util.MYNAMEISTODD, "Remove:" + which);
+                                }
+                            }
+
+                            if (recurDays.size() == 0) {
+                                recurDays.add(-1);
+                                Log.d(Util.MYNAMEISTODD, "Add:-1");
+                            }
+                        }
+                    })
+                    .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.d(Util.MYNAMEISTODD, "Clicked Done in PickDays");
+                            if (recurDays.size() == 0) {
+                                if (!recurDays.contains(-1)) {
+                                    recurDays.add(-1);
+                                }
+                            }
+                        }
+                    });
+
+            return builder.create();
+        }
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            super.onDismiss(dialog);
+            tvRecur.setText(Util.getRecurText(recurDays));
+        }
+    }
+
+    public class VolumeDialog extends DialogFragment {
+        SeekBar seekBar;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            super.onCreateDialog(savedInstanceState);
+            seekBar = new SeekBar(contextThis);
+            seekBar.setMax(maxVolumeStep);
+            seekBar.setProgress(getArguments().getInt("VOLUME"));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(contextThis);
+            builder.setTitle("Set Volume")
+                    .setPositiveButton("Set",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Log.d(Util.MYNAMEISTODD, "Clicked Done in SetVolume");
+                                }
+                            })
+                    .setView(seekBar);
+
+            return builder.create();
+        }
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            super.onDismiss(dialog);
+            nPickerVal = seekBar.getProgress();
+            tvVolume.setText(Util.getVolumePercent(Integer.toString(nPickerVal), maxVolumeStep));
+            Log.d(Util.MYNAMEISTODD, "SetVolume" + nPickerVal);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.activity_edit_create_alarm, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.menu_delete:
+
+                //Delete old alarm
+                if (editMode) {
+                    alarm.cancel();
+                    alarm.delete();
+                }
+
+                mCallbacks.onAlarmDismiss();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 }

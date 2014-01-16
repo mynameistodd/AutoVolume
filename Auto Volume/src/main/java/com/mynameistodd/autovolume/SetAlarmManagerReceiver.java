@@ -1,7 +1,5 @@
 package com.mynameistodd.autovolume;
 
-import java.text.NumberFormat;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,12 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Debug;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.text.NumberFormat;
 
 public class SetAlarmManagerReceiver extends BroadcastReceiver {
 
@@ -50,7 +47,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
                 Notification notification = new Notification(R.drawable.ic_launcher, "Volume has been changed", System.currentTimeMillis());
                 notification.flags = Notification.FLAG_AUTO_CANCEL;
 
-                Intent notificationIntent = new Intent(arg0, ListAlarms.class);
+                Intent notificationIntent = new Intent(arg0, MainActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 notification.setLatestEventInfo(arg0, "Scheduled volume change", "Set to: " + NumberFormat.getPercentInstance().format(toFormat), contentIntent);

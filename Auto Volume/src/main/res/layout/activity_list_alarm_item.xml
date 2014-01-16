@@ -22,6 +22,14 @@
         android:layout_below="@+id/tv_time"
         android:text="Sun" />
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:focusable="false" />
+
     <TextView
         android:id="@+id/tv_volume"
         style="@style/tv_volume"
@@ -29,14 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="7" />
-
-    <ToggleButton
-        android:id="@+id/toggleButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="ToggleButton" />
+        android:text="100%" />
 
 </RelativeLayout>

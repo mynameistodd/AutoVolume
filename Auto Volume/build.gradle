@@ -1,43 +1,22 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
-    }
-}
 apply plugin: 'android'
-
-repositories {
-    mavenCentral()
-}
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.0'
+    buildToolsVersion "19.0.1"
+
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 19
-    }
-    signingConfigs {
-        myConfig {
-            storeFile file('/Users/todd/Documents/workspace/keystore')
-            keyPassword 'Oday1484'
-            storePassword 'Oday1484'
-            keyAlias 'keyalias'
-        }
+        versionCode 1
+        versionName "1.0"
     }
     buildTypes {
         release {
-            jniDebugBuild false
             runProguard false
-            signingConfig signingConfigs.myConfig
-            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:4.0.30'
-    compile files('libs/libGoogleAnalyticsServices.jar')
 }
