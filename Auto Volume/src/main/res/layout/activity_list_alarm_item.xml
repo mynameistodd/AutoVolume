@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="?android:attr/listPreferredItemHeight" >
+    android:minHeight="?android:attr/listPreferredItemHeight">
 
     <TextView
         android:id="@+id/tv_time"
@@ -11,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:text="12:00" />
+        android:text="12:00"
+        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@+id/tv_recur"
@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_time"
         android:layout_below="@+id/tv_time"
-        android:text="Sun" />
+        android:text="Sun"
+        android:layout_marginTop="15dp" />
 
     <Switch
         android:id="@+id/switch1"
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:focusable="false" />
+        android:focusable="false"
+        android:layout_marginRight="16dp" />
 
     <TextView
         android:id="@+id/tv_volume"

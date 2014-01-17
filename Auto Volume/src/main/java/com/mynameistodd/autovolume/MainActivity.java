@@ -1,16 +1,11 @@
 package com.mynameistodd.autovolume;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 public class MainActivity extends Activity implements
         EditCreateAlarm.EditCreateAlarmCallbacks,
@@ -20,6 +15,7 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -44,6 +40,11 @@ public class MainActivity extends Activity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new SettingsActivity())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
             return true;
         }
         else if (id == R.id.action_add) {

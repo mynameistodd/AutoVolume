@@ -13,7 +13,6 @@ import java.util.List;
 
 public class Util {
 
-	static final String AUTOVOLUME = "AUTOVOLUME";
 	static final String MYNAMEISTODD = "MYNAMEISTODD";
 	
 	public static PendingIntent createPendingIntent(Context context, int hour, int minute, int volume, int recurDay, boolean enabled) {

@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -29,11 +30,11 @@ public class BootTimeZoneBR extends BroadcastReceiver {
     	Log.d(Util.MYNAMEISTODD, "Setting alarms...");
     	
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-    	prefs = context.getSharedPreferences(Util.AUTOVOLUME, Context.MODE_PRIVATE);
+    	prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		//prefsEditor = prefs.edit();
     	
 		//allAlarms = new ArrayList<Alarm>();
-
+//TODO Make this read from the database not prefs.
 		int tmpHour;
 		int tmpMinute;
 		List<Integer> tmpRecur;
