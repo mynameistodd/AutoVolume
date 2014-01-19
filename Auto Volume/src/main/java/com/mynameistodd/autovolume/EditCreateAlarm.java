@@ -28,11 +28,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-//import com.google.analytics.tracking.android.EasyTracker;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+//import com.google.analytics.tracking.android.EasyTracker;
 
 public class EditCreateAlarm extends Fragment {
 
@@ -344,7 +344,10 @@ public class EditCreateAlarm extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.activity_edit_create_alarm, menu);
+        menu.removeItem(R.id.action_add);
+        if (editMode) {
+            inflater.inflate(R.menu.activity_edit_create_alarm, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -356,7 +359,6 @@ public class EditCreateAlarm extends Fragment {
 
                 //Delete old alarm
                 if (editMode) {
-                    alarm.cancel();
                     alarm.delete();
                 }
 
