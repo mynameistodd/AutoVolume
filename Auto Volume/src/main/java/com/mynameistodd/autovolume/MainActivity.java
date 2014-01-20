@@ -47,7 +47,7 @@ public class MainActivity extends Activity implements
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new SettingsActivity())
+                    .replace(R.id.container, new SettingsFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
