@@ -28,11 +28,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-//import com.google.analytics.tracking.android.EasyTracker;
 
 public class EditCreateAlarm extends Fragment {
 
@@ -113,7 +116,9 @@ public class EditCreateAlarm extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //EasyTracker.getInstance(this).activityStart(this);
+        Tracker easyTracker = EasyTracker.getInstance(getActivity());
+        easyTracker.set(Fields.SCREEN_NAME, "EditCreateAlarm");
+        easyTracker.send(MapBuilder.createAppView().build());
     }
 
     @Override
@@ -240,7 +245,7 @@ public class EditCreateAlarm extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        //EasyTracker.getInstance(this).activityStop(this);
+        EasyTracker.getInstance(getActivity()).activityStop(getActivity());
     }
 
     public class RecurDaysDialog extends DialogFragment {

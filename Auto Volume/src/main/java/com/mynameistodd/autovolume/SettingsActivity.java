@@ -5,7 +5,10 @@ import android.preference.PreferenceFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-//import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 
 public class SettingsActivity extends PreferenceFragment {
 
@@ -19,7 +22,9 @@ public class SettingsActivity extends PreferenceFragment {
     @Override
     public void onStart() {
         super.onStart();
-        //EasyTracker.getInstance(this).activityStart(this);
+        Tracker easyTracker = EasyTracker.getInstance(getActivity());
+        easyTracker.set(Fields.SCREEN_NAME, "SettingsFragment");
+        easyTracker.send(MapBuilder.createAppView().build());
     }
 
     @Override
@@ -31,6 +36,6 @@ public class SettingsActivity extends PreferenceFragment {
     @Override
     public void onStop() {
         super.onStop();
-        //EasyTracker.getInstance(this).activityStop(this);
+        EasyTracker.getInstance(getActivity()).activityStop(getActivity());
     }
 }

@@ -13,6 +13,11 @@ import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +40,14 @@ public class AlarmListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Tracker easyTracker = EasyTracker.getInstance(getActivity());
+        easyTracker.set(Fields.SCREEN_NAME, "AlarmListFragment");
+        easyTracker.send(MapBuilder.createAppView().build());
     }
 
     @Override
@@ -125,6 +138,12 @@ public class AlarmListFragment extends ListFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement AlarmListCallbacks");
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(getActivity()).activityStop(getActivity());
     }
 }
 

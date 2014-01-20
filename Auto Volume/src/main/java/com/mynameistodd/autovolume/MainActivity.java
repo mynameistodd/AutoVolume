@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 public class MainActivity extends Activity implements
         EditCreateAlarm.EditCreateAlarmCallbacks,
         AlarmListFragment.AlarmListCallbacks {
@@ -24,6 +26,11 @@ public class MainActivity extends Activity implements
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,10 +72,6 @@ public class MainActivity extends Activity implements
     @Override
     public void onAlarmDismiss() {
         getFragmentManager().popBackStack();
-//        getFragmentManager().beginTransaction()
-//                .replace(R.id.container, new AlarmListFragment())
-//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-//                .commit();
     }
 
     @Override
@@ -83,5 +86,11 @@ public class MainActivity extends Activity implements
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
     }
 }
