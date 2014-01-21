@@ -4,10 +4,11 @@ android {
     compileSdkVersion 19
     buildToolsVersion '19.0.1'
     defaultConfig {
+        packageName "com.mynameistodd.autovolume"
         minSdkVersion 19
         targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "1.07"
     }
     signingConfigs {
         myConfig {
@@ -23,7 +24,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             debuggable false
             signingConfig signingConfigs.myConfig
-            packageNameSuffix 'release'
             zipAlign true
         }
     }
