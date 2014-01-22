@@ -5,26 +5,31 @@ android {
     buildToolsVersion '19.0.1'
     defaultConfig {
         packageName "com.mynameistodd.autovolume"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 19
-        versionCode 7
-        versionName "1.07"
+        versionCode 8
+        versionName "1.08"
     }
-    signingConfigs {
-        myConfig {
-            keyAlias 'keyalias'
-            keyPassword ''
-            storeFile file('/Users/todd/Documents/workspace/keystore')
-            storePassword ''
+    if (project.hasProperty("KeyStore.properties") && new File(project.property("KeyStore.properties")).exists()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(file(project.property("KeyStore.properties"))))
+
+        signingConfigs {
+            myConfig {
+                keyAlias props['keyAlias']
+                keyPassword props['keyAlias.password']
+                storeFile file(props['keyStore'])
+                storePassword props['keyStore.password']
+            }
         }
-    }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            debuggable false
-            signingConfig signingConfigs.myConfig
-            zipAlign true
+        buildTypes {
+            release {
+                runProguard false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+                debuggable false
+                signingConfig signingConfigs.myConfig
+                zipAlign true
+            }
         }
     }
 }
