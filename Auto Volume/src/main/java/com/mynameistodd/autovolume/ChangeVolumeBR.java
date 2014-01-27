@@ -15,10 +15,10 @@ public class ChangeVolumeBR extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isEnabled = sharedPrefs.getBoolean("enabled", true);
-        int volumeLevel = sharedPrefs.getInt("volumeLevel", 0);
-        String startTime = sharedPrefs.getString("startTime", "10:00");
-        String endTime = sharedPrefs.getString("endTime", "7:00");
+        boolean isEnabled = sharedPrefs.getBoolean(context.getString(R.string.pref_enabled_key), true);
+        int volumeLevel = sharedPrefs.getInt(context.getString(R.string.pref_volumeLevel_key), 0);
+        String startTime = sharedPrefs.getString(context.getString(R.string.pref_startTime_key), "10:00");
+        String endTime = sharedPrefs.getString(context.getString(R.string.pref_endTime_key), "7:00");
 
         int startHour = Integer.parseInt(startTime.split(":")[0]);
         int startMin = Integer.parseInt(startTime.split(":")[1]);

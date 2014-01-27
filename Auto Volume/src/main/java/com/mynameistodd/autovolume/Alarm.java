@@ -3,7 +3,6 @@ package com.mynameistodd.autovolume;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.SharedPreferences.Editor;
 import android.text.format.DateUtils;
 import android.util.Log;
 

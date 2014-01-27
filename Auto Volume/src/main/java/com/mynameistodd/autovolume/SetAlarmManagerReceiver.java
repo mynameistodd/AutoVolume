@@ -29,7 +29,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 
         if (enabled) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);
-            boolean pref_notify = sharedPref.getBoolean("pref_notify", false);
+            boolean pref_notify = sharedPref.getBoolean(arg0.getString(R.string.pref_notify_key), false);
 
             audioManager.setStreamVolume(AudioManager.STREAM_RING, audioLevel, (pref_notify) ? AudioManager.FLAG_SHOW_UI : 0);
 
