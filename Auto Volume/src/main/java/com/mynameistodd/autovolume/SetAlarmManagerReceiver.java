@@ -13,6 +13,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import java.text.NumberFormat;
 
 public class SetAlarmManagerReceiver extends BroadcastReceiver {
@@ -26,6 +30,9 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		audioManager = (AudioManager) arg0.getSystemService(Context.AUDIO_SERVICE);
 		audioLevel = arg1.getIntExtra("AUDIO_LEVEL", 0);
         enabled = arg1.getBooleanExtra("ENABLED", false);
+
+        Tracker easyTracker = EasyTracker.getInstance(arg0);
+        easyTracker.send(MapBuilder.createEvent("volume_change", (enabled) ? "alarm_enabled" : "alarm_disabled", "level", audioLevel.longValue()).build());
 
         if (enabled) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);

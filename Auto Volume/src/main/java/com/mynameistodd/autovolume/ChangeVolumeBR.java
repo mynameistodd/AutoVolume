@@ -7,6 +7,10 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import java.util.Calendar;
 
 public class ChangeVolumeBR extends BroadcastReceiver {
@@ -14,6 +18,10 @@ public class ChangeVolumeBR extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Tracker easyTracker = EasyTracker.getInstance(context);
+        easyTracker.send(MapBuilder.createEvent("volume_change", "power_connected", null, null).build());
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean isEnabled = sharedPrefs.getBoolean(context.getString(R.string.pref_enabled_key), true);
         int volumeLevel = sharedPrefs.getInt(context.getString(R.string.pref_volumeLevel_key), 0);

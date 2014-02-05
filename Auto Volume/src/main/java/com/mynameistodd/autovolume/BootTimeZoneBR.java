@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import java.util.List;
 
 public class BootTimeZoneBR extends BroadcastReceiver {
@@ -16,7 +20,10 @@ public class BootTimeZoneBR extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(Util.MYNAMEISTODD, "Setting alarms...");
+        Log.d(Util.MYNAMEISTODD, "(Re)setting alarms...");
+
+        Tracker easyTracker = EasyTracker.getInstance(context);
+        easyTracker.send(MapBuilder.createEvent("setting_alarms", (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) ? "timezone_changed" : "boot_completed", null, null).build());
 
         allAlarms = MySQLiteOpenHelper.getAllAlarms(context);
 
