@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity implements
     IInAppBillingService mService;
     Bundle querySkus;
     PendingIntent pendingBuyIntent;
+    //String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +136,15 @@ public class MainActivity extends Activity implements
             if (resultCode == RESULT_OK) {
                 try {
                     JSONObject jo = new JSONObject(purchaseData);
+                    String orderId = jo.getString("orderId");
+                    String productId = jo.getString("productId");
                     String token = jo.getString("purchaseToken");
+
                     Toast.makeText(this, "You are awesome, thanks!", Toast.LENGTH_LONG).show();
+
+                    EasyTracker tracker = EasyTracker.getInstance(this);
+                    tracker.send(MapBuilder.createTransaction(orderId, "In-app Store", Double.valueOf("0.99"), Double.valueOf("0.0"), Double.valueOf("0.0"), "USD").build());
+                    tracker.send(MapBuilder.createItem(orderId, "Donate .99 cents", productId, "Donations", Double.valueOf("0.99"), Long.valueOf("1"), "USD").build());
 
                     new InAppBillingConsumeTask().execute(token);
                 } catch (JSONException e) {
@@ -235,6 +244,7 @@ public class MainActivity extends Activity implements
                         String sku = object.getString("productId");
 
                         if (sku.equals("donate.99")) {
+                            //price = object.getString("price");
                             Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), sku, "inapp", "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
                             pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
                         }

@@ -10,5 +10,5 @@
     <!--Enable automatic exception tracking-->
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
-    <!--<string name="ga_logLevel">verbose</string>-->
+    <string name="ga_logLevel">verbose</string>
 </resources>
