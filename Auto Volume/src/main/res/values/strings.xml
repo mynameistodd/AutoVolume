@@ -9,12 +9,23 @@
     <string name="menu_delete">Delete</string>
 
     <string name="pref_category_general">General</string>
+    <string name="pref_category_calendar">Calendar</string>
     <string name="pref_category_powerConnected">Power Connected</string>
 
     <string name="pref_notify_key">pref_notify</string>
     <string name="pref_notify_default">false</string>
     <string name="pref_notify_title">Notifications</string>
     <string name="pref_notify_summary">Alert for volume change</string>
+
+    <string name="pref_calendar_enabled_key">pref_calendar_enabled</string>
+    <string name="pref_calendar_enabled_default">true</string>
+    <string name="pref_calendar_enabled_title">Include calendar events</string>
+    <string name="pref_calendar_enabled_summary">Automatically silence based on calendar events</string>
+
+    <string name="pref_calendar_list_key">pref_calendar_list</string>
+    <string-array name="pref_calendar_list_default" />
+    <string name="pref_calendar_list_title">Select calendars</string>
+    <string name="pref_calendar_list_summary">Pick the calendars to include</string>
 
     <string name="pref_enabled_key">pref_enabled</string>
     <string name="pref_enabled_default">true</string>

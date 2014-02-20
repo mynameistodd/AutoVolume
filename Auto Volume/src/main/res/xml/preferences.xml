@@ -7,6 +7,19 @@
             android:summary="@string/pref_notify_summary"
             android:title="@string/pref_notify_title" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_calendar">
+        <CheckBoxPreference
+            android:defaultValue="@string/pref_calendar_enabled_default"
+            android:key="@string/pref_calendar_enabled_key"
+            android:summary="@string/pref_calendar_enabled_summary"
+            android:title="@string/pref_calendar_enabled_title" />
+        <com.mynameistodd.autovolume.CalendarListPreference
+            android:defaultValue="@array/pref_calendar_list_default"
+            android:key="@string/pref_calendar_list_key"
+            android:summary="@string/pref_calendar_list_summary"
+            android:title="@string/pref_calendar_list_title"
+            android:dependency="@string/pref_calendar_enabled_key" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_category_powerConnected">
         <CheckBoxPreference
             android:defaultValue="@string/pref_enabled_default"
