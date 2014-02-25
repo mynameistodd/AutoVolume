@@ -147,7 +147,7 @@ public class EditCreateAlarm extends Fragment {
                 recurDays.add(rd);
             }
         } else {
-            alarm = new Alarm(id, hour, minute, recurDays, volume, enabled, contextThis);
+            alarm = new Alarm(id, hour, minute, recurDays, volume, enabled, Alarm.AlarmType.Timed, contextThis);
             if (!recurDays.contains(-1)) {
                 recurDays.add(-1);
             }

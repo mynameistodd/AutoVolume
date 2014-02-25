@@ -95,6 +95,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             alarm.setRecur(Util.getRecurList(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_RECUR))));
             alarm.setEnabled(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_ENABLED)) > 0);
             alarm.setVolume(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_VOLUME)));
+            alarm.setType(Alarm.AlarmType.Timed);
         }
         db.close();
         helper.close();
@@ -114,6 +115,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             alarm.setRecur(Util.getRecurList(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_RECUR))));
             alarm.setEnabled(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_ENABLED)) > 0);
             alarm.setVolume(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_VOLUME)));
+            alarm.setType(Alarm.AlarmType.Timed);
             alarms.add(alarm);
         }
         db.close();

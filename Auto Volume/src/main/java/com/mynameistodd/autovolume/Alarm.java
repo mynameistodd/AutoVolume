@@ -11,7 +11,13 @@ import java.util.List;
 
 public class Alarm {
 
-	private AlarmManager alarmManager;
+
+    public enum AlarmType {
+        Timed,
+        Calendar
+    }
+
+    private AlarmManager alarmManager;
 	
 	private int id;
 	private int hour;
@@ -19,22 +25,24 @@ public class Alarm {
 	private List<Integer> recur;
 	private int volume;
 	private boolean enabled;
-	private Context context;
+    private AlarmType type;
+    private Context context;
 
     public Alarm(Context context) {
         this.context = context;
         init();
     }
 
-    public Alarm(int id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, Context context) {
-		super();
+    public Alarm(int id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, AlarmType type, Context context) {
+        super();
 		this.id = id;
 		this.hour = hour;
 		this.minute = minute;
 		this.recur = recur;
 		this.volume = volume;
 		this.enabled = enabled;
-		this.context = context;
+        this.type = type;
+        this.context = context;
         init();
 	}
 
@@ -78,8 +86,17 @@ public class Alarm {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	public void save() {
-		if (this.id <= 0) {
+
+    public AlarmType getType() {
+        return type;
+    }
+
+    public void setType(AlarmType type) {
+        this.type = type;
+    }
+
+    public void save() {
+        if (this.id <= 0) {
             MySQLiteOpenHelper.insertAlarm(context, this);
             Log.d(Util.MYNAMEISTODD, "Inserted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume) + " Enabled:" + String.valueOf(enabled));
         }

@@ -17,7 +17,7 @@ public class CalendarListPreference extends MultiSelectListPreference {
 
     ContentResolver cr;
     Cursor cursor;
-    String[] projection = new String[]{CalendarContract.Calendars.NAME, CalendarContract.Calendars.CALENDAR_DISPLAY_NAME};
+    String[] projection = new String[]{CalendarContract.Calendars._ID, CalendarContract.Calendars.NAME, CalendarContract.Calendars.CALENDAR_DISPLAY_NAME};
     String selection = "(" + CalendarContract.Calendars.VISIBLE + " = ?)";
     String[] selectionArgs = new String[]{"1"};
 
@@ -31,11 +31,12 @@ public class CalendarListPreference extends MultiSelectListPreference {
         cursor = cr.query(CalendarContract.Calendars.CONTENT_URI, projection, selection, selectionArgs, null);
 
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            String displayName = cursor.getString(1);
+            String id = cursor.getString(0);
+            String name = cursor.getString(1);
+            String displayName = cursor.getString(2);
 
-            entries.add(name);
-            entriesValues.add(displayName);
+            entries.add(displayName);
+            entriesValues.add(id);
         }
 
         setEntries(entries.toArray(new CharSequence[]{}));

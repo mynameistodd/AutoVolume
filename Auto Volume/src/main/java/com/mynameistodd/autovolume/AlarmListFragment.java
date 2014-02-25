@@ -53,7 +53,9 @@ public class AlarmListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        alarms = MySQLiteOpenHelper.getAllAlarms(getActivity());
+        alarms = new ArrayList<Alarm>();
+        alarms.addAll(MySQLiteOpenHelper.getAllAlarms(getActivity()));
+        alarms.addAll(CalendarHelper.getAllAlarms(getActivity()));
 
         adapter = new AlarmAdapter(getActivity(), android.R.layout.list_content, alarms);
         setListAdapter(adapter);
