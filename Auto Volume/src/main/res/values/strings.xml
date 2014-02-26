@@ -46,5 +46,9 @@
     <string name="pref_endTime_default">7:00</string>
     <string name="pref_endTime_title">End Time</string>
     <string name="pref_endTime_summary">Change volume before this time</string>
+    <string name="default_tv_time">12:00</string>
+    <string name="default_tv_recur">One Time</string>
+    <string name="default_tv_volume">100%</string>
+    <string name="default_tv_title">Event Start: What happens when the event title is super long like this?</string>
 
 </resources>

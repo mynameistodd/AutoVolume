@@ -75,6 +75,7 @@ public class CalendarHelper {
                         alarmStart.setEnabled(true);
                         alarmStart.setType(Alarm.AlarmType.Calendar);
                         alarmStart.setRecur(recur);
+                        alarmStart.setTitle("Event Start: " + title);
                         alarmStart.cancel();
                         alarmStart.schedule();
                         alarms.add(alarmStart);
@@ -92,6 +93,7 @@ public class CalendarHelper {
                         alarmEnd.setEnabled(true);
                         alarmEnd.setType(Alarm.AlarmType.Calendar);
                         alarmEnd.setRecur(recur);
+                        alarmEnd.setTitle("Event End: " + title);
                         alarmEnd.cancel();
                         alarmEnd.schedule();
                         alarms.add(alarmEnd);

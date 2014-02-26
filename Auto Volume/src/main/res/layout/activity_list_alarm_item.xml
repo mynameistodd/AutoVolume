@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:text="12:00"
-        android:layout_marginLeft="16dp" />
+        android:text="@string/default_tv_time"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/tv_recur"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_time"
         android:layout_below="@+id/tv_time"
-        android:text="Sun"
+        android:text="@string/default_tv_recur"
         android:layout_marginTop="15dp" />
 
     <Switch
@@ -31,7 +31,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:focusable="false"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:id="@+id/tv_volume"
@@ -40,6 +40,19 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="100%" />
+        android:text="@string/default_tv_volume" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_tv_title"
+        android:layout_alignRight="@+id/switch1"
+        android:layout_alignBottom="@+id/tv_recur"
+        android:singleLine="true"
+        android:layout_toRightOf="@+id/tv_recur"
+        android:layout_marginLeft="20dp"
+        android:gravity="right" />
 
 </RelativeLayout>

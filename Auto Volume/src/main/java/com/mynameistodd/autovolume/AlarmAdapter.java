@@ -30,6 +30,12 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
     }
 
     @Override
+    public boolean isEnabled(int position) {
+        Alarm alarm = objects.get(position);
+        return alarm.getType() != Alarm.AlarmType.Calendar;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService (Context.LAYOUT_INFLATER_SERVICE);
 
@@ -39,6 +45,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
         TextView recur = (TextView) rowView.findViewById(R.id.tv_recur);
         TextView volume = (TextView) rowView.findViewById(R.id.tv_volume);
         CompoundButton enabled = (CompoundButton) rowView.findViewById(R.id.switch1);
+        TextView title = (TextView) rowView.findViewById(R.id.tv_title);
 
         final Alarm alarm = objects.get(position);
 
@@ -70,6 +77,12 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
                 alarm.save();
             }
         });
+
+        title.setText(alarm.getTitle());
+
+        if (alarm.getType() == Alarm.AlarmType.Calendar) {
+            rowView.setAlpha(0.3F);
+        }
         return rowView;
     }
 }

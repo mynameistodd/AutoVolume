@@ -11,7 +11,6 @@ import java.util.List;
 
 public class Alarm {
 
-
     public enum AlarmType {
         Timed,
         Calendar
@@ -26,6 +25,7 @@ public class Alarm {
 	private int volume;
 	private boolean enabled;
     private AlarmType type;
+    private String title;
     private Context context;
 
     public Alarm(Context context) {
@@ -86,13 +86,19 @@ public class Alarm {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
     public AlarmType getType() {
         return type;
     }
-
     public void setType(AlarmType type) {
         this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void save() {
