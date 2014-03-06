@@ -15,7 +15,7 @@
     <string name="pref_notify_key">pref_notify</string>
     <string name="pref_notify_default">false</string>
     <string name="pref_notify_title">Notifications</string>
-    <string name="pref_notify_summary">Alert for volume change</string>
+    <string name="pref_notify_summary">Alert for volume changes</string>
 
     <string name="pref_calendar_enabled_key">pref_calendar_enabled</string>
     <string name="pref_calendar_enabled_default">true</string>
@@ -26,6 +26,11 @@
     <string-array name="pref_calendar_list_default" />
     <string name="pref_calendar_list_title">Select calendars</string>
     <string name="pref_calendar_list_summary">Pick the calendars to include</string>
+
+    <string name="pref_calendar_volumeLevel_restore_key">pref_calendar_volumeLevel_restore</string>
+    <string name="pref_calendar_volumeLevel_restore_default">7</string>
+    <string name="pref_calendar_volumeLevel_restore_title">Restore Volume Level</string>
+    <string name="pref_calendar_volumeLevel_restore_summary">After calendar event, restore to this volume</string>
 
     <string name="pref_enabled_key">pref_enabled</string>
     <string name="pref_enabled_default">true</string>
@@ -46,9 +51,11 @@
     <string name="pref_endTime_default">7:00</string>
     <string name="pref_endTime_title">End Time</string>
     <string name="pref_endTime_summary">Change volume before this time</string>
+
     <string name="default_tv_time">12:00</string>
     <string name="default_tv_recur">One Time</string>
     <string name="default_tv_volume">100%</string>
     <string name="default_tv_title">Event Start: What happens when the event title is super long like this?</string>
+
 
 </resources>

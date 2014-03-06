@@ -19,6 +19,12 @@
             android:summary="@string/pref_calendar_list_summary"
             android:title="@string/pref_calendar_list_title"
             android:dependency="@string/pref_calendar_enabled_key" />
+        <com.mynameistodd.autovolume.NumberPickerPreference
+            android:defaultValue="@string/pref_calendar_volumeLevel_restore_default"
+            android:key="@string/pref_calendar_volumeLevel_restore_key"
+            android:summary="@string/pref_calendar_volumeLevel_restore_summary"
+            android:title="@string/pref_calendar_volumeLevel_restore_title"
+            android:dependency="@string/pref_calendar_enabled_key" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_category_powerConnected">
         <CheckBoxPreference

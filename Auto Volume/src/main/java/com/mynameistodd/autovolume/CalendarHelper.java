@@ -28,20 +28,22 @@ public class CalendarHelper {
     static String selection = "(" + CalendarContract.Instances.CALENDAR_ID + " = ?) AND (" + CalendarContract.Instances.ALL_DAY + " = ?)";
     static String[] selectionArgs;
     static AudioManager audioManager;
-    static int currentVolume;
+    static int restoreVolume;
     static List<Integer> recur = new ArrayList<Integer>();
 
     public static Collection<? extends Alarm> getAllAlarms(Context context) {
         List<Alarm> alarms = new ArrayList<Alarm>();
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        Set<String> calendar_ids = sharedPref.getStringSet(context.getString(R.string.pref_calendar_list_key), null);
-
         audioManager = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
-        currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        boolean enabled = sharedPref.getBoolean(context.getString(R.string.pref_calendar_enabled_key), Boolean.parseBoolean(context.getString(R.string.pref_calendar_enabled_default)));
+        Set<String> calendar_ids = sharedPref.getStringSet(context.getString(R.string.pref_calendar_list_key), null);
+        restoreVolume = sharedPref.getInt(context.getString(R.string.pref_calendar_volumeLevel_restore_key), audioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
+
         recur.add(-1);
 
-        if (calendar_ids != null) {
+        if (enabled && calendar_ids != null) {
 
             Calendar today = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             Calendar nowLocal = Calendar.getInstance();
@@ -89,7 +91,7 @@ public class CalendarHelper {
                         Alarm alarmEnd = new Alarm(context);
                         alarmEnd.setHour(calEnd.get(Calendar.HOUR_OF_DAY));
                         alarmEnd.setMinute(calEnd.get(Calendar.MINUTE));
-                        alarmEnd.setVolume(currentVolume);
+                        alarmEnd.setVolume(restoreVolume);
                         alarmEnd.setEnabled(true);
                         alarmEnd.setType(Alarm.AlarmType.Calendar);
                         alarmEnd.setRecur(recur);
