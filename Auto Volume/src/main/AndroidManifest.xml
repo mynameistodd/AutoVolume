@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.mynameistodd.autovolume.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,12 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-        <!--android:name="com.google.android.gms.ads.AdActivity"-->
-        <!--android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />-->
-        <receiver android:name=".SetAlarmManagerReceiver"></receiver>
+        <!-- <activity -->
+        <!-- android:name="com.google.android.gms.ads.AdActivity" -->
+        <!-- android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" /> -->
+        <receiver android:name="com.mynameistodd.autovolume.SetAlarmManagerReceiver" />
         <receiver
-            android:name=".BootTimeZoneBR"
+            android:name="com.mynameistodd.autovolume.BootTimeZoneBR"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -35,15 +35,26 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".ChangeVolumeBR">
+        <receiver android:name="com.mynameistodd.autovolume.ChangeVolumeBR">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
             </intent-filter>
         </receiver>
-        <!--<meta-data android:name="com.google.android.backup.api_key"-->
-        <!--android:value="AEdPqrEAAAAIZbs_fwBzQCnVOd_AR_Qv9eAyJ88TQZ8JdI2_Hw" />-->
-        <!--<meta-data android:name="com.google.android.gms.version"-->
-        <!--android:value="@integer/google_play_services_version" />-->
+        <!-- <meta-data android:name="com.google.android.backup.api_key" -->
+        <!-- android:value="AEdPqrEAAAAIZbs_fwBzQCnVOd_AR_Qv9eAyJ88TQZ8JdI2_Hw" /> -->
+        <!-- <meta-data android:name="com.google.android.gms.version" -->
+        <!-- android:value="@integer/google_play_services_version" /> -->
+        <receiver
+            android:name="com.mynameistodd.autovolume.CalendarChangedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data android:scheme="content" />
+                <data android:host="com.android.calendar" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

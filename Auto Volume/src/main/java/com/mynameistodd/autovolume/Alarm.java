@@ -16,6 +16,7 @@ public class Alarm {
         Calendar
     }
 
+    private Context context;
     private AlarmManager alarmManager;
 	
 	private int id;
@@ -26,7 +27,7 @@ public class Alarm {
 	private boolean enabled;
     private AlarmType type;
     private String title;
-    private Context context;
+    private String instanceID;
 
     public Alarm(Context context) {
         this.context = context;
@@ -35,14 +36,16 @@ public class Alarm {
 
     public Alarm(int id, int hour, int minute, List<Integer> recur, int volume, boolean enabled, AlarmType type, Context context) {
         super();
-		this.id = id;
-		this.hour = hour;
+        this.context = context;
+
+        this.id = id;
+        this.hour = hour;
 		this.minute = minute;
 		this.recur = recur;
 		this.volume = volume;
 		this.enabled = enabled;
         this.type = type;
-        this.context = context;
+
         init();
 	}
 
@@ -92,13 +95,19 @@ public class Alarm {
     public void setType(AlarmType type) {
         this.type = type;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getInstanceID() {
+        return instanceID;
+    }
+
+    public void setInstanceID(String instanceID) {
+        this.instanceID = instanceID;
     }
 
     public void save() {
@@ -117,11 +126,13 @@ public class Alarm {
         Log.d(Util.MYNAMEISTODD, "Deleted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + volume + "Enabled:" + enabled);
 	}
 	public void cancel() {
-		for (int recurDay : recur) {
-			PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, volume, recurDay, enabled);
-			alarmManager.cancel(pendingIntent);
-		}
-	}
+        if (recur != null) {
+            for (int recurDay : recur) {
+                PendingIntent pendingIntent = Util.createPendingIntent(context, hour, minute, volume, recurDay, enabled);
+                alarmManager.cancel(pendingIntent);
+            }
+        }
+    }
 	public void schedule() {
 		for (int recurDay : recur) {
 			final Calendar calNow = Calendar.getInstance();

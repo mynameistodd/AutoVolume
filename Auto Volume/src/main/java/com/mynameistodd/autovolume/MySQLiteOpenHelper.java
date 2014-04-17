@@ -16,13 +16,16 @@ import java.util.List;
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "auto_volume.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String ALARM_TABLE_NAME = "alarm";
     public static final String ALARM_COLUMN_HOUR = "hour";
     public static final String ALARM_COLUMN_MINUTE = "minute";
     public static final String ALARM_COLUMN_RECUR = "recur";
     public static final String ALARM_COLUMN_ENABLED = "enabled";
     public static final String ALARM_COLUMN_VOLUME = "volume";
+    public static final String ALARM_COLUMN_TITLE = "title";
+    public static final String ALARM_COLUMN_INSTANCE_ID = "instanceID";
+
     private static final String ALARM_TABLE_CREATE =
             "CREATE TABLE " + ALARM_TABLE_NAME + " (" +
                     BaseColumns._ID + " INTEGER PRIMARY KEY, " +
@@ -30,7 +33,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
                     ALARM_COLUMN_MINUTE + " INTEGER, " +
                     ALARM_COLUMN_RECUR + " TEXT, " +
                     ALARM_COLUMN_ENABLED + " INTEGER, " +
-                    ALARM_COLUMN_VOLUME + " INTEGER);";
+                    ALARM_COLUMN_VOLUME + " INTEGER, " +
+                    ALARM_COLUMN_TITLE + " TEXT, " +
+                    ALARM_COLUMN_INSTANCE_ID + " TEXT);";
 
     MySQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,6 +50,12 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion == 1 && newVersion == 2)
         {
+            String alterAddTitle = "ALTER TABLE " + ALARM_TABLE_NAME + " ADD COLUMN " +
+                    ALARM_COLUMN_TITLE + " TEXT";
+            String alterAddInstanceID = "ALTER TABLE " + ALARM_TABLE_NAME + " ADD COLUMN " +
+                    ALARM_COLUMN_INSTANCE_ID + " TEXT";
+            db.execSQL(alterAddTitle);
+            db.execSQL(alterAddInstanceID);
         }
     }
 
@@ -58,6 +69,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         ct.put(ALARM_COLUMN_RECUR, Util.getRecurDelim(alarm.getRecur(), "|"));
         ct.put(ALARM_COLUMN_ENABLED, alarm.isEnabled());
         ct.put(ALARM_COLUMN_VOLUME, alarm.getVolume());
+        ct.put(ALARM_COLUMN_TITLE, alarm.getTitle());
+        ct.put(ALARM_COLUMN_INSTANCE_ID, alarm.getInstanceID());
         long rows = db.insert(ALARM_TABLE_NAME, null, ct);
 
         db.close();
@@ -78,13 +91,13 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         if (rows > 0) { return true; } else { return false; }
     }
 
-    public static Alarm getAlarm(Context context, int id)
+    public static Alarm getAlarm(Context context, String id, boolean isInstanceID)
     {
         Alarm alarm = null;
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
-        String whereClause = BaseColumns._ID + " = ?";
-        String[] whereArgs = new String[] {String.valueOf(id)};
+        String whereClause = (!isInstanceID) ? BaseColumns._ID + " = ?" : ALARM_COLUMN_INSTANCE_ID + " = ?";
+        String[] whereArgs = new String[]{id};
         Cursor dbCursor = db.query(ALARM_TABLE_NAME, null, whereClause, whereArgs, null, null, null);
         if (dbCursor.moveToFirst())
         {
@@ -95,7 +108,13 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             alarm.setRecur(Util.getRecurList(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_RECUR))));
             alarm.setEnabled(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_ENABLED)) > 0);
             alarm.setVolume(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_VOLUME)));
-            alarm.setType(Alarm.AlarmType.Timed);
+            alarm.setTitle(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_TITLE)));
+            alarm.setInstanceID(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_INSTANCE_ID)));
+            if (alarm.getInstanceID() != null) {
+                alarm.setType(Alarm.AlarmType.Calendar);
+            } else {
+                alarm.setType(Alarm.AlarmType.Timed);
+            }
         }
         db.close();
         helper.close();
@@ -115,8 +134,12 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             alarm.setRecur(Util.getRecurList(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_RECUR))));
             alarm.setEnabled(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_ENABLED)) > 0);
             alarm.setVolume(dbCursor.getInt(dbCursor.getColumnIndex(ALARM_COLUMN_VOLUME)));
-            alarm.setType(Alarm.AlarmType.Timed);
-            alarms.add(alarm);
+            alarm.setTitle(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_TITLE)));
+            alarm.setInstanceID(dbCursor.getString(dbCursor.getColumnIndex(ALARM_COLUMN_INSTANCE_ID)));
+            if (alarm.getInstanceID() == null) {
+                alarm.setType(Alarm.AlarmType.Timed);
+                alarms.add(alarm);
+            }
         }
         db.close();
         helper.close();
@@ -135,6 +158,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         ct.put(ALARM_COLUMN_RECUR, Util.getRecurDelim(alarm.getRecur(), "|"));
         ct.put(ALARM_COLUMN_ENABLED, alarm.isEnabled());
         ct.put(ALARM_COLUMN_VOLUME, alarm.getVolume());
+        ct.put(ALARM_COLUMN_TITLE, alarm.getTitle());
+        ct.put(ALARM_COLUMN_INSTANCE_ID, alarm.getInstanceID());
         int rows = db.update(ALARM_TABLE_NAME, ct, whereClause, whereArgs);
 
         db.close();

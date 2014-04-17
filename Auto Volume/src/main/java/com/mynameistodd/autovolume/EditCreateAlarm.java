@@ -135,7 +135,7 @@ public class EditCreateAlarm extends Fragment {
         recurDays.clear();
 
         if (editMode) {
-            alarm = MySQLiteOpenHelper.getAlarm(contextThis, args.getInt("ID"));
+            alarm = MySQLiteOpenHelper.getAlarm(contextThis, String.valueOf(args.getInt("ID")), false);
             id = alarm.getId();
             hour = alarm.getHour();
             minute = alarm.getMinute();
@@ -332,7 +332,8 @@ public class EditCreateAlarm extends Fragment {
                                 public void onClick(DialogInterface dialog, int id) {
                                     Log.d(Util.MYNAMEISTODD, "Clicked Done in SetVolume");
                                 }
-                            })
+                            }
+                    )
                     .setView(seekBar);
 
             return builder.create();

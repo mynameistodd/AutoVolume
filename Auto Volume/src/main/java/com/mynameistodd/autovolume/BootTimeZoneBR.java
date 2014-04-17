@@ -25,7 +25,8 @@ public class BootTimeZoneBR extends BroadcastReceiver {
         Tracker easyTracker = EasyTracker.getInstance(context);
         easyTracker.send(MapBuilder.createEvent("setting_alarms", (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) ? "timezone_changed" : "boot_completed", null, null).build());
 
-        allAlarms = MySQLiteOpenHelper.getAllAlarms(context);
+        allAlarms.addAll(MySQLiteOpenHelper.getAllAlarms(context));
+        allAlarms.addAll(CalendarHelper.getAllAlarms(context));
 
         for (Alarm alarm : allAlarms) {
             if (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) {

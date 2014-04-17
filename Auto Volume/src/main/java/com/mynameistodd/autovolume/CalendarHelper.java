@@ -24,7 +24,7 @@ import java.util.TimeZone;
 public class CalendarHelper {
     static ContentResolver cr;
     static Cursor cursor;
-    static String[] projection = new String[]{CalendarContract.Instances.EVENT_ID, CalendarContract.Instances.BEGIN, CalendarContract.Instances.END, CalendarContract.Instances.TITLE};
+    static String[] projection = new String[]{CalendarContract.Instances._ID, CalendarContract.Instances.EVENT_ID, CalendarContract.Instances.BEGIN, CalendarContract.Instances.END, CalendarContract.Instances.TITLE};
     static String selection = "(" + CalendarContract.Instances.CALENDAR_ID + " = ?) AND (" + CalendarContract.Instances.ALL_DAY + " = ?)";
     static String[] selectionArgs;
     static AudioManager audioManager;
@@ -57,20 +57,26 @@ public class CalendarHelper {
                 builder.appendPath(julianDay);
 
                 cr = context.getContentResolver();
+
                 cursor = cr.query(builder.build(), projection, selection, selectionArgs, null);
 
                 while (cursor.moveToNext()) {
-                    String id = cursor.getString(0);
-                    String eventStart = cursor.getString(1);
-                    String eventEnd = cursor.getString(2);
-                    String title = cursor.getString(3);
+                    String instanceID = cursor.getString(0);
+                    String eventID = cursor.getString(1);
+                    String eventStart = cursor.getString(2);
+                    String eventEnd = cursor.getString(3);
+                    String title = cursor.getString(4);
 
                     //Set starting alarm
                     Calendar calStart = Calendar.getInstance();
                     calStart.setTimeInMillis(Long.parseLong(eventStart));
 
                     if (calStart.after(nowLocal)) {
-                        Alarm alarmStart = new Alarm(context);
+                        Alarm alarmStart = MySQLiteOpenHelper.getAlarm(context, instanceID + "S", true);
+                        if (alarmStart == null) {
+                            alarmStart = new Alarm(context);
+                        }
+                        alarmStart.cancel();
                         alarmStart.setHour(calStart.get(Calendar.HOUR_OF_DAY));
                         alarmStart.setMinute(calStart.get(Calendar.MINUTE));
                         alarmStart.setVolume(0);
@@ -78,8 +84,9 @@ public class CalendarHelper {
                         alarmStart.setType(Alarm.AlarmType.Calendar);
                         alarmStart.setRecur(recur);
                         alarmStart.setTitle("Event Start: " + title);
-                        alarmStart.cancel();
+                        alarmStart.setInstanceID(instanceID + "S");
                         alarmStart.schedule();
+                        alarmStart.save();
                         alarms.add(alarmStart);
                     }
 
@@ -88,7 +95,11 @@ public class CalendarHelper {
                     calEnd.setTimeInMillis(Long.parseLong(eventEnd));
 
                     if (calEnd.after(nowLocal)) {
-                        Alarm alarmEnd = new Alarm(context);
+                        Alarm alarmEnd = MySQLiteOpenHelper.getAlarm(context, instanceID + "E", true);
+                        if (alarmEnd == null) {
+                            alarmEnd = new Alarm(context);
+                        }
+                        alarmEnd.cancel();
                         alarmEnd.setHour(calEnd.get(Calendar.HOUR_OF_DAY));
                         alarmEnd.setMinute(calEnd.get(Calendar.MINUTE));
                         alarmEnd.setVolume(restoreVolume);
@@ -96,8 +107,9 @@ public class CalendarHelper {
                         alarmEnd.setType(Alarm.AlarmType.Calendar);
                         alarmEnd.setRecur(recur);
                         alarmEnd.setTitle("Event End: " + title);
-                        alarmEnd.cancel();
+                        alarmEnd.setInstanceID(instanceID + "E");
                         alarmEnd.schedule();
+                        alarmEnd.save();
                         alarms.add(alarmEnd);
                     }
                 }
