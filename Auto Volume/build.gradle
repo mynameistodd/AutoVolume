@@ -2,13 +2,13 @@ apply plugin: 'android'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.3'
+    buildToolsVersion '19.1.0'
     defaultConfig {
         packageName "com.mynameistodd.autovolume"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 19
-        versionCode 15
-        versionName "1.15"
+        versionCode 16
+        versionName "1.16"
     }
     if (project.hasProperty("KeyStore.properties") && new File(project.property("KeyStore.properties")).exists()) {
         Properties props = new Properties()

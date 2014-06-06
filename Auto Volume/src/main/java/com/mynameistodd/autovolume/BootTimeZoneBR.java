@@ -9,6 +9,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BootTimeZoneBR extends BroadcastReceiver {
@@ -25,6 +26,7 @@ public class BootTimeZoneBR extends BroadcastReceiver {
         Tracker easyTracker = EasyTracker.getInstance(context);
         easyTracker.send(MapBuilder.createEvent("setting_alarms", (intent.getAction() == Intent.ACTION_TIMEZONE_CHANGED) ? "timezone_changed" : "boot_completed", null, null).build());
 
+        allAlarms = new ArrayList<Alarm>();
         allAlarms.addAll(MySQLiteOpenHelper.getAllAlarms(context));
         allAlarms.addAll(CalendarHelper.getAllAlarms(context));
 
