@@ -13,15 +13,17 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.text.NumberFormat;
 
 public class SetAlarmManagerReceiver extends BroadcastReceiver {
 
-	private AudioManager audioManager;
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
+    private AudioManager audioManager;
 	private Integer audioLevel;
     private Boolean enabled;
 	
@@ -31,8 +33,16 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
 		audioLevel = arg1.getIntExtra("AUDIO_LEVEL", 0);
         enabled = arg1.getBooleanExtra("ENABLED", false);
 
-        Tracker easyTracker = EasyTracker.getInstance(arg0);
-        easyTracker.send(MapBuilder.createEvent("volume_change", (enabled) ? "alarm_enabled" : "alarm_disabled", "level", audioLevel.longValue()).build());
+        analytics = GoogleAnalytics.getInstance(arg0);
+        tracker = analytics.newTracker(R.xml.global_tracker);
+
+        tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("volume_change")
+                        .setAction((enabled) ? "alarm_enabled" : "alarm_disabled")
+                        .setLabel("level")
+                        .setValue(audioLevel.longValue())
+                        .build()
+        );
 
         if (enabled) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);

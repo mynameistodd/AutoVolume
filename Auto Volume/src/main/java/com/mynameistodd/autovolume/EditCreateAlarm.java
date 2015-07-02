@@ -28,10 +28,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Fields;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,34 +37,35 @@ import java.util.List;
 
 public class EditCreateAlarm extends Fragment {
 
-    private Button buttonSave;
-    private Button buttonCancel;
-    private AudioManager audioManager;
-    private AlarmManager alarmManager;
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
     private static TextView tvTime;
     private static TableRow timeTableRow;
     private static TableRow volumeTableRow;
     private static TableRow recurTableRow;
-    private TimePickerDialog tPicker;
     private static Calendar cal;
     private static int id = 0;
     private static int hour = 0;
     private static int minute = 0;
     private static int volume = 0;
     private static boolean enabled = true;
+    private static List<Integer> recurDays;
+    private static boolean editMode = false;
+    EditCreateAlarmCallbacks mCallbacks;
+    private Button buttonSave;
+    private Button buttonCancel;
+    private AudioManager audioManager;
+    private AlarmManager alarmManager;
+    private TimePickerDialog tPicker;
     private Bundle args;
     private TextView tvRecur;
     private Context contextThis;
-    private static List<Integer> recurDays;
-    private static boolean editMode = false;
     private TextView tvVolume;
     private int maxVolumeStep;
     private int nPickerVal = 0;
     private Alarm alarm;
-    EditCreateAlarmCallbacks mCallbacks;
 
-    public interface EditCreateAlarmCallbacks {
-        public void onAlarmDismiss();
+    public EditCreateAlarm() {
     }
 
     @Override
@@ -79,16 +78,13 @@ public class EditCreateAlarm extends Fragment {
         }
     }
 
-    public EditCreateAlarm() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         contextThis = getActivity();
-        audioManager = (AudioManager) contextThis.getSystemService(contextThis.AUDIO_SERVICE);
-        alarmManager = (AlarmManager) contextThis.getSystemService(contextThis.ALARM_SERVICE);
+        audioManager = (AudioManager) contextThis.getSystemService(Context.AUDIO_SERVICE);
+        alarmManager = (AlarmManager) contextThis.getSystemService(Context.ALARM_SERVICE);
 
         recurDays = new ArrayList<Integer>();
         maxVolumeStep = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
@@ -116,9 +112,8 @@ public class EditCreateAlarm extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Tracker easyTracker = EasyTracker.getInstance(getActivity());
-        easyTracker.set(Fields.SCREEN_NAME, "EditCreateAlarm");
-        easyTracker.send(MapBuilder.createAppView().build());
+        analytics = GoogleAnalytics.getInstance(getActivity());
+        tracker = analytics.newTracker(R.xml.global_tracker);
     }
 
     @Override
@@ -245,7 +240,39 @@ public class EditCreateAlarm extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        EasyTracker.getInstance(getActivity()).activityStop(getActivity());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.removeItem(R.id.action_add);
+        if (editMode) {
+            inflater.inflate(R.menu.activity_edit_create_alarm, menu);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.menu_delete:
+
+                //Delete old alarm
+                if (editMode) {
+                    alarm.delete();
+                }
+
+                mCallbacks.onAlarmDismiss();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public interface EditCreateAlarmCallbacks {
+        void onAlarmDismiss();
     }
 
     public class RecurDaysDialog extends DialogFragment {
@@ -346,35 +373,6 @@ public class EditCreateAlarm extends Fragment {
             tvVolume.setText(Util.getVolumePercent(Integer.toString(nPickerVal), maxVolumeStep));
             Log.d(Util.MYNAMEISTODD, "SetVolume" + nPickerVal);
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.removeItem(R.id.action_add);
-        if (editMode) {
-            inflater.inflate(R.menu.activity_edit_create_alarm, menu);
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.menu_delete:
-
-                //Delete old alarm
-                if (editMode) {
-                    alarm.delete();
-                }
-
-                mCallbacks.onAlarmDismiss();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
     }
 
 }

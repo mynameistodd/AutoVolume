@@ -13,10 +13,8 @@ import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Fields;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,28 +24,18 @@ import java.util.List;
  */
 public class AlarmListFragment extends ListFragment {
 
-    public interface AlarmListCallbacks {
-        public void onAlarmSelected(int id);
-    }
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
+    AlarmListCallbacks mCallbacks;
+    private ArrayAdapter<Alarm> adapter;
+    private List<Alarm> alarms;
 
     public AlarmListFragment() {
     }
 
-    private ArrayAdapter<Alarm> adapter;
-    private List<Alarm> alarms;
-    AlarmListCallbacks mCallbacks;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Tracker easyTracker = EasyTracker.getInstance(getActivity());
-        easyTracker.set(Fields.SCREEN_NAME, "AlarmListFragment");
-        easyTracker.send(MapBuilder.createAppView().build());
     }
 
     @Override
@@ -140,12 +128,13 @@ public class AlarmListFragment extends ListFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement AlarmListCallbacks");
         }
+
+        analytics = GoogleAnalytics.getInstance(getActivity());
+        tracker = analytics.newTracker(R.xml.global_tracker);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EasyTracker.getInstance(getActivity()).activityStop(getActivity());
+    public interface AlarmListCallbacks {
+        void onAlarmSelected(int id);
     }
 }
 

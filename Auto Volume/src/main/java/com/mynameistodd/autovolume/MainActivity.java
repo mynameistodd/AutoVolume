@@ -18,8 +18,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +32,8 @@ public class MainActivity extends Activity implements
         EditCreateAlarm.EditCreateAlarmCallbacks,
         AlarmListFragment.AlarmListCallbacks {
 
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
     ServiceConnection mServiceConn;
     IInAppBillingService mService;
     Bundle querySkus;
@@ -41,6 +45,11 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        analytics = GoogleAnalytics.getInstance(this);
+
+        tracker = analytics.newTracker(R.xml.global_tracker);
+        tracker.enableAdvertisingIdCollection(true);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -74,7 +83,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
-        EasyTracker.getInstance(this).activityStart(this);
     }
 
     @Override
@@ -142,9 +150,21 @@ public class MainActivity extends Activity implements
 
                     Toast.makeText(this, "You are awesome, thanks!", Toast.LENGTH_LONG).show();
 
-                    EasyTracker tracker = EasyTracker.getInstance(this);
-                    tracker.send(MapBuilder.createTransaction(orderId, "In-app Store", Double.valueOf("0.99"), Double.valueOf("0.0"), Double.valueOf("0.0"), "USD").build());
-                    tracker.send(MapBuilder.createItem(orderId, "Donate .99 cents", productId, "Donations", Double.valueOf("0.99"), Long.valueOf("1"), "USD").build());
+                    tracker.send(new HitBuilders.TransactionBuilder()
+                                    .setTransactionId(orderId)
+                                    .setAffiliation("In-app Store")
+                                    .setRevenue(Double.valueOf("0.99"))
+                                    .setTax(Double.valueOf("0.0"))
+                                    .setShipping(Double.valueOf("0.0"))
+                                    .setCurrencyCode("USD")
+                                    .build()
+                    );
+                    tracker.send(new HitBuilders.ItemBuilder()
+                                    .setTransactionId(orderId)
+                                    .addProduct(new Product().setName("Donate .99 cents").setId(productId).setCategory("Donations").setPrice(Double.valueOf("0.99")).setQuantity(1))
+                                    .setCurrencyCode("USD")
+                                    .build()
+                    );
 
                     new InAppBillingConsumeTask().execute(token);
                 } catch (JSONException e) {
@@ -179,7 +199,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onStop() {
         super.onStop();
-        EasyTracker.getInstance(this).activityStop(this);
     }
 
     @Override
