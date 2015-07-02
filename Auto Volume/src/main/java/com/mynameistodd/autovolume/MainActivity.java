@@ -61,7 +61,7 @@ public class MainActivity extends Activity implements
                 new InAppBillingPurchasedItemsTask().execute();
             }
         };
-        bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"),
+        bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND").setPackage("com.android.vending"),
                 mServiceConn, Context.BIND_AUTO_CREATE);
 
         ArrayList<String> skuList = new ArrayList<String>();

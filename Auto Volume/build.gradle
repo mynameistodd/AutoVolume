@@ -1,15 +1,11 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
+
+def versionMajor = 1
+def versionMinor = 16
+def versionPatch = 0
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '21.1.1'
-    defaultConfig {
-        packageName "com.mynameistodd.autovolume"
-        minSdkVersion 14
-        targetSdkVersion 19
-        versionCode 16
-        versionName "1.16"
-    }
     if (project.hasProperty("KeyStore.properties") && new File(project.property("KeyStore.properties")).exists()) {
         Properties props = new Properties()
         props.load(new FileInputStream(file(project.property("KeyStore.properties"))))
@@ -34,6 +30,18 @@ android {
                 signingConfig signingConfigs.myConfig
             }
         }
+    }
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
+
+    defaultConfig {
+        applicationId "com.mynameistodd.autovolume"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+    }
+    productFlavors {
     }
 }
 
