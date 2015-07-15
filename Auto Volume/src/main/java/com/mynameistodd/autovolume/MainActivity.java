@@ -1,6 +1,5 @@
 package com.mynameistodd.autovolume;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -13,6 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -28,7 +28,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends AppCompatActivity implements
         EditCreateAlarm.EditCreateAlarmCallbacks,
         AlarmListFragment.AlarmListCallbacks {
 

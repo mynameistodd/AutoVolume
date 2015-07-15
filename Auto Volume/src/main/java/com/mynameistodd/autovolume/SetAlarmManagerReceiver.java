@@ -64,7 +64,7 @@ public class SetAlarmManagerReceiver extends BroadcastReceiver {
                 NotificationManager mNotificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
                 Notification notification = new Notification.Builder(arg0)
                         .setAutoCancel(true)
-                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Volume changed")
                         .setContentText("Scheduled volume change")
                         .setContentInfo("Set to: " + NumberFormat.getPercentInstance().format(toFormat))
