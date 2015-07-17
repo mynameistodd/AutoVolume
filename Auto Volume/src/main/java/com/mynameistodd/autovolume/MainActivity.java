@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements
         EditCreateAlarm.EditCreateAlarmCallbacks,
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements
         bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND").setPackage("com.android.vending"),
                 mServiceConn, Context.BIND_AUTO_CREATE);
 
-        ArrayList<String> skuList = new ArrayList<String>();
+        ArrayList<String> skuList = new ArrayList<>();
         skuList.add("donate.99");
 
         querySkus = new Bundle();
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements
         } else if (id == R.id.action_donate) {
             if (pendingBuyIntent != null) {
                 try {
-                    startIntentSenderForResult(pendingBuyIntent.getIntentSender(), 1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
+                    startIntentSenderForResult(pendingBuyIntent.getIntentSender(), 1001, new Intent(), 0, 0, 0);
                 } catch (IntentSender.SendIntentException e) {
                     e.printStackTrace();
                 }
@@ -229,9 +233,7 @@ public class MainActivity extends AppCompatActivity implements
                         return true;
                     }
                 }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (RemoteException | JSONException e) {
                 e.printStackTrace();
             }
             return false;
@@ -269,9 +271,7 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     }
                 }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (RemoteException | JSONException e) {
                 e.printStackTrace();
             }
             return pendingIntent;

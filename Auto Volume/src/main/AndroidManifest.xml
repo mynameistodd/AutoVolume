@@ -52,6 +52,10 @@
                 <data android:host="com.android.calendar" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cb68486cf7bf9c734391abe526decb95709e9933" />
     </application>
 
 </manifest>
