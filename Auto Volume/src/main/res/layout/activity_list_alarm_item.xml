@@ -1,58 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/item_selected_background">
+    android:layout_margin="@dimen/activity_vertical_margin"
+    card_view:cardCornerRadius="4dp">
 
-    <TextView
-        android:id="@+id/tv_time"
-        style="@style/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:text="@string/default_tv_time"
-        android:layout_marginLeft="10dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_selected_background"
+        android:minHeight="?android:attr/listPreferredItemHeight">
 
-    <TextView
-        android:id="@+id/tv_recur"
-        style="@style/tv_recur"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_time"
-        android:layout_below="@+id/tv_time"
-        android:text="@string/default_tv_recur"
-        android:layout_marginTop="15dp" />
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="@string/default_tv_time" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:focusable="false"
-        android:layout_marginRight="10dp" />
+        <TextView
+            android:id="@+id/tv_recur"
+            style="@style/tv_recur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_time"
+            android:layout_below="@+id/tv_time"
+            android:layout_marginTop="15dp"
+            android:text="@string/default_tv_recur" />
 
-    <TextView
-        android:id="@+id/tv_volume"
-        style="@style/tv_volume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/default_tv_volume" />
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:focusable="false" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        style="@style/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/default_tv_title"
-        android:layout_alignRight="@+id/switch1"
-        android:layout_alignBottom="@+id/tv_recur"
-        android:singleLine="true"
-        android:layout_toRightOf="@+id/tv_recur"
-        android:layout_marginLeft="20dp"
-        android:gravity="right" />
+        <TextView
+            android:id="@+id/tv_volume"
+            style="@style/tv_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/default_tv_volume" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_recur"
+            android:layout_alignRight="@+id/switch1"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/tv_recur"
+            android:gravity="right"
+            android:singleLine="true"
+            android:text="@string/default_tv_title" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
