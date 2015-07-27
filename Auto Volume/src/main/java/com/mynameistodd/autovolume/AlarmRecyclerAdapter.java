@@ -1,5 +1,6 @@
 package com.mynameistodd.autovolume;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.media.AudioManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.List;
@@ -33,7 +35,7 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_alarm_item, parent, false);
-        return new ViewHolder(view, new IViewHolderClicks() {
+        return new ViewHolder(view, new ViewHolder.IViewHolderClicks() {
             @Override
             public void onItemClick(int position) {
                 mListener.onItemClick(position);
@@ -42,14 +44,34 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
         final Alarm alarm = mAlarms.get(i);
 
         //set the time
-        Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, alarm.getHour());
         c.set(Calendar.MINUTE, alarm.getMinute());
         viewHolder.mTime.setText(DateUtils.formatDateTime(mContext, c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+        viewHolder.mTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minuteOfDay) {
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        c.set(Calendar.MINUTE, minuteOfDay);
+
+                        alarm.setHour(hourOfDay);
+                        alarm.setMinute(minuteOfDay);
+                        alarm.save();
+
+                        viewHolder.mTime.setText(DateUtils.formatDateTime(mContext, c.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
+                    }
+                }, alarm.getHour(), alarm.getMinute(), false);
+
+                timePickerDialog.show();
+            }
+        });
 
         //set the recur
         String textToShow = Util.getRecurText(alarm.getRecur());
@@ -86,10 +108,6 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         return mAlarms.size();
     }
 
-    public interface IViewHolderClicks {
-        void onItemClick(int position);
-    }
-
     public interface IAdapterClicks {
         void onItemClick(int position);
     }
@@ -119,6 +137,10 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         @Override
         public void onClick(View v) {
             mListener.onItemClick(getPosition());
+        }
+
+        public interface IViewHolderClicks {
+            void onItemClick(int position);
         }
     }
 }
