@@ -1,14 +1,23 @@
 package com.mynameistodd.autovolume;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -24,12 +33,14 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
     private List<Alarm> mAlarms;
     private Context mContext;
     private IAdapterClicks mListener;
+    private FragmentManager fragmentManager;
 
     public AlarmRecyclerAdapter(Context context, List<Alarm> places, IAdapterClicks listener) {
         this.mContext = context;
         this.mAlarms = places;
         this.mListener = listener;
         this.mMaxVolume = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getStreamMaxVolume(AudioManager.STREAM_RING);
+        this.fragmentManager = ((Activity) context).getFragmentManager();
     }
 
     @Override
@@ -79,6 +90,53 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
 
         //set the volume
         viewHolder.mVolume.setText(Util.getVolumePercent(String.valueOf(alarm.getVolume()), mMaxVolume));
+        viewHolder.mVolume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dialogFragment = new DialogFragment() {
+
+                    SeekBar seekBar;
+
+                    @Override
+                    public Dialog onCreateDialog(Bundle savedInstanceState) {
+                        super.onCreateDialog(savedInstanceState);
+                        seekBar = new SeekBar(getActivity());
+                        seekBar.setMax(getArguments().getInt("MAX_VOLUME"));
+                        seekBar.setProgress(getArguments().getInt("VOLUME"));
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Set Volume")
+                                .setPositiveButton("Set",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Log.d(Util.MYNAMEISTODD, "Clicked Done in SetVolume");
+                                            }
+                                        }
+                                )
+                                .setView(seekBar);
+
+                        return builder.create();
+                    }
+
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        super.onDismiss(dialog);
+                        int seekProgress = seekBar.getProgress();
+                        alarm.setVolume(seekProgress);
+                        alarm.save();
+
+                        viewHolder.mVolume.setText(Util.getVolumePercent(String.valueOf(alarm.getVolume()), mMaxVolume));
+                        Log.d(Util.MYNAMEISTODD, "SetVolume" + seekProgress);
+                    }
+                };
+
+                Bundle args = new Bundle();
+                args.putInt("MAX_VOLUME", mMaxVolume);
+                args.putInt("VOLUME", alarm.getVolume());
+                dialogFragment.setArguments(args);
+                dialogFragment.show(fragmentManager, "volumeDialogFragment");
+            }
+        });
 
         //set the on/off switch
         viewHolder.mEnabled.setChecked(alarm.isEnabled());
