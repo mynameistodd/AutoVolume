@@ -1,6 +1,5 @@
 package com.mynameistodd.autovolume;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,12 +17,11 @@ import java.util.List;
 /**
  * Created by todd on 1/11/14.
  */
-public class AlarmListFragment extends Fragment implements AlarmRecyclerAdapter.IAdapterClicks {
+public class AlarmListFragment extends Fragment {
 
     public static GoogleAnalytics analytics;
     public static Tracker tracker;
 
-    private AlarmListCallbacks mCallbacks;
     private List<Alarm> alarms;
 
     private RecyclerView mRecyclerView;
@@ -60,91 +58,7 @@ public class AlarmListFragment extends Fragment implements AlarmRecyclerAdapter.
         alarms.addAll(MySQLiteOpenHelper.getAllAlarms(getActivity()));
         alarms.addAll(CalendarHelper.getAllAlarms(getActivity()));
 
-        mAdapter = new AlarmRecyclerAdapter(getActivity(), alarms, this);
+        mAdapter = new AlarmRecyclerAdapter(getActivity(), alarms);
         mRecyclerView.setAdapter(mAdapter);
-
-//        ListView listView = getListView();
-//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-//        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-//            List<Alarm> selAlarms = new ArrayList<Alarm>();
-//
-//            @Override
-//            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-//                Log.d(Util.MYNAMEISTODD, "Position: " + position);
-//                Log.d(Util.MYNAMEISTODD, "ID: " + id);
-//
-//                Alarm alarm = (Alarm) getListView().getItemAtPosition(position);
-//                if (checked) {
-//                    if (!selAlarms.contains(alarm)) {
-//                        selAlarms.add(alarm);
-//                    }
-//                } else {
-//                    if (selAlarms.contains(alarm)) {
-//                        selAlarms.remove(alarm);
-//                    }
-//                }
-//
-//                mode.setTitle(selAlarms.size() + " selected");
-//            }
-//
-//            @Override
-//            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//                MenuInflater inflater = mode.getMenuInflater();
-//                inflater.inflate(R.menu.activity_edit_create_alarm, menu);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.menu_delete:
-//                        deleteSelected(selAlarms);
-//                        mode.finish();
-//                        return true;
-//                    default:
-//                        return false;
-//                }
-//            }
-//
-//            @Override
-//            public void onDestroyActionMode(ActionMode mode) {
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-    }
-
-//    private void deleteSelected(List<Alarm> selAlarms) {
-//        for (Alarm alarm : selAlarms) {
-//            alarms.remove(alarm);
-//            alarm.delete();
-//        }
-//    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (AlarmListCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement AlarmListCallbacks");
-        }
-
-        analytics = GoogleAnalytics.getInstance(getActivity());
-        tracker = analytics.newTracker(R.xml.global_tracker);
-    }
-
-    @Override
-    public void onItemClick(int position) {
-        Alarm item = alarms.get(position);
-        mCallbacks.onAlarmSelected(item.getId());
-    }
-
-    public interface AlarmListCallbacks {
-        void onAlarmSelected(int id);
     }
 }

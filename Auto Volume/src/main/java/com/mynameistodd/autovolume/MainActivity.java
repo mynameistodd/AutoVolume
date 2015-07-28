@@ -31,9 +31,7 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity implements
-        EditCreateAlarm.EditCreateAlarmCallbacks,
-        AlarmListFragment.AlarmListCallbacks {
+public class MainActivity extends AppCompatActivity {
 
     public static GoogleAnalytics analytics;
     public static Tracker tracker;
@@ -115,16 +113,16 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
         else if (id == R.id.action_add) {
-            EditCreateAlarm editCreateAlarm = new EditCreateAlarm();
-            Bundle args = new Bundle();
-            args.putInt("ID", 0);
-            editCreateAlarm.setArguments(args);
-
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.container, editCreateAlarm, "editCreate")
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack(null)
-                    .commit();
+//            EditCreateAlarm editCreateAlarm = new EditCreateAlarm();
+//            Bundle args = new Bundle();
+//            args.putInt("ID", 0);
+//            editCreateAlarm.setArguments(args);
+//
+//            getFragmentManager().beginTransaction()
+//                    .replace(R.id.container, editCreateAlarm, "editCreate")
+//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                    .addToBackStack(null)
+//                    .commit();
             return true;
         } else if (id == R.id.action_donate) {
             if (pendingBuyIntent != null) {
@@ -179,25 +177,6 @@ public class MainActivity extends AppCompatActivity implements
                 new InAppBillingPurchasedItemsTask().execute();
             }
         }
-    }
-
-    @Override
-    public void onAlarmDismiss() {
-        getFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onAlarmSelected(int id) {
-        EditCreateAlarm editCreateAlarm = new EditCreateAlarm();
-        Bundle args = new Bundle();
-        args.putInt("ID", id);
-        editCreateAlarm.setArguments(args);
-
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, editCreateAlarm, "editCreate")
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(null)
-                .commit();
     }
 
     @Override

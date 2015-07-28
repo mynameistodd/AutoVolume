@@ -21,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -32,13 +33,11 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
     Integer mMaxVolume;
     private List<Alarm> mAlarms;
     private Context mContext;
-    private IAdapterClicks mListener;
     private FragmentManager fragmentManager;
 
-    public AlarmRecyclerAdapter(Context context, List<Alarm> places, IAdapterClicks listener) {
+    public AlarmRecyclerAdapter(Context context, List<Alarm> places) {
         this.mContext = context;
         this.mAlarms = places;
-        this.mListener = listener;
         this.mMaxVolume = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getStreamMaxVolume(AudioManager.STREAM_RING);
         this.fragmentManager = ((Activity) context).getFragmentManager();
     }
@@ -46,12 +45,7 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_alarm_item, parent, false);
-        return new ViewHolder(view, new ViewHolder.IViewHolderClicks() {
-            @Override
-            public void onItemClick(int position) {
-                mListener.onItemClick(position);
-            }
-        });
+        return new ViewHolder(view);
     }
 
     @Override
@@ -87,6 +81,82 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         //set the recur
         String textToShow = Util.getRecurText(alarm.getRecur());
         viewHolder.mRecur.setText(textToShow);
+        viewHolder.mRecur.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dialogFragment = new DialogFragment() {
+
+                    List<Integer> recurDays = new ArrayList<>();
+
+                    @Override
+                    public Dialog onCreateDialog(Bundle savedInstanceState) {
+                        super.onCreateDialog(savedInstanceState);
+
+                        boolean[] itemsChecked = new boolean[7];
+                        for (int rd : alarm.getRecur()) {
+                            recurDays.add(rd);
+
+                            if (rd >= 0) {
+                                itemsChecked[rd] = true;
+                            }
+                        }
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle("Pick recurring days")
+                                .setMultiChoiceItems(R.array.days, itemsChecked, new DialogInterface.OnMultiChoiceClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                        //keep track of the selected items
+                                        if (isChecked) {
+                                            if (!recurDays.contains(which)) {
+                                                recurDays.add(which);
+                                                Log.d(Util.MYNAMEISTODD, "Add:" + which);
+                                            }
+
+                                            if (recurDays.contains(-1)) {
+                                                recurDays.remove(recurDays.indexOf(-1)); //added a recur day, remove "one time"
+                                                Log.d(Util.MYNAMEISTODD, "Remove:-1");
+                                            }
+                                        } else {
+                                            if (recurDays.contains(which)) {
+                                                recurDays.remove(recurDays.indexOf(which));
+                                                Log.d(Util.MYNAMEISTODD, "Remove:" + which);
+                                            }
+                                        }
+
+                                        if (recurDays.size() == 0) {
+                                            recurDays.add(-1);
+                                            Log.d(Util.MYNAMEISTODD, "Add:-1");
+                                        }
+                                    }
+                                })
+                                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Log.d(Util.MYNAMEISTODD, "Clicked Done in PickDays");
+                                        if (recurDays.size() == 0) {
+                                            if (!recurDays.contains(-1)) {
+                                                recurDays.add(-1);
+                                            }
+                                        }
+                                    }
+                                });
+
+                        return builder.create();
+                    }
+
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        super.onDismiss(dialog);
+                        alarm.setRecur(recurDays);
+                        alarm.save();
+
+                        viewHolder.mRecur.setText(Util.getRecurText(recurDays));
+                    }
+                };
+                dialogFragment.show(fragmentManager, "recurDialogFragment");
+            }
+        });
 
         //set the volume
         viewHolder.mVolume.setText(Util.getVolumePercent(String.valueOf(alarm.getVolume()), mMaxVolume));
@@ -100,11 +170,11 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
                         super.onCreateDialog(savedInstanceState);
-                        seekBar = new SeekBar(getActivity());
+                        seekBar = new SeekBar(mContext);
                         seekBar.setMax(getArguments().getInt("MAX_VOLUME"));
                         seekBar.setProgress(getArguments().getInt("VOLUME"));
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                         builder.setTitle("Set Volume")
                                 .setPositiveButton("Set",
                                         new DialogInterface.OnClickListener() {
@@ -170,8 +240,7 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         void onItemClick(int position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public IViewHolderClicks mListener;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTime;
         public TextView mRecur;
@@ -179,26 +248,14 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         public CompoundButton mEnabled;
         public TextView mTitle;
 
-        public ViewHolder(View itemView, IViewHolderClicks listener) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            mListener = listener;
 
             mTime = (TextView) itemView.findViewById(R.id.tv_time);
             mRecur = (TextView) itemView.findViewById(R.id.tv_recur);
             mVolume = (TextView) itemView.findViewById(R.id.tv_volume);
             mEnabled = (CompoundButton) itemView.findViewById(R.id.switch1);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mListener.onItemClick(getPosition());
-        }
-
-        public interface IViewHolderClicks {
-            void onItemClick(int position);
         }
     }
 }
