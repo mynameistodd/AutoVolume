@@ -6,6 +6,7 @@ import android.content.Context;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,14 +17,25 @@ public class Alarm {
 	private int id;
 	private int hour;
 	private int minute;
-	private List<Integer> recur;
-	private int volume;
+    private List<Integer> recur = new ArrayList<>();
+    private int volume;
 	private boolean enabled;
     private AlarmType type;
     private String title;
     private String instanceID;
+
     public Alarm(Context context) {
+        Calendar cal = Calendar.getInstance();
+
         this.context = context;
+        this.id = 0;
+        this.hour = cal.get(Calendar.HOUR_OF_DAY);
+        this.minute = cal.get(Calendar.MINUTE);
+        this.recur.add(-1);
+        this.volume = 0;
+        this.enabled = true;
+        this.type = AlarmType.Timed;
+
         init();
     }
 

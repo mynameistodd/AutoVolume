@@ -112,19 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
             return true;
         }
-        else if (id == R.id.action_add) {
-//            EditCreateAlarm editCreateAlarm = new EditCreateAlarm();
-//            Bundle args = new Bundle();
-//            args.putInt("ID", 0);
-//            editCreateAlarm.setArguments(args);
-//
-//            getFragmentManager().beginTransaction()
-//                    .replace(R.id.container, editCreateAlarm, "editCreate")
-//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-//                    .addToBackStack(null)
-//                    .commit();
-            return true;
-        } else if (id == R.id.action_donate) {
+        else if (id == R.id.action_donate) {
             if (pendingBuyIntent != null) {
                 try {
                     startIntentSenderForResult(pendingBuyIntent.getIntentSender(), 1001, new Intent(), 0, 0, 0);
