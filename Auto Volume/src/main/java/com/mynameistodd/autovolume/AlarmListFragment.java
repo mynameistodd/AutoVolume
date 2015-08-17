@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by todd on 1/11/14.
  */
-public class AlarmListFragment extends Fragment {
+public class AlarmListFragment extends Fragment implements AlarmRecyclerAdapter.IAdapterClicks {
 
     public static GoogleAnalytics analytics;
     public static Tracker tracker;
@@ -62,7 +62,7 @@ public class AlarmListFragment extends Fragment {
         alarms.addAll(MySQLiteOpenHelper.getAllAlarms(getActivity()));
         alarms.addAll(CalendarHelper.getAllAlarms(getActivity()));
 
-        mAdapter = new AlarmRecyclerAdapter(getActivity(), alarms);
+        mAdapter = new AlarmRecyclerAdapter(getActivity(), alarms, this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -85,5 +85,16 @@ public class AlarmListFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAlarmDelete(Alarm alarm) {
+        int position = alarms.indexOf(alarm);
+        alarm.delete();
+
+        if (position > -1) {
+            alarms.remove(alarm);
+            mAdapter.notifyItemRemoved(position);
+        }
     }
 }

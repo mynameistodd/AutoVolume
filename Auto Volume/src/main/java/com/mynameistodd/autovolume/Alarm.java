@@ -133,7 +133,7 @@ public class Alarm {
     public void save() {
         if (this.id <= 0) {
             schedule();
-            MySQLiteOpenHelper.insertAlarm(context, this);
+            this.id = MySQLiteOpenHelper.insertAlarm(context, this);
             Log.d(Util.MYNAMEISTODD, "Inserted:" + hour + ":" + minute + ":" + Util.getRecurDelim(recur, "|") + " Volume:" + String.valueOf(volume) + " Enabled:" + String.valueOf(enabled));
         }
         else {

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,12 +32,14 @@ import java.util.List;
 public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdapter.ViewHolder> {
 
     Integer mMaxVolume;
+    private IAdapterClicks mListener;
     private List<Alarm> mAlarms;
     private Context mContext;
     private FragmentManager fragmentManager;
 
-    public AlarmRecyclerAdapter(Context context, List<Alarm> places) {
+    public AlarmRecyclerAdapter(Context context, List<Alarm> places, IAdapterClicks listener) {
         this.mContext = context;
+        this.mListener = listener;
         this.mAlarms = places;
         this.mMaxVolume = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getStreamMaxVolume(AudioManager.STREAM_RING);
         this.fragmentManager = ((Activity) context).getFragmentManager();
@@ -226,6 +229,13 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
 
         viewHolder.mTitle.setText(alarm.getTitle());
 
+        viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onAlarmDelete(alarm);
+            }
+        });
+
         if (alarm.getType() == Alarm.AlarmType.Calendar) {
             viewHolder.itemView.setAlpha(0.3F);
         }
@@ -237,7 +247,7 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
     }
 
     public interface IAdapterClicks {
-        void onItemClick(int position);
+        void onAlarmDelete(Alarm alarm);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -247,6 +257,7 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         public TextView mVolume;
         public CompoundButton mEnabled;
         public TextView mTitle;
+        public ImageView mDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -256,6 +267,7 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
             mVolume = (TextView) itemView.findViewById(R.id.tv_volume);
             mEnabled = (CompoundButton) itemView.findViewById(R.id.switch1);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            mDelete = (ImageView) itemView.findViewById(R.id.deleteAlarm);
         }
     }
 }

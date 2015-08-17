@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "auto_volume.db";
-    private static final int DATABASE_VERSION = 2;
     public static final String ALARM_TABLE_NAME = "alarm";
     public static final String ALARM_COLUMN_HOUR = "hour";
     public static final String ALARM_COLUMN_MINUTE = "minute";
@@ -25,7 +23,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String ALARM_COLUMN_VOLUME = "volume";
     public static final String ALARM_COLUMN_TITLE = "title";
     public static final String ALARM_COLUMN_INSTANCE_ID = "instanceID";
-
+    private static final String DATABASE_NAME = "auto_volume.db";
+    private static final int DATABASE_VERSION = 2;
     private static final String ALARM_TABLE_CREATE =
             "CREATE TABLE " + ALARM_TABLE_NAME + " (" +
                     BaseColumns._ID + " INTEGER PRIMARY KEY, " +
@@ -41,25 +40,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(ALARM_TABLE_CREATE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion == 1 && newVersion == 2)
-        {
-            String alterAddTitle = "ALTER TABLE " + ALARM_TABLE_NAME + " ADD COLUMN " +
-                    ALARM_COLUMN_TITLE + " TEXT";
-            String alterAddInstanceID = "ALTER TABLE " + ALARM_TABLE_NAME + " ADD COLUMN " +
-                    ALARM_COLUMN_INSTANCE_ID + " TEXT";
-            db.execSQL(alterAddTitle);
-            db.execSQL(alterAddInstanceID);
-        }
-    }
-
-    public static boolean insertAlarm(Context context, Alarm alarm)
+    public static int insertAlarm(Context context, Alarm alarm)
     {
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -75,7 +56,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
         db.close();
         helper.close();
-        if (rows > 0) { return true; } else { return false; }
+        return (int) rows;
     }
 
     public static boolean deleteAlarm(Context context, Alarm alarm)
@@ -88,7 +69,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
         db.close();
         helper.close();
-        if (rows > 0) { return true; } else { return false; }
+        return rows > 0;
     }
 
     public static Alarm getAlarm(Context context, String id, boolean isInstanceID)
@@ -120,6 +101,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         helper.close();
         return alarm;
     }
+
     public static List<Alarm> getAllAlarms(Context context) {
         List<Alarm> alarms = new ArrayList<Alarm>();
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
@@ -164,6 +146,24 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
         db.close();
         helper.close();
-        if (rows > 0) { return true; } else { return false; }
+        return rows > 0;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(ALARM_TABLE_CREATE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == 1 && newVersion == 2)
+        {
+            String alterAddTitle = "ALTER TABLE " + ALARM_TABLE_NAME + " ADD COLUMN " +
+                    ALARM_COLUMN_TITLE + " TEXT";
+            String alterAddInstanceID = "ALTER TABLE " + ALARM_TABLE_NAME + " ADD COLUMN " +
+                    ALARM_COLUMN_INSTANCE_ID + " TEXT";
+            db.execSQL(alterAddTitle);
+            db.execSQL(alterAddInstanceID);
+        }
     }
 }
