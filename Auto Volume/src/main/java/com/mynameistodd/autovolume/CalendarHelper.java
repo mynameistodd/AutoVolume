@@ -34,7 +34,7 @@ public class CalendarHelper {
     public static Collection<? extends Alarm> getAllAlarms(Context context) {
         List<Alarm> alarms = new ArrayList<Alarm>();
 
-        audioManager = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean enabled = sharedPref.getBoolean(context.getString(R.string.pref_calendar_enabled_key), Boolean.parseBoolean(context.getString(R.string.pref_calendar_enabled_default)));
