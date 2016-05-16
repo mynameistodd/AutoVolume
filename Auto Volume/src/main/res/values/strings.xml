@@ -56,6 +56,7 @@
     <string name="default_tv_recur">One Time</string>
     <string name="default_tv_volume">100%</string>
     <string name="default_tv_title">Event Start: What happens when the event title is super long like this?</string>
+    <string name="title_activity_main_activity_new">MainActivityNew</string>
 
 
 </resources>

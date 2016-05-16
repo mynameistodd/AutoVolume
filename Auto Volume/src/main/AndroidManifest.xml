@@ -14,7 +14,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.mynameistodd.autovolume.MainActivity"
+            android:name=".MainActivityNew"
+            android:label="@string/title_activity_main_activity_new"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,10 +33,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.mynameistodd.autovolume.SetAlarmManagerReceiver" />
-
+        <receiver android:name=".SetAlarmManagerReceiver" />
         <receiver
-            android:name="com.mynameistodd.autovolume.BootTimeZoneBR"
+            android:name=".BootTimeZoneBR"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -34,15 +43,13 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="com.mynameistodd.autovolume.ChangeVolumeBR">
+        <receiver android:name=".ChangeVolumeBR">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
             </intent-filter>
         </receiver>
-
         <receiver
-            android:name="com.mynameistodd.autovolume.CalendarChangedReceiver"
+            android:name=".CalendarChangedReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
