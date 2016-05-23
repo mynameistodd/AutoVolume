@@ -13,7 +13,7 @@
     <string name="pref_category_powerConnected">Power Connected</string>
 
     <string name="pref_notify_key">pref_notify</string>
-    <string name="pref_notify_default">false</string>
+    <string name="pref_notify_default">true</string>
     <string name="pref_notify_title">Notifications</string>
     <string name="pref_notify_summary">Alert for volume changes</string>
 
@@ -58,5 +58,24 @@
     <string name="default_tv_title">Event Start: What happens when the event title is super long like this?</string>
     <string name="title_activity_main_activity_new">MainActivityNew</string>
 
+    <!-- Error strings -->
+    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents">
+        You have provided too many PendingIntents to the addGeofences() call
+    </string>
+    <string name="unknown_geofence_error">
+        Unknown error: the Geofence service is not available now
+    </string>
+    <string name="geofence_transition_invalid_type">
+        Geofence transition error: invalid transition type %1$d
+    </string>
 
+    <!-- Transition type strings -->
+    <string name="geofence_transition_entered">Entered</string>
+    <string name="geofence_transition_exited">Exited</string>
+    <string name="unknown_geofence_transition">Unknown Transition</string>
+
+    <string name="geofence_transition_notification_text">Click notification to return to app</string>
 </resources>

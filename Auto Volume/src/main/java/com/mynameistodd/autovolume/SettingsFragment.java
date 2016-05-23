@@ -2,8 +2,11 @@ package com.mynameistodd.autovolume;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -25,6 +28,16 @@ public class SettingsFragment extends PreferenceFragment {
         super.onStart();
         analytics = GoogleAnalytics.getInstance(getActivity());
         tracker = analytics.newTracker(R.xml.global_tracker);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        if (view != null) {
+            view.setBackgroundColor(getResources().getColor(android.R.color.white));
+        }
+        return view;
     }
 
     @Override

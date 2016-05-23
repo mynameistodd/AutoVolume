@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -59,6 +60,10 @@
                 <data android:host="com.android.calendar" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".GeofenceTransitionsIntentService"
+            android:exported="false" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

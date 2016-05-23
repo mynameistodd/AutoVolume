@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "206532797781",
+    "project_id": "auto-volume"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206532797781:android:5f3813d704d81b59",
+        "android_client_info": {
+          "package_name": "com.mynameistodd.autovolume"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd5yjSi6LHimbdt53ALMoaZTnnRCtYcoA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-26489424-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2,
+          "test_banner_ad_unit_id": "ca-app-pub-3940256099942544/6300978111",
+          "test_interstitial_ad_unit_id": "ca-app-pub-3940256099942544/1033173712"
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
